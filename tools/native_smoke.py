@@ -8,14 +8,14 @@ from remote import request, snapshot
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 def click(text, search=True):
-    for attempt in range(8 if search else 1):
-        matches = [x for x in snapshot() if x.get('t') == text and x['ty'] in ['Button','TextInput']]
+    for attempt in range(24 if search else 1):
+        matches = [x for x in snapshot() if x.get('t') == text and x['ty'] in ['Button','TextInput'] and x['r'][3] >= 24]
         if matches:
             x,y,w,h=matches[0]['r']
             request('/m',k='click',x=x+w/2,y=y+h/2,wait=1)
             time.sleep(.08)
             return
-        request('/m',k='scroll',x=220,y=500,dy=400,wait=1)
+        request('/m',k='scroll',x=220,y=500,dy=180,wait=1)
         time.sleep(.15)
     raise AssertionError('Control not found: '+text)
 
@@ -69,7 +69,10 @@ def main():
     second=labels()
     assert any('先去了解' in x for x in second),second
     shot('03-second-match.png')
-    click('请系统 Agent 解释一次')
+    click('我想调整的是…')
+    request('/t',t='比起工作机会，我现在更想常去户外。',wait=1)
+    click('让 Agent 提出修改')
+    request('/m',k='scroll',x=220,y=500,dy=120,wait=1)
     time.sleep(.3)
     end=labels()
     assert any('不可用' in x for x in end),end

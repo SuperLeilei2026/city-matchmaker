@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-03",
+  "bundle_version": "0.2.0",
+  "production_main_sha256": "b87a280fb076b16274c83d48021b509d582cdda78daa9dbe311249165411a1b8",
+  "synthetic_inputs_only": true,
+  "real_model_verified": false,
+  "test_method": "Real hidden Makepad card-host. Production unavailable path plus explicit response injection in a temporary bundle copy only. No external provider call.",
+  "production_checks": [
+    {
+      "name": "profile_and_two_round_flow",
+      "passed": true
+    },
+    {
+      "name": "explicit_city_rejection",
+      "passed": true
+    },
+    {
+      "name": "empty_feedback_rejected_without_state_change",
+      "passed": true
+    },
+    {
+      "name": "free_feedback_not_saved_before_confirmation",
+      "passed": true
+    },
+    {
+      "name": "real_cardhost_unavailable_preserves_state",
+      "passed": true
+    }
+  ],
+  "injected_response_checks": [
+    {
+      "name": "valid_proposal_does_not_mutate_or_save",
+      "passed": true
+    },
+    {
+      "name": "person_reject_preserves_state",
+      "passed": true
+    },
+    {
+      "name": "unknown_enum_rejected",
+      "passed": true
+    },
+    {
+      "name": "extra_protocol_fields_rejected",
+      "passed": true
+    },
+    {
+      "name": "foreign_city_rejected",
+      "passed": true
+    },
+    {
+      "name": "multiline_reply_rejected",
+      "passed": true
+    },
+    {
+      "name": "stale_request_ignored",
+      "passed": true
+    },
+    {
+      "name": "stale_revision_rejected",
+      "passed": true
+    },
+    {
+      "name": "no_change_proposal_not_executable",
+      "passed": true
+    },
+    {
+      "name": "editing_feedback_invalidates_pending_proposal",
+      "passed": true
+    },
+    {
+      "name": "stale_confirmation_does_not_execute",
+      "passed": true
+    },
+    {
+      "name": "confirmed_preferences_applied",
+      "passed": true
+    },
+    {
+      "name": "existing_climate_limits_preserved",
+      "passed": true
+    },
+    {
+      "name": "existing_city_rejection_preserved",
+      "passed": true
+    },
+    {
+      "name": "confirmed_action_recomputes_candidates",
+      "passed": true
+    },
+    {
+      "name": "unknown_quiet_evidence_stays_unknown",
+      "passed": true
+    },
+    {
+      "name": "save_readback_verified",
+      "passed": true
+    },
+    {
+      "name": "double_confirm_has_no_effect",
+      "passed": true
+    },
+    {
+      "name": "saved_execution_survives_reload",
+      "passed": true
+    },
+    {
+      "name": "real_ui_confirmation_executes_and_verifies",
+      "passed": true
+    }
+  ],
+  "production_bundle_modified_by_test": false,
+  "screenshots_published": false
+}

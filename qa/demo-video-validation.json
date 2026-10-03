@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-03T03:48:30.234Z",
+  "playback": {
+    "duration": 151,
+    "width": 1440,
+    "height": 1000,
+    "currentTime": 0.705767
+  },
+  "playbackMethod": "Chromium with local route serving the actual MP4 bytes; product server does not serve docs",
+  "fullDecode": "ffmpeg decoded the complete MP4 without errors",
+  "sampledFramesSeconds": [
+    12,
+    94,
+    130,
+    148
+  ],
+  "visualReview": "Chinese captions readable outside app; no clipping; empty state, result and share verified",
+  "sourceHashesStillMatch": {
+    "web/app.mjs": true,
+    "web/index.html": true,
+    "core/matcher.mjs": true,
+    "core/questions.mjs": true,
+    "data/cities.json": true
+  },
+  "stylesheetHashAfterRecording": "fc438515a5b2ce7539e26a8f2c551ba37e1f612328a749ac23d2677de4f4b2e1",
+  "mp4Sha256": "cb2931a40556f5ceb14a9304980342d707bff009d5a5c0ecce4f2a3bad81265f"
+}

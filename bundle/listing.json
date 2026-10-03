@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "subtitle": "毕业下一站，先和一座城市约会",
-  "description": "填写自己的资料，由猫或狗问一个关键问题，认识一个城市；告诉红娘哪里不合适，再得到首选、备选和变化原因。六城数据包含公开来源与未知项，排名是可解释的本地规则，不是幸福概率。可在支持系统 Agent 的 OctoSense 中请求受约束的说明。",
+  "description": "填写自己的资料，由猫或狗问关键问题，认识城市，按反馈进一步比较。六城数据保留公开来源与未知项，本地规则负责匹配，不预测幸福概率。在支持系统 Agent 且配置模型的 OctoSense 中，可用一句自由反馈请求偏好修改建议；用户确认后应用重排、保存并核验，拒绝或失败不修改资料。",
   "category": "lifestyle",
   "keywords": [
     "city",
@@ -25,7 +25,7 @@
     "support": "https://github.com/SuperLeilei2026/city-matchmaker/issues",
     "privacy_policy_url": "https://github.com/SuperLeilei2026/city-matchmaker/blob/main/docs/privacy.md"
   },
-  "release_notes": "六城探索候选、三页资料、两轮问题与反馈、来源展开、本地保存与清除；系统 Agent 说明入口带结果校验与超时保护。",
+  "release_notes": "系统 Agent 入口升级为自由反馈、受控修改提案、用户确认、重排与本机保存核验。保留无模型的六城探索、三页资料、两轮反馈、来源与清除。实际模型验收范围见公开版本说明。",
   "age_rating": "all",
   "license": "Apache-2.0"
 }

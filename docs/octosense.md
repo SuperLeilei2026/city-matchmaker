@@ -1,103 +1,79 @@
 # 城市红娘 OctoScript 包
 
-日期：2026-10-03。应用 ID：`leilei-city-matchmaker`，版本：`0.1.0`。
+更新：2026-10-03。应用 ID：`leilei-city-matchmaker`，版本：`0.2.0`。实际发布及未完成项见 [publication.md](publication.md)。
 
-这份包是独立的 OctoScript 原生实现，使用 Makepad card-host 与 App Hub gate。下文记录首次本地验收，不代表公开 App Hub 已审核通过。公开源码和比赛提交的最新链接以仓库 README 为准；仓库公开、比赛提交与 App Hub 上架是三个不同状态。
+## 已实现的流程
 
-## 当前能玩到什么
+三页可跳过资料 → 第一问 → 首座城市及依据 → 明确反馈与第二问 → 候选、变化原因和未知项。猫狗只改变口吻，核心匹配、保存、恢复与清除不依赖模型。
 
-- 猫/狗选择，只改变口吻，不改变事实或排序。
-- 先完成三页资料：目前状态与背景、性格与相处、职业与生活。文本输入与选择即时保存；资料可以留空。
-- 第一个问题确认职业与生活的优先级，显示一座探索候选及其具体依据、生活想象和代价。
-- 用户反馈后进入一次澄清；明确拒绝会排除城市，成本/气候/职业担忧分别继续问，其他反馈让用户确认最重要的生活兴趣。
-- 二轮给出首选、备选、变化原因、未知条件和可展开来源。相同排序不会强行换城；同分明确提示不是唯一最优。
-- 修改资料使旧结论与旧 Agent 说明失效。关闭重开恢复资料及二轮结果；每一页的底栏都可清除本机资料。
-- 完整体验不需要模型。系统 Agent 说明按钮有清楚的可用/不可用状态，并准备版本、城市 ID、格式、长度校验与 45 秒超时/取消。
+新增的系统 Agent 任务：
 
-## 与 Web 版本的关系
+1. 在结果页输入自由反馈，点击“让 Agent 提出修改”。
+2. 通过宿主的 `octos.session.open`、`octos.turn.start` 请求受控提案。
+3. 展示原偏好与拟修改内容；用户可确认或放弃。
+4. 确认后修改允许字段，实际重排、保存并读回核验。
+5. 旧请求、旧版本、陌生城市、非法字段、错误格式和重复确认不执行；45 秒超时及取消不修改资料。
 
-两者共用 `data/cities.json`。`tools/build_bundle.py` 将六城特征、证据状态、说明、生活场景和来源生成到 `bundle/main.splash`；模板在 `tools/main.template.splash`。不要只编辑生成后的 `main.splash`。
+协议为 `CM1|revision|city_id|priority|focus|avoid|exclude|reason`。只允许改变职业/生活取舍、强调一项兴趣、追加气候避开项或排除当前候选。不能恢复已拒绝城市、放宽原气候底线、修改预算或人格、直接指定得分。没有证据的项目继续保持未知。
 
-原生排序移植 `core/matcher.mjs` 的规则：职业/生活权重、气候项、未知不加分且不重新分配权重、最重要兴趣的两份权重、明确排除、仅有来源的气候硬排除、同分稳定排序。原生页面使用自己的两轮问题状态机，不等于完整复用了 Web 问题引擎或其分享功能。
+自由反馈与未确认提案只在应用内存中；确认后存档保存新偏好、版本与执行变化说明。宿主可能保留 Agent 历史，参见 [隐私说明](privacy.md)。
 
-当前数据的非空等级均为 `editorial`，因此气候硬条件不能被宣称已满足。人格、年龄、院校不计分；租金预算没有可比较房源证据，不据此筛城。主界面不显示内部总分或幸福概率。
+## 与 Web 的关系
 
-## 实际验收
+两者共用 `data/cities.json`。生成器将六城特征、依据、生活场景与来源嵌入原生脚本；Web 与原生各自实现交互状态机。原生不含 Web 的 PNG 车票功能，Web 不含系统 Agent 请求。
 
-已在 Apple silicon macOS、460×820 点的真实 card-host 隐藏窗口执行：
+请修改 `tools/main.template.splash` 和共享数据，再运行 `python3 tools/build_bundle.py`，不要只改生成的 `bundle/main.splash`。
 
-1. 首页绘制并加载包内猫狗图片；三页资料输入与选择；翻页后从新页面顶部开始。
-2. 合成资料：昵称“小舟”、MBTI“INFP”、科技方向、户外+演出、月租预算 2500；职业优先。第一轮上海。
-3. 明确拒绝上海，第二问强调户外；第二轮杭州、备选武汉，变化文本说明上海已排除。
-4. `match.json` 中资料、排除 ID、第一轮 ID、反馈、版本与第二轮变化说明真实写入。
-5. 关闭 card-host 后重开，恢复“先去了解 杭州。”与“已恢复本机进度”。
-6. 点击清除，确认 `match.json` 不存在；再完成一次上述流程。
-7. 点击系统 Agent 按钮，card-host 返回 `no service answers "octos" on this device`，页面明确显示不可用并保留本地结果。
-8. 四张 listing 截图来自真实 card-host，均已打开检查。
+## 运行与复现
 
-UI 回归工具：`tools/remote.py`（仅请求本机 18131 端口）与 `tools/native_smoke.py`。后者可从首页或任意已恢复页面开始，先清除本测试包的存档，再使用合成资料完整操作。临时状态与输出由 `tools/.gitignore` 排除。
+精确源码基底、二进制校验、依赖与 Shell 配置见 [运行环境锁定记录](runtime-lock.md)。先准备对应的 `card-host`、`hub`；它们不随应用源码打包。已验证平台为 Apple silicon macOS；原生工具需要图形会话，Python 3.9+ 用于生成和测试。
 
-截图：
-
-- `bundle/screenshots/01-welcome.png`
-- `bundle/screenshots/02-first-match.png`
-- `bundle/screenshots/03-second-match.png`
-- `bundle/screenshots/04-changes.png`
-
-## 复现命令
-
-先按 [OctoScript 官方快速上手](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/docs/QUICKSTART.md) 安装或构建 `card-host`、`hub`。这两个平台工具不放在本仓库；Web 版无需它们。原生验收使用 Python 3.9+、Apple silicon macOS 与图形会话，其他平台尚未验证。
-
-以下命令从本仓库根目录运行。将两个示例路径替换为你机器上的工具位置，不需要建立原作者的父目录结构：
+从仓库根目录运行，路径换成自己准备的工具：
 
 ```sh
-export OCTO_CARD_HOST="/path/to/OctoSense-App-Hub/target/release/card-host"
-export OCTO_HUB="/path/to/OctoSense-App-Hub/target/release/hub"
+export OCTO_CARD_HOST="/path/to/card-host"
+export OCTO_HUB="/path/to/hub"
 python3 tools/build_bundle.py
-env MAKEPAD_REMOTE=18131 MAKEPAD_HIDE_WINDOWS=1 "$OCTO_CARD_HOST" --bundle bundle --app-data tools/local-state --allow-unsigned --stamp --size 460x820
-```
-
-单独读取/截图/退出：
-
-```sh
-python3 tools/remote.py snap
-python3 tools/remote.py shot /tmp/city-native.png
-python3 tools/remote.py quit
 "$OCTO_HUB" stamp bundle
 "$OCTO_HUB" check bundle --allow-unsigned
-"$OCTO_HUB" scan bundle --packet tools/review.json
+"$OCTO_CARD_HOST" --bundle bundle --app-data .local-state/card-host --allow-unsigned --size 460x820
 ```
 
-准入检查已实际通过，输出：
+card-host 不提供系统模型服务。点击 Agent 会显示不可用，本地功能继续运行；真实调用必须在配置了 provider 的完整 Shell 中验证。独立 Shell 启动脚本为 `tools/start-shell.sh`，设置方法见环境记录。
+
+每次修改最终包后都需重新 stamp；正式签名包有变动还需重新签名。不要把测试状态或私钥提交到仓库。
+
+## 实际测试证据
+
+原有真实 card-host 操作验证了首页、三页资料、两轮推荐、明确排除、保存、重启恢复、清除与滚动。四张基础截图在 `bundle/screenshots/`，使用合成资料。
+
+v0.2.0 追加检查：
+
+- **5 项生产路径检查通过**：资料及两轮流程、明确排除、空反馈拒绝、反馈未确认不落盘、真实 card-host 服务不可用时存档不变。
+- **20 项临时响应注入检查通过**：确认前不修改、拒绝、非法/额外字段、错误城市、多行、旧请求、旧版本、无变化、改反馈、过期确认、执行、底线保留、重排、未知证据、存档读回、重复确认与恢复。
+- 注入检查真实点击确认后，合成案例从杭州变为武汉，版本 10 → 11，原先拒绝的上海保持排除；它验证执行机制，**不验证真实模型**。
+- 测试只修改临时复制的包，生产源中没有注入按钮或函数。报告记录生产脚本 SHA-256。
+
+复现：
+
+```sh
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_agent_smoke.py
+```
+
+脚本只使用合成资料、独立临时状态和本机端口，默认端口占用时会退出，可用 `--port` 指定。报告：[qa/native-agent-check.json](../qa/native-agent-check.json)。测试工具关闭自己启动的进程，不连接真实 provider。
+
+## 最终包本地预检
 
 ```text
-leilei-city-matchmaker 0.1.0 — PASSED
+leilei-city-matchmaker 0.2.0 — PASSED
   [warning] publisher-signature: unsigned: accountability rests on the hub alone
   grants: capabilities {"octos.session.open", "octos.turn.interrupt", "octos.turn.start", "storage"}, hosts {}, storage 16777216 bytes, agent none
 ```
 
-`hub scan` 的七个问题已输出到本地 review packet；人工可读回答在 `tools/REVIEW-ANSWERS.md`。没有调用外部 reviewer，也没有伪造审核通过。
+当前 bundle 摘要：`d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c`。
 
-## 验收边界与发布状态
+`hub scan` 已生成七题，书面回答在 [REVIEW-ANSWERS.md](../tools/REVIEW-ANSWERS.md)。未运行外部 reviewer；本地通过不等于人工审核或比赛合格。gate 的 `agent none` 指清单未写独立 agent 块，不能据此判断 Shell 没有应用 Agent；本包声明精确 `octos.*` 权限。
 
-- **实际模型未验证。** 本包没有使用 MiniMax/Kimi 成功返回，不能把本地规则或不可用状态写成模型已接通。
-- **完整 Shell 安装未验证。** 旧故事应用曾验证系统 Agent 链路，但不是本包的安装或模型证据。本次验证为独立 card-host。
-- **本地准入检查不等于 App Hub 上架。** 上述通过记录使用无签名测试模式。正式提交需要当前有效的支持/隐私 URL、发布者签名、源码版本以及 App Hub 审核。公开状态以 README 的实际提交链接为准，不能从本页的本地通过记录推断。
-- 其他平台、真实毕业生使用效果、城市推荐准确性和全部异常响应分支未验证；只报告上述实际执行路径。
-- 原生版不含 Web 分享卡，不自动抓取岗位、演出、租金或地理位置。
+## 验收边界
 
-## 公开源码与测试资料
-
-`tools/native_smoke.py` 使用固定的合成资料“小舟 / INFP / 2500”，Web QA 使用“合成体验者 / 合成隐私学校”。这些是测试夹具，不是用户真实档案。随包截图与已保存的 QA 图片来自这些合成流程或空白资料流程；分享卡默认不带年龄、学校、预算或欣赏对象的信息。
-
-`tools/local-state/`、本地 review packet、原生测试结果 JSON、日志、环境文件与私钥由 `.gitignore` 排除。发布源码时保留生成器、模板、自动化测试和人工 review 回答；不要上传本机的 `match.json`。自动化测试会清除其专用测试包存档，因此不要把日常使用的原生数据目录交给它。
-
-生成器相对自身文件定位 `data/`、`assets/` 与 `bundle/`，不依赖个人绝对路径。原生测试桥固定使用回环地址 `127.0.0.1:18131`；启动测试宿主时需使用同一端口。图形渲染的实际截图不能由纯无界面的通用 CI 替代。
-
-## 工具/平台注意点
-
-本地官方文档对 `octos.*` 的可用性说明落后于旧应用的 Shell 实测，不能简单以文档判定所有 Shell 都不支持。本包会处理实际宿主的返回。
-
-App Hub gate 将普通 `.json` 内的完整外部 URL 也当作外部资产引用，不能把共享城市 JSON 原样放进包中。生成器只嵌入运行所需数据及用于显示的域名/路径，完整来源 URL 保留在源码仓库的 `data/cities.json`，应用本身不发城市数据网络请求。
-
-Makepad 的隐藏窗口环境变量是 `MAKEPAD_HIDE_WINDOWS=1`。每次修改程序或截图后必须重新 stamp；正式签名之后仍有修改时还需重新签名。
+真实 MiniMax/Kimi 或其他 provider 的成功请求仍待完成，不借用旧项目或模拟模型的记录。实体手机、其他操作系统、真实毕业生满意度和现实推荐准确性均未验证。本次提交产品仓库，不以 App Hub 已上架为前提，也不宣称已经公开上架。
