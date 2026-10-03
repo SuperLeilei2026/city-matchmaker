@@ -1,0 +1,10 @@
+local-state/
+play-state/
+test-state/
+.local-state/
+__pycache__/
+*.py[cod]
+native-smoke-result.json
+review.json
+*.log
+*.pid

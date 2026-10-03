@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "subtitle": "毕业下一站，先和一座城市约会",
+  "description": "填写自己的资料，由猫或狗问一个关键问题，认识一个城市；告诉红娘哪里不合适，再得到首选、备选和变化原因。六城数据包含公开来源与未知项，排名是可解释的本地规则，不是幸福概率。可在支持系统 Agent 的 OctoSense 中请求受约束的说明。",
+  "category": "lifestyle",
+  "keywords": [
+    "city",
+    "graduate",
+    "match",
+    "lifestyle",
+    "agent"
+  ],
+  "screenshots": [
+    "screenshots/01-welcome.png",
+    "screenshots/02-first-match.png",
+    "screenshots/03-second-match.png",
+    "screenshots/04-changes.png"
+  ],
+  "icon": "assets/icon.svg",
+  "platforms": [
+    "macos"
+  ],
+  "publisher": {
+    "name": "Leilei",
+    "support": "https://github.com/SuperLeilei2026/city-matchmaker/issues",
+    "privacy_policy_url": "https://github.com/SuperLeilei2026/city-matchmaker/blob/main/docs/privacy.md"
+  },
+  "release_notes": "六城探索候选、三页资料、两轮问题与反馈、来源展开、本地保存与清除；系统 Agent 说明入口带结果校验与超时保护。",
+  "age_rating": "all",
+  "license": "Apache-2.0"
+}

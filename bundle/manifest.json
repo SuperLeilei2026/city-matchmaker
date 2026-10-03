@@ -1,0 +1,18 @@
+{
+  "capabilities": [
+    "storage",
+    "octos.session.open",
+    "octos.turn.start",
+    "octos.turn.interrupt"
+  ],
+  "id": "leilei-city-matchmaker",
+  "integrity": {
+    "bundle_blake3": "f7a68a7a0498aa32f942122a7cfdd5dbefab4934b660c9be12ac8f09ae09632b"
+  },
+  "name": "城市红娘",
+  "network": {
+    "hosts": []
+  },
+  "schema": 1,
+  "version": "0.1.0"
+}

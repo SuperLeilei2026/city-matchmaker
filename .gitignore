@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+*.log
+
+# Local profiles, credentials and tool output must never be published.
+local-state/
+.local-state/
+build/
+.cache/
+__pycache__/
+*.py[cod]
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+test-results/
+playwright-report/

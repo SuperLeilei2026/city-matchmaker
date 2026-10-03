@@ -1,0 +1,892 @@
+[
+  {
+    "id": "wuhan",
+    "name": "武汉",
+    "english": "WUHAN",
+    "region": "central",
+    "tagline": "在江湖之间，把工作和自己的生活都安顿下来。",
+    "persona": "像一位把长江和湖泊摊在桌上、邀你慢慢挑日子的介绍人。",
+    "color": "#EA795A",
+    "coords": [
+      114.3,
+      30.6
+    ],
+    "features": {
+      "tech": 2,
+      "creative": 1,
+      "manufacturing": 3,
+      "service": 2,
+      "nature": 3,
+      "live": 2,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": 3,
+      "cold": 2,
+      "humidity": 2,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。电子设备和高技术制造业有明确产业基础，记2；不等同互联网岗位密度。"
+      },
+      "creative": {
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。有专业艺术团体和剧目生产，文化生产记1；广告、设计和数字内容岗位仍待核验。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。电子设备、电气机械及高技术制造等多类产业均有统计，生产制造基础记3。"
+      },
+      "service": {
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。第三产业占比较高，且有贸易、金融等多种服务活动，记2；不预测个人就业。"
+      },
+      "nature": {
+        "sourceIds": [
+          "wh-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。江河湖泊与东湖、木兰等不同类型自然目的地并存，资源类型记3；不是下楼可达分。"
+      },
+      "live": {
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。有专业艺术团体、新排剧目及文化惠民活动，供给基础记2；具体演出日期和票价另查。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未取得可比的饮食选择与口味适配证据；不把餐饮收入当成好吃程度。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "wh-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方常年气候描述为冬冷夏热，夏热敏感项记3；不采用某一年极端值代表常年。"
+      },
+      "cold": {
+        "sourceIds": [
+          "wh-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方描述冬冷，冬季体感敏感项记2；住房保温和个人感受会改变体验。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "wh-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方列为湿润季风气候、常年雨量丰沛，潮湿关注项记2；不是湿度百分数。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：沿东湖走一段，走累了就坐下来，不把休息日排成打卡清单。",
+      "一种可能的下班后：约好一场演出，把晚饭和回程一起安排好，给这个普通星期留一点期待。"
+    ],
+    "tradeoffs": [
+      "江湖景观是城市资源，不保证住处或工作地点靠近它；先核实你会生活在哪一片。",
+      "冬冷夏热都需要考虑；怕热或怕湿冷时，把住房条件和季节体验列为优先核验。",
+      "产业基础不能替代具体岗位；先用你要投的职位，而非“武汉机会多”做判断。"
+    ],
+    "sources": [
+      {
+        "id": "wh-economy",
+        "title": "武汉市统计局：2024年武汉市国民经济和社会发展统计公报",
+        "url": "https://tjj.wuhan.gov.cn/tjfw/tjgb/202503/t20250327_2558447.shtml",
+        "published": "2025-04-03",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "wh-geography",
+        "title": "武汉市投资促进局（武汉市政务服务局）：武汉概况（来源：武汉地方志数字方志馆）",
+        "url": "https://tc.wuhan.gov.cn/yxwh/202410/t20241009_2465283.shtml",
+        "published": "2024-10-09",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ]
+  },
+  {
+    "id": "shanghai",
+    "name": "上海",
+    "english": "SHANGHAI",
+    "region": "east",
+    "tagline": "给职业留更多分支，也给下班后的自己留一张票。",
+    "persona": "像一位翻开节目单，又提醒你把散场后的回家路线算进去的介绍人。",
+    "color": "#8266CD",
+    "coords": [
+      121.5,
+      31.2
+    ],
+    "features": {
+      "tech": 3,
+      "creative": 3,
+      "manufacturing": 3,
+      "service": 3,
+      "nature": 2,
+      "live": 3,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": 3,
+      "cold": 2,
+      "humidity": 3,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "sh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。集成电路、人工智能、生物医药被明确列为先导产业，技术生态记3；不推导求职成功率。"
+      },
+      "creative": {
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。展览与营业性演出规模及多类文化设施体现文化生产生态，记3；细分内容岗位仍需核验。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "sh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。运输装备、医药、专用设备和电子设备等多类制造业有明确基础，记3。"
+      },
+      "service": {
+        "sourceIds": [
+          "sh-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。第三产业在经济结构中占较大比重，服务业多样性记3；不代表毕业生薪酬。"
+      },
+      "nature": {
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。滨江滨河空间、公园和崇明湿地提供不同户外资源，记2；郊野资源不能等同日常就近可达。"
+      },
+      "live": {
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方概览记载大量营业性演出与文博展览，演出生态记3；不保证你喜欢的场次或票价。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未取得可比的饮食选择与口味适配证据；不把餐饮收入当成好吃程度。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "sh-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方季节指南描述夏季炎热潮湿，夏热关注项记3。"
+      },
+      "cold": {
+        "sourceIds": [
+          "sh-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方季节指南描述冬季寒冷潮湿，冬冷关注项记2。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "sh-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方明确梅雨期、夏季湿热与冬季湿冷，潮湿关注项记3；不是相对湿度实测排名。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的晚上：工作结束后看一场小剧场演出；你在意的不是打卡，而是每周能不能真的腾出这一晚。",
+      "一种可能的周日：沿苏州河走走，临时决定进一场展览，再按自己的节奏回家。"
+    ],
+    "tradeoffs": [
+      "演出与工作机会都需要具体地点；先把房子、办公室和常去场馆放到同一张实际路线图上。",
+      "预算是否承受得住仍未知；没有用上海的城市名替你判定“住不起”或“值得贵一点”。",
+      "梅雨、湿热夏季和湿冷冬季都有可能影响日常，不应只用旅行季节的印象决定。"
+    ],
+    "sources": [
+      {
+        "id": "sh-economy",
+        "title": "上海市统计局：2024年上海市国民经济运行情况",
+        "url": "https://www.shanghai.gov.cn/nw31406/20250122/69acf99e47e044739545ee2c641db33a.html",
+        "published": "2025-01-22",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "sh-overview",
+        "title": "上海市人民政府：上海概览2025",
+        "url": "https://www.shanghai.gov.cn/shanghai/newshanghai/shgl2025.pdf",
+        "published": null,
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "sh-climate",
+        "title": "上海市人民政府：Shanghai’s weather: A guide to the city’s four seasons",
+        "url": "https://english.shanghai.gov.cn/en-Overview/20241225/ce046a2a1e754fde8c02804d6d66db18.html",
+        "published": "2024-12-25",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ]
+  },
+  {
+    "id": "hangzhou",
+    "name": "杭州",
+    "english": "HANGZHOU",
+    "region": "east",
+    "tagline": "把数字工作与一段湖边的日常，放进同一周。",
+    "persona": "像一位桌上放着项目草稿，也给你留出一段湖边空白的介绍人。",
+    "color": "#528D78",
+    "coords": [
+      120.2,
+      30.3
+    ],
+    "features": {
+      "tech": 3,
+      "creative": 3,
+      "manufacturing": 2,
+      "service": 3,
+      "nature": 2,
+      "live": 1,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": 3,
+      "cold": null,
+      "humidity": 2,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "hz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。信息传输、软件和信息技术服务在官方经济运行中被突出列示，技术生态记3。"
+      },
+      "creative": {
+        "sourceIds": [
+          "hz-culture"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。数字文化、游戏、大视听及文化产业平台有明确官方依据，创意生态记3；不替代细分岗位样本。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "hz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。电子设备、电气机械、汽车及高端装备均有统计，制造业基础记2。"
+      },
+      "service": {
+        "sourceIds": [
+          "hz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。服务业占经济结构较大比重，软件信息、金融、商务等多类服务均有依据，记3。"
+      },
+      "nature": {
+        "sourceIds": [
+          "hz-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。已核验西湖水体及其生态气候作用，湖边户外资源记2；尚未用市域山地面积夸大日常可达性。"
+      },
+      "live": {
+        "sourceIds": [
+          "hz-culture"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。资料确认剧场等文化空间运营，演出供给记1；未取得可比全市演出频次。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未取得可比的饮食选择与口味适配证据；不把餐饮收入当成好吃程度。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "hz-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。气象科普明确杭州夏季常酷热，夏热关注项记3；湖面冷岛不代表全城凉爽。"
+      },
+      "cold": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前已核验资料不足以可靠分档冬季体感；不能以年平均气温代替冬季体验。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "hz-climate"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。气象部门描述当地温暖湿润、降水较多，潮湿关注项记2；不同街区住宅体感仍待体验。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：把手机收进口袋，沿西湖走到想停的地方，今天不安排“必须完成”的项目。",
+      "一种可能的平日：完成手头项目后，认真保护一晚属于自己的时间；去剧场，或者只是回家看一部电影。"
+    ],
+    "tradeoffs": [
+      "“在杭州工作”不等于“住在西湖边”；办公室所在片区与日常活动半径必须一起核实。",
+      "湖边风景不能抵消夏季酷热与潮湿，户外习惯需要考虑季节。",
+      "数字与文化产业有基础，但公司、岗位与工作节奏差别很大；尚无个人录取与加班信息。"
+    ],
+    "sources": [
+      {
+        "id": "hz-economy",
+        "title": "杭州市统计局：2024年杭州经济运行情况",
+        "url": "https://www.hangzhou.gov.cn/art/2025/1/22/art_1229063407_4329187.html",
+        "published": "2025-01-22",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "hz-climate",
+        "title": "北京市气象局：杭州西湖生态气候科普",
+        "url": "https://bj.cma.gov.cn/qxkp/qxbk/202505/t20250512_7059350.html",
+        "published": "2025-05-12",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "hz-culture",
+        "title": "杭州市人民政府：文脉绵延 华章绽放——2024年全市宣传思想文化工作综述",
+        "url": "https://www.hangzhou.gov.cn/art/2025/2/28/art_812262_59109961.html",
+        "published": "2025-02-28",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间",
+      "杭州冬季体感尚未在当前数据集中充分核验，怕冷时需要补问和补查"
+    ]
+  },
+  {
+    "id": "chengdu",
+    "name": "成都",
+    "english": "CHENGDU",
+    "region": "southwest",
+    "tagline": "把一顿饭、一段绿地和想做的工作，认真放在一起。",
+    "persona": "像一位先陪你把饭吃好，再把下一步工作摊开谈的介绍人。",
+    "color": "#DD9B4E",
+    "coords": [
+      104.1,
+      30.7
+    ],
+    "features": {
+      "tech": 2,
+      "creative": 2,
+      "manufacturing": 2,
+      "service": 2,
+      "nature": 3,
+      "live": null,
+      "food": 3,
+      "ball": null,
+      "quiet": null,
+      "heat": 2,
+      "cold": null,
+      "humidity": 2,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "cd-talent"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方人才目录列有集成电路、高端软件、人工智能等方向，产业存在性记2；目录不等于实时招聘。"
+      },
+      "creative": {
+        "sourceIds": [
+          "cd-talent"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。目录列有数字文创和音乐产业方向，创意生态记2；不声称岗位数量或录取机会。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "cd-talent"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。目录列有新能源车、航空、轨道交通等制造方向，产业基础记2；不比较招聘规模。"
+      },
+      "service": {
+        "sourceIds": [
+          "cd-talent"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。目录列有物流、旅游、会展及金融科技等服务方向，产业基础记2。"
+      },
+      "nature": {
+        "sourceIds": [
+          "cd-ecology"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方规划确认山地、平原、河网和公园城市自然格局，资源类型记3；去山地仍需额外规划交通。"
+      },
+      "live": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前资料尚未核验可比演出供给；需要按音乐、戏剧等具体喜好与近期日程补查。"
+      },
+      "food": {
+        "sourceIds": [
+          "cd-food"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。UNESCO介绍成都川菜及饮食文化活动，饮食文化辨识度记3；不是个人口味命中率。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "cd-ecology"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。生态规划提示高温与城市热岛风险，夏热关注项记2；未用“公园城市”推断全年凉爽。"
+      },
+      "cold": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前已核验资料不足以可靠分档冬季体感；不能以年平均气温代替冬季体验。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "cd-ecology"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方规划描述湿润季风、雨量丰富与盆地条件，潮湿关注项记2；不代表每间房子的体感。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：约一位朋友吃顿川菜，吃完再走进一片绿地，让见面不用赶着换场。",
+      "一种可能的休息日：天气和交通都合适时，计划一次市域山地出行；出不了城，也允许自己留在附近散步。"
+    ],
+    "tradeoffs": [
+      "饮食文化丰富不代表每一餐都符合你的口味或预算；不吃辣也需要具体找店。",
+      "市域山地资源不等于下班后就能到达，户外偏好要和真实交通、休息时间匹配。",
+      "“慢生活”不是公司的工作制度；具体团队的节奏与岗位机会仍需核验。"
+    ],
+    "sources": [
+      {
+        "id": "cd-talent",
+        "title": "成都市人力资源和社会保障局：成都市人才开发指引（2024）",
+        "url": "https://cdhrss.chengdu.gov.cn/cdrsj/c151955/2024-06/14/8882c8d287714a5287b07009deb1aa6c/files/4a5fdbd3c7e74204814fb943ce08fe47.pdf",
+        "published": null,
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "cd-ecology",
+        "title": "成都市规划和自然资源局：成都市国土空间生态修复规划（2021—2035年）",
+        "url": "https://mpnr.chengdu.gov.cn/ghhzrzyj/tzgg/2024-08/21/97e8fd940aa04e2f9735fb75b8c60110/files/bff1eee922864412a083407cd2e3e8d0.pdf",
+        "published": null,
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "cd-food",
+        "title": "联合国教科文组织：Chengdu — Creative Cities Network",
+        "url": "https://www.unesco.org/en/creative-cities/chengdu",
+        "published": null,
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间",
+      "成都冬季体感、近期演出日程与居住片区尚未充分核验"
+    ]
+  },
+  {
+    "id": "guangzhou",
+    "name": "广州",
+    "english": "GUANGZHOU",
+    "region": "south",
+    "tagline": "在商贸与制造的城市里，把吃饭和散步过成自己的日常。",
+    "persona": "像一位把菜单递给你，也愿意陪你把实际生活账算清楚的介绍人。",
+    "color": "#C99835",
+    "coords": [
+      113.3,
+      23.1
+    ],
+    "features": {
+      "tech": 2,
+      "creative": 1,
+      "manufacturing": 3,
+      "service": 3,
+      "nature": 2,
+      "live": 2,
+      "food": 3,
+      "ball": null,
+      "quiet": null,
+      "heat": 3,
+      "cold": 1,
+      "humidity": 3,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "gz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。电子产品制造和高技术制造投资有官方统计，技术生态记2；不推断互联网岗位密度。"
+      },
+      "creative": {
+        "sourceIds": [
+          "gz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。资料确认专业艺术团体等文化生产，记1；广告、设计和内容行业需另补岗位证据。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "gz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。汽车、电子、石化为官方列明的工业支柱，制造业基础记3；有基础不代表当年招聘扩张。"
+      },
+      "service": {
+        "sourceIds": [
+          "gz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。现代服务业、生产性服务业、商贸等有明确产业基础，记3。"
+      },
+      "nature": {
+        "sourceIds": [
+          "gz-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。珠江水系、丘陵及白云山等多类地形资源可核验，记2；开放性与居住地距离另查。"
+      },
+      "live": {
+        "sourceIds": [
+          "gz-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。专业艺术团体与公共文化设施形成演出文化基础，记2；具体场次与喜好仍未知。"
+      },
+      "food": {
+        "sourceIds": [
+          "gz-food"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方转载资料确认粤味与跨地区菜系等饮食选择，饮食文化辨识度记3；不承诺餐饮价格。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "gz-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方自然地理记载温暖季风气候与高温过程，夏热关注项记3；不是每年极端温度预测。"
+      },
+      "cold": {
+        "sourceIds": [
+          "gz-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。常年温暖背景下冬冷关注项记1，同时保留寒潮可能；不写成全年不冷。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "gz-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方描述温暖湿润、雨量充沛，潮湿关注项记3；台风与暴雨按实时预报判断。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的休息日：选一家合口味的店认真吃顿饭，再去江边走走；这一天不需要有宏大的安排。",
+      "一种可能的工作日：先把午饭、通勤和休息时间调顺，再慢慢找一家愿意反复去的小店。"
+    ],
+    "tradeoffs": [
+      "温暖不等于没有季节负担，湿热、强降雨和偶发寒潮都要纳入生活安排。",
+      "产业覆盖多，不等于每个行业都在扩招；需要查与你岗位有关的最新机会。",
+      "吃饭选择不代表低成本；房租、用餐和真实交通费用仍需要按你的生活半径核实。"
+    ],
+    "sources": [
+      {
+        "id": "gz-economy",
+        "title": "广州市统计局：2024年广州市国民经济和社会发展统计公报",
+        "url": "https://tjj.gz.gov.cn/gkmlpt/content/10/10203/mpost_10203416.html",
+        "published": "2025-04-08",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "gz-geography",
+        "title": "广州市人民政府：自然地理（广州年鉴2024）",
+        "url": "https://www.gz.gov.cn/zlgz/gzgk/zrdl/content/post_10230952.html",
+        "published": "2025-04-23",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "gz-food",
+        "title": "广州市人民政府转载广州日报：第三批“食在广州”榜单出炉",
+        "url": "https://www.gz.gov.cn/ysgz/xwdt/ysdt/content/post_10489953.html",
+        "published": "2025-10-16",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ]
+  },
+  {
+    "id": "nanjing",
+    "name": "南京",
+    "english": "NANJING",
+    "region": "east",
+    "tagline": "让研发、制造或文化工作，与山湖之间的日常相遇。",
+    "persona": "像一位带着地图和笔记本，愿意和你边走边把想法理清的介绍人。",
+    "color": "#5C88AF",
+    "coords": [
+      118.8,
+      32.1
+    ],
+    "features": {
+      "tech": 2,
+      "creative": 2,
+      "manufacturing": 3,
+      "service": 2,
+      "nature": 3,
+      "live": null,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": 3,
+      "cold": 2,
+      "humidity": 2,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "nj-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。研发平台、高新技术企业与电子设备产业均有官方依据，技术生态记2；不是岗位供需分。"
+      },
+      "creative": {
+        "sourceIds": [
+          "nj-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。文化产业园区和基地有明确统计，创意产业基础记2；具体广告、设计、内容岗位另查。"
+      },
+      "manufacturing": {
+        "sourceIds": [
+          "nj-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。先进制造业集群和医药、电子设备、仪器仪表等产业可核验，制造业基础记3。"
+      },
+      "service": {
+        "sourceIds": [
+          "nj-economy"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。第三产业及贸易、旅游、金融等服务活动均有统计，服务业基础记2。"
+      },
+      "nature": {
+        "sourceIds": [
+          "nj-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方资料确认钟山等山地、河流湖泊及玄武湖资源，类型丰富记3；住处可达性待核验。"
+      },
+      "live": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前资料尚未核验可比演出供给；需要按音乐、戏剧等具体喜好与近期日程补查。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未取得可比的饮食选择与口味适配证据；不把餐饮收入当成好吃程度。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无居住地附近球场、开放时段、费用与球友信息；城市赛事数量不代表日常可参与。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "安静程度取决于街区、住宅和作息，尚无可比的街区级噪声资料。"
+      },
+      "heat": {
+        "sourceIds": [
+          "nj-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方常年气候显示夏季较热，7月平均气温28.4℃，夏热关注项记3。"
+      },
+      "cold": {
+        "sourceIds": [
+          "nj-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方常年1月平均气温3.1℃且冬季较长，冬冷关注项记2；并非个人体感保证。"
+      },
+      "humidity": {
+        "sourceIds": [
+          "nj-geography"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方描述北亚热带湿润气候、雨水充沛，潮湿关注项记2。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无同口径、与岗位地点匹配的当前租赁样本；不以人均收入、GDP或房价推算租金。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：沿玄武湖走一段，再挑一间博物馆；把看风景和认真看一件东西，放在同一天。",
+      "一种可能的休息日：天气合适就去山边走走，晚上回来准备下一周；这段生活由你自己的作息决定。"
+    ],
+    "tradeoffs": [
+      "山湖和文化场馆是资源，不保证住处附近就有；具体片区和工作地点仍需一起看。",
+      "冬夏都比较鲜明；怕冷或怕热时，不要只凭春秋旅行印象选城。",
+      "科研与产业基础不能替代你的岗位匹配，院校名称也不被用来推算录取机会。"
+    ],
+    "sources": [
+      {
+        "id": "nj-economy",
+        "title": "南京市统计局：南京市2024年国民经济和社会发展统计公报",
+        "url": "https://tjj.nanjing.gov.cn/bmfw/njsj/202504/t20250401_5108490.html",
+        "published": "2025-04-01",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "nj-geography",
+        "title": "南京市人民政府：自然状况",
+        "url": "https://www.nanjing.gov.cn/zjnj/zrzk/202509/t20250919_5652875.html",
+        "published": null,
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ]
+  }
+]

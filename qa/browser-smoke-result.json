@@ -1,0 +1,28 @@
+[
+  {
+    "passed": true,
+    "firstCityId": "shanghai",
+    "finalCityNames": [
+      "杭州",
+      "武汉",
+      "成都"
+    ],
+    "checks": [
+      "profile tabs and inputs",
+      "first recommendation",
+      "explicit rejection removed",
+      "second-round response",
+      "guide invariance",
+      "reload persistence",
+      "PNG download",
+      "source dialog",
+      "390px and 320px overflow",
+      "edit invalidation",
+      "clear local storage",
+      "empty-profile ties",
+      "no page errors",
+      "no remote profile request"
+    ],
+    "errors": []
+  }
+]
