@@ -8,7 +8,7 @@
 
 这对应官方 [App Flow 的 script-app 路径](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/README.zh-CN.md#设计流程)：`main.splash` 由 Makepad Script 在 Splash 环境求值，与 `page.card` 的 L0 解析路径不同；不因后缀为 `.splash` 而误判缺少 OctoScript 参赛应用。
 
-**v0.3.0 目前是本地开发版本，尚未创建标签、尚未推送。** 本次只读远端核对时，公开 `main` 仍为 `131e752`，最新公开标签为 `v0.2.0`。旧标签保留，不移动。原生流程已完成本轮复验；公开提交后再以实际提交号和标签更新本页。
+**v0.3.0 原生源码、报告和影片已公开。** 本次推送后通过 `git ls-remote` 核对，远端包含固定提交 [`f4566a5`](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)；其后的文档更新不改变已验收应用。历史 `v0.1.0`、`v0.2.0` 标签保留。版本入口见 [仓库标签](https://github.com/SuperLeilei2026/city-matchmaker/tags)。
 
 源码初赛提交与 App Hub 公开上架是两条状态。[赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)写明现阶段按公开源码和可运行作品评审，无需等待 Hub 上架。官方 App Flow 也明确参赛不会自动提交到 App Hub。本项目未公开上架；这不应被写成当前源码提交的前置阻断。
 
@@ -31,7 +31,7 @@
 | 辅助规则与 Web | 41 项 Node、10 组浏览器流程通过；0 页面错误、0 远端资料请求 | 仅覆盖各报告对应的源码，不能替代原生启动与交互 |
 | 原生主演示 | 约2分31秒真实card-host操作；生产源码哈希一致，无注入，录制、完整解码、Chromium播放和画面检查通过 | 模型服务不可用的真实失败处理，不是模型成功证据 |
 | 辅助 Web 录像 | 151秒；录制、完整解码和浏览器播放通过 | 不能代替原生操作结果或真实模型证据 |
-| v0.3 公开源码 | 本地开发中 | 标签、推送尚未完成；没有公开在线 Web Demo |
+| v0.3 公开源码 | 已推送并核对远端 | 固定源码 [`f4566a5`](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)；没有公开在线 Web Demo |
 
 ## 真实模型边界
 
@@ -39,7 +39,7 @@ CM1 保留结构化提案、用户确认、执行、保存与读回保护。当�
 
 用户已报告宿主连接完成，但本应用真实模型返回、确认执行与恢复全链路仍没有验收证据。card-host 按官方设计不提供 octos 服务，无服务提示只能证明失败处理；不能据此认定真实模型已通过或把配置账户当作本地基础流程的前提。详见 [原生说明](octosense.md)。
 
-原生新入口回归、截图与包检查已完成；下一步固定源码并推送。真实模型验收和以后选择进行的 App Hub 签名／审核分别记录，不混同为初赛源码是否已经提交。
+原生新入口回归、截图、包检查与固定源码公开均已完成。真实模型验收和以后选择进行的 App Hub 签名／审核分别记录，不混同为初赛源码是否已经提交。
 
 ## 数据与隐私
 

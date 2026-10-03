@@ -10,7 +10,7 @@
 
 本项目的参赛作品是 **OctoSense 原生脚本应用**：`bundle/main.splash`，采用官方 [script-app 流程](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/flows/script-app/FLOW.md)。无需用浏览器承载界面，也无需编写或编译本应用的 Rust 代码。
 
-当前本地候选版本 **v0.3.0**，聚焦 AI 应用、产品、设计与落地。它帮助你找到值得了解和试住的城市，不预测幸福概率，也不保证就业结果。公开仓库与版本标签状态见 [publication.md](docs/publication.md)。
+当前版本 **v0.3.0**，聚焦 AI 应用、产品、设计与落地。它帮助你找到值得了解和试住的城市，不预测幸福概率，也不保证就业结果。公开仓库与版本标签状态见 [publication.md](docs/publication.md)。
 
 ## 怎么玩
 

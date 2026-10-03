@@ -1,4 +1,4 @@
-> **当前本地候选为 Joy City v0.3.0，主交付已明确为 `bundle/main.splash` 原生脚本应用。** 五个生活场景、可修改画像、两轮城市反馈和猫狗不同视角见 [README](README.md)；当前验证与公开发布情况见 [publication.md](docs/publication.md)。下面仅为 v0.1 晨间历史记录，不能代表当前能力、初赛门槛与待办。
+> **当前已公开源码版本为 Joy City v0.3.0，主交付已明确为 `bundle/main.splash` 原生脚本应用。** 五个生活场景、可修改画像、两轮城市反馈和猫狗不同视角见 [README](README.md)；当前验证与公开发布情况见 [publication.md](docs/publication.md)。下面仅为 v0.1 晨间历史记录，不能代表当前能力、初赛门槛与待办。
 
 # 城市红娘：晨间交付（历史记录）
 
