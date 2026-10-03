@@ -1,0 +1,164 @@
+{
+  "recordedAt": "2026-10-03T15:10:37.763228+00:00",
+  "version": "0.3.0",
+  "kind": "real-hidden-card-host-frame-recording",
+  "productionMainSHA256": "a01414d00e7b9abe923ccbb6e3676895aa0b1b2c2f440b95db84a10cb1234577",
+  "syntheticInputsOnly": true,
+  "stateInjected": false,
+  "sourceInjected": false,
+  "userWindowOperated": false,
+  "realModelSuccessVerified": false,
+  "temporaryDirectory": "/var/folders/5_/qx8p5th144s5l5b2fswg2w5c0000gn/T/city-native-demo-_3d1gfyn",
+  "port": 18157,
+  "passed": true,
+  "finalSyntheticProfile": {
+    "guide": "cat",
+    "aiRole": "product",
+    "joy": [
+      "mix",
+      "quiet",
+      "new",
+      "build",
+      "explore"
+    ],
+    "rentBudget": 4000,
+    "housingType": "alone",
+    "maxCommuteMinutes": 45
+  },
+  "uiFlowPassed": true,
+  "video": {
+    "width": 920,
+    "nativeHeight": 1640,
+    "height": 1840,
+    "duration": 150.96,
+    "fps": 25,
+    "capturedFrames": 756,
+    "requestedCaptureFPS": 5,
+    "bytes": 4147584,
+    "sha256": "81f4891a2074f739f2f8433ff7d097ce90ad96a10ed7bb86060b20e99f9ee2ff",
+    "fullDecodePassed": true,
+    "captureDuration": 151.006322083
+  },
+  "productionMainStillCurrent": true,
+  "productionBundleModifiedByRecording": false,
+  "chapters": [
+    {
+      "start": 0.0003769579999999273,
+      "title": "从真实原生应用开始",
+      "detail": "独立 card-host 与空白存档；所有操作使用合成资料。"
+    },
+    {
+      "start": 5.1644777500000005,
+      "title": "先确认 AI 方向",
+      "detail": "方向用于整理期待，不承诺任何城市已有合适职位。"
+    },
+    {
+      "start": 11.16469225,
+      "title": "生活场景 1 / 5：新鲜感",
+      "detail": "一次只选一个真实期待；可跳过，不从人格标签猜答案。"
+    },
+    {
+      "start": 18.168151291999997,
+      "title": "生活场景 2 / 5：恢复精力",
+      "detail": "一次只选一个真实期待；可跳过，不从人格标签猜答案。"
+    },
+    {
+      "start": 25.169699542,
+      "title": "生活场景 3 / 5：关系",
+      "detail": "一次只选一个真实期待；可跳过，不从人格标签猜答案。"
+    },
+    {
+      "start": 32.169183167,
+      "title": "生活场景 4 / 5：职业期待",
+      "detail": "一次只选一个真实期待；可跳过，不从人格标签猜答案。"
+    },
+    {
+      "start": 39.165058667,
+      "title": "生活场景 5 / 5：不确定性",
+      "detail": "一次只选一个真实期待；可跳过，不从人格标签猜答案。"
+    },
+    {
+      "start": 46.158324666999995,
+      "title": "天气偏好与现实条件",
+      "detail": "明确底线会保留；预算、住房和通勤仍需现实核验。"
+    },
+    {
+      "start": 64.315849708,
+      "title": "先核对画像，再认识城市",
+      "detail": "每句话都来自明确选择；点修改，只重答对应场景。"
+    },
+    {
+      "start": 80.218088,
+      "title": "第一轮：先介绍一座探索候选",
+      "detail": "看具体理由，也看代价；证据区间重叠，不宣称唯一最佳。"
+    },
+    {
+      "start": 92.600206667,
+      "title": "反馈后，只追问一个相关场景",
+      "detail": "合成用户重新确认恢复方式，其他四维保持原样。"
+    },
+    {
+      "start": 98.31452241699999,
+      "title": "第二轮：解释变化，也承认未知",
+      "detail": "安静需具体街区证据；确认偏好并不保证一定换城。"
+    },
+    {
+      "start": 106.90325704199999,
+      "title": "换一位介绍人，看同一份资料",
+      "detail": "小猫侧重职业、小狗侧重生活；答案、事实与底线保留。"
+    },
+    {
+      "start": 116.498762125,
+      "title": "把偏好变成三条体验行动",
+      "detail": "尝试节奏、关系验证、普通一天；不靠未知资料暗中加分。"
+    },
+    {
+      "start": 122.75635199999999,
+      "title": "公开依据与尚未确认的条件",
+      "detail": "八城仅 47/136 个 Joy 信号可探索比较，仍有大量未知。"
+    },
+    {
+      "start": 132.682049542,
+      "title": "真实宿主限制，也如实展示",
+      "detail": "card-host 未提供应用 Agent 服务；失败没有修改档案。"
+    },
+    {
+      "start": 143.153254042,
+      "title": "原生主流程完成，真实模型仍待验收",
+      "detail": "这是生产 OctoScript 的真实操作，不是 Web 视频或注入响应。"
+    }
+  ],
+  "events": [
+    {
+      "time": 46.158321582999996,
+      "name": "five_scenes_answered_through_ui"
+    },
+    {
+      "time": 73.313755458,
+      "name": "single_portrait_scene_revised_without_erasing_other_answers"
+    },
+    {
+      "time": 80.21843958299999,
+      "name": "first_city",
+      "cityId": "chengdu"
+    },
+    {
+      "time": 98.314509333,
+      "name": "feedback_refinement_changes_explicit_preference"
+    },
+    {
+      "time": 106.903275458,
+      "name": "guide_switch_preserves_answers"
+    },
+    {
+      "time": 122.953663708,
+      "name": "sources_opened_in_real_ui"
+    },
+    {
+      "time": 132.682079833,
+      "name": "agent_unavailable_preserves_saved_state"
+    }
+  ],
+  "captureErrors": [],
+  "maxFrameGapSeconds": 0.3795136249999942
+}

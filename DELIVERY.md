@@ -1,4 +1,4 @@
-> **当前版本已更新为 Joy City v0.3.0。** 五个生活场景、可修改画像、两轮城市反馈和猫狗不同视角见 [README](README.md)；当前验证与发布情况见 [publication.md](docs/publication.md)。下面仅为 v0.1 晨间历史记录，不能代表当前能力与待办。
+> **当前本地候选为 Joy City v0.3.0，主交付已明确为 `bundle/main.splash` 原生脚本应用。** 五个生活场景、可修改画像、两轮城市反馈和猫狗不同视角见 [README](README.md)；当前验证与公开发布情况见 [publication.md](docs/publication.md)。下面仅为 v0.1 晨间历史记录，不能代表当前能力、初赛门槛与待办。
 
 # 城市红娘：晨间交付（历史记录）
 
@@ -45,7 +45,7 @@ Web 版视觉、交互和分享完整，按本地规则运行，未调用大模�
 
 原生 OctoScript 版已验证核心撮合流程并具有系统 Agent 入口。实际 card-host 返回 `no service answers "octos" on this device`，页面正确显示不可用并保留本地结果。本应用尚未在完整 Shell 接通 MiniMax/Kimi；原生版也没有 Web 的 PNG 分享功能。
 
-**正式参赛未完成：** 本应用完整 Shell 安装与真实模型、正式签名、公开支持/隐私 URL（当前 listing 为占位）、GitHub 仓库/Tag、App Hub Issue 与人工审核。当前不应宣称正式上架。
+**当时尚未完成的完整发布事项（历史记录）：** 本应用完整 Shell 安装与真实模型、正式签名、公开支持/隐私 URL、GitHub 仓库/Tag、App Hub Issue 与人工审核。这里混合了源码交付与商店发布，不能用作当前初赛硬门槛；当前状态见上方链接。
 
 ## 产品判断与接下来最关键的验证
 

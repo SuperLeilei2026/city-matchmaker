@@ -207,12 +207,9 @@ def main():
     state=temp/'state';statefile=state/'leilei-city-matchmaker/match.json'
     actual=[]
     def production(d):
-        d.click('填写我的资料 →');d.click('昵称（可跳过）');d.type('合成原生测试者')
-        d.click('下一页：性格与相处 →');d.click('下一页：职业与生活 →')
-        for text in ['○ 科技 / 互联网','○ 户外与自然','○ 演出与展览','○ 2500']:d.click(text)
-        d.click('下一页：五种日常场景 →')
-        for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']: d.click(text)
-        d.click('看看我的生活画像 →');d.click('画像准确，先认识一座城 →')
+        d.click('从想过的日子开始 →');d.click('○ AI 应用与产品')
+        for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']:d.click(text)
+        d.click('先核对我的生活画像 →');d.click('画像准确，先认识一座城 →')
         assert any('，先见一面' in x for x in d.labels())
         first_city_id=json.loads(statefile.read_text())[25]
         d.click('这座城我明确不考虑');d.top();d.click('保留原回答');d.top()
@@ -228,7 +225,7 @@ def main():
         assert statefile.read_bytes()==before
         actual.append('free_feedback_not_saved_before_confirmation')
         d.click('让 Agent 提出修改');d.scroll(120)
-        assert any('系统 Agent 当前不可用' in x for x in d.labels())
+        assert any('应用 Agent 当前不可用' in x for x in d.labels())
         assert statefile.read_bytes()==before
         actual.append('real_cardhost_unavailable_preserves_state')
         d.shot(temp/'actual-cardhost-unavailable.png')

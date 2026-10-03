@@ -18,11 +18,12 @@ chmod 700 "$state_dir"
 state_dir=$(CDPATH= cd -- "$state_dir" && pwd)
 
 # Do not inherit a different test profile or the historical shared-core override.
-unset OCTOS_APP_CORE_DIR MAKEOS_HOME MAKEPAD_HIDE_WINDOWS
+unset OCTOS_APP_CORE_DIR MAKEOS_HOME MAKEPAD_HIDE_WINDOWS OCTOSENSE_CONTAINED_APPS
 export OCTOSENSE_HOME="$state_dir"
 export OCTOSENSE_APP_DATA="$state_dir/apps"
 export OCTOS_APP_CORE_BIN="$octos_bin"
-export OCTOSENSE_CONTAINED_APPS=1
+# Preserve the host's first-use agent consent. OCTOSENSE_CONTAINED_APPS is a
+# development consent override, so never inherit or enable it in this launcher.
 export MAKEPAD_WM_TEST_APP="$start_app"
 
 # A local signed catalog is optional and never means public App Hub approval.

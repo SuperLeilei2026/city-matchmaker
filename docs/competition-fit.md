@@ -1,6 +1,12 @@
 # Joy City v0.3：项目定位与参赛场景
 
-更新：2026-10-03。本轮更新产品实际能力与证据边界，没有重新联网核验赛事规则，也没有改变外部报名记录。下列官方链接沿用此前登记材料，当前要求仍以主办方发布为准。
+更新：2026-10-03。本轮核对了官方 App Flow 与现有赛事提交说明，没有改变外部报名记录。v0.3 目前为本地开发版本，尚未建标签、尚未推送。
+
+## 参赛交付定位
+
+本项目的初赛主交付是 `bundle/` 中的 OctoScript 应用，程序入口为 `bundle/main.splash`；真实原生截图、运行步骤与验收报告是主要证据。Web 是辅助体验和规则对照，不替代原生应用。
+
+官方 [App Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/README.zh-CN.md#设计流程)的文字需求路线是 script-app，产物包含 `main.splash`；它由 Makepad Script/Splash 运行，与 `page.card` 的 L0 路径不同。源码初赛提交与 App Hub 签名上架分开；[赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)明确现阶段无需等待 Hub 上架。技术文档自身不决定比赛规则，其他作品形态不在此被一概判定。
 
 ## 产品定位
 
@@ -49,11 +55,11 @@
 4. 规则负责事实门槛、比较和排除，不能把确定性规则结果写成模型生成的推荐。
 5. 当前验证包括真实 card-host 运行和临时包中的显式响应注入；未证明本应用已获得真实模型的成功返回。失败处理通过也不等于模型链路成功。
 
-演示时应分别标明手动场景修订、规则重排、Agent 提案确认和模型服务状态。不得借用旧项目的调用记录，也不得将旧版录屏当作 v0.3 新流程已经录制完成的证据。
+演示时应分别标明手动场景修订、规则重排、Agent 提案确认和模型服务状态。用户已报告宿主连接，但本应用仍缺真实模型全链路证据。已完成约2分31秒原生card-host实录，覆盖逐题画像、反馈、来源及模型服务不可用保护；这是原生主流程和真实失败处理证据，没有真实模型成功。另保留151秒Web辅助录像，两者分别说明。
 
 ## 证据与材料
 
-当前算法细节见 [匹配模型](matching-model.md)，产品过程见 [产品设计](product-design.md)。原生五维与跨端对照见 `qa/native-joy-check.json`；CM1 机制见 `qa/native-agent-check.json`。两份报告使用合成资料，均不能证明推荐的现实有效性或真实模型成功。
+当前算法细节见 [匹配模型](matching-model.md)，产品过程见 [产品设计](product-design.md)。原生五维与跨端对照见 `qa/native-joy-check.json`；CM1 机制见 `qa/native-agent-check.json`。两份报告使用合成资料，均不能证明推荐的现实有效性或真实模型成功。原生五题逐页流程已最终通过12项界面、4项存档／迁移和7组跨端对照；单题编辑中重启后仍返回画像，39字段存档兼容29／30／38旧档。Agent的5项生产路径、21项临时响应检查也已复跑，两份报告哈希与生产程序一致。
 
 [公开版本说明](publication.md) 与 [演示材料](demo.md) 记录发布和录像；引用时要核对各自版本。历史 v0.2 内容和录像不能自动继承为本轮证据。当前本地通过检查，也不等于比赛评审通过或 App Hub 已发布。
 
@@ -64,4 +70,4 @@
 - [作品提交与实际运行证据要求](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)
 - [初赛交付清单](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/competition-schedule.md)
 
-本轮只更新这三份说明。完整真实模型链路、v0.3 演示材料及任何对外发布，须分别提供对应证据，不能从模型测试或文档更新推导已完成。
+原生入口改动后的运行、截图与包复验已完成；当前仍需固定并推送 v0.3 源码。真实模型和 App Hub 发布另行记录，不作为已经完成的事实，也不混同为当前源码交付的前置条件。

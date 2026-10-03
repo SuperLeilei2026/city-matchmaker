@@ -7,8 +7,10 @@
 - 独立 OctoSense Shell 已启动，AI providers 页面可用；新状态目录没有继承故事排练场的 mock provider。
 - 城市红娘 `0.2.0` 已复制到专用测试目录并以临时测试发布者签名。`hub check` 无警告通过，本地 catalog `sequence 1`、`1 entries` 验签通过。
 - 本地包摘要为 `d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c`。测试签名没有写回仓库中的 `bundle/`。
-- **真实模型调用尚未通过。** 截至本次检查，独立 profile 尚未保存。已打开宿主密钥输入向导，等待用户在本机完成配置；没有读取或记录用户密钥。
-- **本地 catalog 安装待继续。** 镜像已准备，但没有在用户填写密钥时重启 Shell。此处的本地测试发布不是公开 App Hub 审核。
+- **用户已报告模型连接完成。** 本应用的真实响应、确认执行与恢复仍待独立验收；不再将等待填写密钥列为阻塞。没有读取或记录用户密钥。
+- **上面两项包与 catalog 记录仅适用于旧 v0.2.0。** 当前 v0.3 的真实 card-host 验收见 [原生说明](octosense.md)；尚无 v0.3 经完整 Shell 安装并成功调用模型的证据。本地测试发布不是公开 App Hub 审核。
+
+本次重新核对官方 [App Design Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/0e59346e810ed694702b1df48f4283dc8104358c/README.zh-CN.md)：`main.splash` 是正式支持的 script-app 入口；无需改成 Web 或重写为 `page.card`。官方最新源码基底已前进，下表识别的是实际测过的工具，不能据此宣称最新宿主全部兼容。
 
 后续真实调用必须记录 provider/model、应用版本、实际输入、应用收到的有效提案、用户采用后的状态变化；只有连接测试成功还不算应用验收成功。
 
@@ -28,7 +30,7 @@
 
 Makepad 归档存在少量非编译文件的换行差异及忽略文件/符号链接缺失，不宣称全树逐字节相同。Shell 源码的额外变更可由该 OctoSense commit 中的 `tools/runtime-patches/makepad-settings.patch` 重建；已在临时副本成功应用，并核对覆盖文件。历史本地树未应用 `makepad-system-back.patch`，这一区别涉及 Android，当前仅验证 macOS。
 
-Shell 使用一个本地薄 wrapper：入口仍为官方 `desktop/src/main.rs`，依赖官方 `crates/shell`，关闭默认 features，仅开启 `octos-core`、`app-hub`、`dev-mode`。本地配置把 Git 依赖映射到同 commit 的归档路径；它没有改写应用 API 或跳过城市应用的权限同意。编译进 `dev-mode` feature 不等于授予应用任意权限。
+Shell 使用一个本地薄 wrapper：入口仍为官方 `desktop/src/main.rs`，依赖官方 `crates/shell`，关闭默认 features，仅开启 `octos-core`、`app-hub`、`dev-mode`。本地配置把 Git 依赖映射到同 commit 的归档路径，没有改写应用 API。历史启动脚本曾默认设 `OCTOSENSE_CONTAINED_APPS=1`，官方将其标为跳过首次 Agent 同意的开发覆盖；现已移除，并显式清除此继承环境变量。因此历史启动不能作为正常首次授权的验收证据。编译进 `dev-mode` feature 本身不等于授予应用任意权限。
 
 构建缓存记录的 Rust 为 `rustc 1.98.1 (48a229cea 2026-09-01)`，LLVM `22.1.8`。Octos 的实际 features 为 `api,matrix`，关闭默认 features；Shell 的实际 features 为 `app-hub,dev-mode,octos-core`。
 

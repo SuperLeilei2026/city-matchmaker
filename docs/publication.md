@@ -1,48 +1,46 @@
-# 公开版本与初赛材料状态
+# 初赛源码与发布状态
 
-更新：2026-10-03。源码仓库：[SuperLeilei2026/city-matchmaker](https://github.com/SuperLeilei2026/city-matchmaker)。队伍：MOST暴躁队；成员：Leinstein。
+更新：2026-10-03。队伍：MOST暴躁队；成员：Leinstein。仓库：[SuperLeilei2026/city-matchmaker](https://github.com/SuperLeilei2026/city-matchmaker)；[初赛地址登记回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)。仓库登记不等于评审通过。
 
-## 仓库登记与版本
+## 主交付与版本
 
-已在赛事 Issue #13 按“队伍名＋仓库地址”登记：[提交回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)。登记不代表主办方已验收、评分或确认晋级。
+**本项目初赛主交付是 OctoScript 脚本应用包 `bundle/`，程序入口为 `bundle/main.splash`。** `manifest.json`、`listing.json`、素材、原生真实截图与复现说明随包提供。Web 版用于辅助体验、规则对照和交互说明，不能替代原生应用运行证据。
 
-本轮版本为 **Joy City v0.3.0**：用户通过五个生活场景认识自己的取舍，先确认可编辑画像，再探索城市、反馈并修正。猫狗介绍人提供不同的观察角度，切换时保留用户答案与明确拒绝。版本以 `v0.3.0` 标签固定；源代码、验证报告与演示一起归档。旧 `v0.1.0`、`v0.2.0` 记录保留，不移动旧标签。
+这对应官方 [App Flow 的 script-app 路径](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/README.zh-CN.md#设计流程)：`main.splash` 由 Makepad Script 在 Splash 环境求值，与 `page.card` 的 L0 解析路径不同；不因后缀为 `.splash` 而误判缺少 OctoScript 参赛应用。
 
-本轮先提交产品仓库。未向 App Hub 公开提交或上架；本地包检查、签名或安装测试不能代替 App Hub 的人工审核与公开收录。
+**v0.3.0 目前是本地开发版本，尚未创建标签、尚未推送。** 本次只读远端核对时，公开 `main` 仍为 `131e752`，最新公开标签为 `v0.2.0`。旧标签保留，不移动。原生流程已完成本轮复验；公开提交后再以实际提交号和标签更新本页。
 
-## 可以核验的交付
+源码初赛提交与 App Hub 公开上架是两条状态。[赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)写明现阶段按公开源码和可运行作品评审，无需等待 Hub 上架。官方 App Flow 也明确参赛不会自动提交到 App Hub。本项目未公开上架；这不应被写成当前源码提交的前置阻断。
 
-- **可玩 Web 原型。** 运行 `node serve.mjs`，在同一台电脑打开输出地址；不需要 API Key。没有公开在线 Demo。
-- **OctoScript 参赛包。** `bundle/` 提供应用逻辑、素材与权限清单。当前原生五维流程、存档迁移和与 JavaScript 引擎的一致性已有真实 card-host 验证。
-- **v0.3 关键截图。** [可编辑画像](../qa/desktop-portrait.png)、[首次城市介绍](../qa/desktop-first-match.png)、[反馈后结果](../qa/desktop-result.png)，全部采用合成资料。
-- **v0.3 实际演示。** 新录制的 [151 秒 MP4](demo-web.mp4)（1440 × 1000，H.264，3,935,397 字节）覆盖五维画像、拒绝反馈、试城计划、来源、分享和恢复；[录制报告](../qa/demo-web/recording-report.json) 为 `passed: true`。首轮上海被明确拒绝后，结果为南京、深圳、北京。新文件已替换旧演示，已通过完整 ffmpeg 解码、Chromium 实际播放与录制源码哈希核对，见 `qa/demo-video-validation.json`。
-- **来源与边界。** 八座城市、32 条公开来源；136 条五维信号中 47 条非空人工分档、89 条未知。它们是探索线索，不是 AI 城市排名或幸福率。
-- **材料导航。** [初赛清单](submission-checklist.md)、[产品设计](product-design.md)、[场景定位](competition-fit.md)、[运行环境](runtime-lock.md)、[来源说明](data-sources.md)。
+## 交付与证据
 
-## 已验证的范围
+- **原生主程序。** [main.splash](../bundle/main.splash)；启动、生成和测试命令见 [OctoScript 包说明](octosense.md)，工具基底见 [runtime-lock.md](runtime-lock.md)。
+- **原生真实截图。** [首次介绍](../bundle/screenshots/02-first-match.png)、[反馈后结果](../bundle/screenshots/03-second-match.png)、[画像](../bundle/screenshots/05-portrait.png)、[逐题场景](../bundle/screenshots/06-scene.png)。已随本轮真实 card-host 验收更新，使用合成资料。
+- **原生测试。** [Joy 报告](../qa/native-joy-check.json)、[Agent 报告](../qa/native-agent-check.json)记录被测源码哈希。两份报告的源码哈希均与当前生产 `main.splash` 一致；单题编辑中退出重启后返回画像已加入回归。
+- **原生主演示。** [约2分31秒真实 card-host 录像](demo-native.mp4)与[录制报告](../qa/native-demo/recording-report.json)，包含逐题选择、画像修订、两轮推荐及服务不可用保护；无源码／状态注入，录制、完整解码、Chromium实际播放与成片抽帧检查通过。
+- **辅助 Web。** [Web 录像](demo-web.mp4)与[浏览器报告](../qa/browser-smoke-result.json)用于交互对照；两部影片的范围分别见 [demo.md](demo.md)，均无真实模型成功。
+- **数据。** 8 城、32 来源、136 条 Joy 信号；47 条人工分档，89 条未知，详见 [来源说明](data-sources.md)。
 
-| 项目 | 已有证据 | 尚不能据此宣称 |
+## 验证状态
+
+| 范围 | 已有证据 | 当前边界 |
 | --- | --- | --- |
-| 匹配、数据、迁移与静态服务 | 最终 41 项 Node 测试通过；服务测试需要本机监听端口权限 | 推荐准确率、幸福概率、就业成功率，或所有平台已验 |
-| Web 五维闭环 | [浏览器报告](../qa/browser-smoke-result.json) 最终记录 10 组流程通过、无页面错误、0 次远端资料请求；[详细记录](web-qa.md)列出范围 | 实体手机已验证，或真实模型已参与 |
-| 原生 Joy City 流程 | [原生五维报告](../qa/native-joy-check.json)：7 项界面检查、3 项存档／旧格式迁移检查、7 组原生与 JS 对照；城市顺序、分数、覆盖和区间一致，试城计划与共享配置一致 | 现实体验已校准、真实 provider 已成功调用 |
-| 受控 Agent 执行保护 | [原生 Agent 报告](../qa/native-agent-check.json)：5 项生产路径、21 项临时响应注入检查；确认前不修改，拒绝／非法／过期不执行，确认后保存读回 | 测试响应来自 MiniMax、Kimi 或其他真实模型 |
-| v0.3 包检查 | 最终 Hub gate 通过，仅 `unsigned` 警告；最终包 BLAKE3 为 `383e79eaa30a4604d58df924464c12e4071706a053631ba1e31256bbcff3f81e` | 已完成公开发布签名、App Hub 上架或比赛审核 |
+| 原生 Joy 流程 | 最终 12 项界面、4 项存档／迁移、7 组原生与 JS 对照通过，含试城计划一致性 | 39字段存档兼容29／30／38旧档；这不证明现实推荐有效或真实模型成功 |
+| 原生 Agent 保护机制 | 最终 5 项生产路径、21 项临时响应注入检查通过 | 注入只在临时包；不是 MiniMax／Kimi 的真实返回 |
+| 包检查 | 最终 `hub check --allow-unsigned` 通过，仅 unsigned 警告；审核材料与生产源码一致 | 不等于正式签名或 App Hub 批准；以后改包须重新检查 |
+| 辅助规则与 Web | 41 项 Node、10 组浏览器流程通过；0 页面错误、0 远端资料请求 | 仅覆盖各报告对应的源码，不能替代原生启动与交互 |
+| 原生主演示 | 约2分31秒真实card-host操作；生产源码哈希一致，无注入，录制、完整解码、Chromium播放和画面检查通过 | 模型服务不可用的真实失败处理，不是模型成功证据 |
+| 辅助 Web 录像 | 151秒；录制、完整解码和浏览器播放通过 | 不能代替原生操作结果或真实模型证据 |
+| v0.3 公开源码 | 本地开发中 | 标签、推送尚未完成；没有公开在线 Web Demo |
 
-原生数值对照考虑 OctoScript f32 与 JavaScript f64 的差异，报告容许误差为 `0.0001`。测试响应只注入临时包，生产源码不包含测试注入逻辑。旧 v0.2 包的 `hub check` 结果不能自动作为 v0.3 最终包的检查结果。
+## 真实模型边界
 
-## 真实模型与当前协议边界
+CM1 保留结构化提案、用户确认、执行、保存与读回保护。当前有用的 Agent 操作是追加气候避开项或明确排除候选城市；五维答案由用户手选。旧 `priority/focus` 字段不能被演示成已能修改五维画像。
 
-当前仍保留 CM1 受控提案协议。对 Joy City 五维推荐有效的 Agent 操作主要是新增气候约束或明确排除当前城市；五维答案由用户在界面中直接确认、修改。兼容协议中的旧 `priority`／`focus` 字段不能冒称已能修改新的五维画像。
+用户已报告宿主连接完成，但本应用真实模型返回、确认执行与恢复全链路仍没有验收证据。card-host 按官方设计不提供 octos 服务，无服务提示只能证明失败处理；不能据此认定真实模型已通过或把配置账户当作本地基础流程的前提。详见 [原生说明](octosense.md)。
 
-本应用尚无真实模型成功返回的验收记录。card-host 不提供 octos 服务，能够验证不可用提示与状态保护；它既不是调用代码失败的充分证据，也不是模型成功证据。完整验收需要在独立 OctoSense Shell 中配置可用 provider，经宿主授权请求真实模型，核对提案并确认执行，再核验排除／约束、排序、存档和恢复。密钥只进入宿主设置，不进入源码或提交材料。
+原生新入口回归、截图与包检查已完成；下一步固定源码并推送。真实模型验收和以后选择进行的 App Hub 签名／审核分别记录，不混同为初赛源码是否已经提交。
 
-目前待完成：本应用的真实模型成功链路；App Hub 尚未公开上架。完成一项后按实际结果更新，不把准备工作写成已发布。
+## 数据与隐私
 
-## 数据与个人资料边界
-
-- 五维信号是有来源的人工整理，未知保持未知；自然资源、行业案例或活动入口不保证恢复感、工作机会和稳定关系。
-- MBTI、星座、学校、年龄与 AI 职业角色不为城市证据加分。住房预算、住房方式和通勤要求缺少可比样本时，只作待核验条件。
-- Web 资料保存在本机，不向模型发送。当前浏览器验收未观察到远端资料请求；分享内容仍按 [隐私说明](privacy.md) 限定。
-- 原生调用发送自由反馈和匹配上下文，可能包含预算等待核验条件；不自动附带结构化身份档案。自由反馈可能含用户主动输入的隐私，发送前须核对。
-- 公开测试、截图与演示采用合成资料；模拟响应与真实模型结果严格分开记录。
+MBTI、星座、学校、年龄不产生城市分数；住房与通勤缺少可比样本时只作待核验条件。原生自由反馈会发送给宿主模型，用户可能自行写入隐私；公开证据只用合成资料。完整说明见 [privacy.md](privacy.md)。

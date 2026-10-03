@@ -1,38 +1,37 @@
-# Joy City v0.3 · 2分31秒实际操作演示
+# Joy City v0.3 · 原生实际操作演示
 
-[观看或下载 MP4](demo-web.mp4) · [镜头说明](demo-script.md) · [初赛清单](submission-checklist.md)
+[观看原生 MP4](demo-native.mp4) · [原生录制报告](../qa/native-demo/recording-report.json) · [初赛清单](submission-checklist.md)
 
-本片为 v0.3 真实浏览器操作，使用“小舟／示例大学”等合成资料。演示五个生活场景、画像核对、首次城市介绍、明确拒绝、关键追问、第二轮结果、试城计划、来源、猫狗视角、PNG 下载与刷新恢复。
+**主交付是 `bundle/main.splash` 的 OctoScript 应用。** 本片使用最终生产源码，在独立隐藏 card-host 窗口中实际操作并连续采帧，使用合成资料；没有源码注入、状态注入，也没有操作用户已有窗口。录像报告中的程序 SHA-256 与当前生产文件一致。
 
-**范围：Web、本地规则；无真实模型调用。** 不代表原生 OctoSense 录屏或系统 Agent 成功证据。
+原生影片约 **2分31秒，920×1840，H.264／25fps编码，4,147,584字节**。原生画面为920×1640，底部添加说明字幕；窗口约每秒采集5帧，未用静态概念图替代交互。录制断言、完整视频解码与 [Chromium 实际播放](../qa/native-demo/playback-validation.json)均通过；[成片画面检查](../qa/native-demo/visual-check.json)核对22／83／136秒，确认场景、首城及不可用提示可读，字幕没有遮挡应用。
 
-## 可核对的结果
+v0.3 目前仍仅在本地，尚未创建标签、尚未推送；影片存在不等于新版源码已经公开发布。
 
-- 空画像明确提示不足，展示顺序不等于适合程度。
-- 合成 AI 设计方向与生活答案先介绍上海。
-- 明确拒绝上海后，第二轮候选为南京、深圳、北京，拒绝记录保留。
-- 猫狗使用同一资料和底线、不同权重；切换不会替用户修改答案。
-- 来源可追溯；缺少证据的偏好用于试城计划而非凭空加分。
-- 实际生成并下载 PNG，不带昵称、院校、预算或重要的人位置。
-- 刷新恢复当前结果，整个录制无远端资料请求。
+## 本片能核对的行为
 
-成片 **151秒，1440×1000，25fps，H.264，3,935,397字节**。无声，中文说明字幕放在浏览器画面下方，未改写应用显示。
+1. 从空白存档选择 AI 方向，逐页回答五个生活场景，再填写合成预算4000、独居与45分钟通勤条件。
+2. 先核对画像，单独修改一个场景后返回画像，其余答案保留；确认后首次介绍成都。
+3. 反馈并确认恢复方式为安静，第二轮重新介绍上海；这是本次合成资料的结果，应用不保证改一个答案必定换城。
+4. 切换猫狗观察角度，保留原答案与底线；显示三条试城计划，并打开真实来源界面。
+5. 实际请求应用 Agent，card-host 返回服务不可用；应用提示限制，存档保持不变。
 
-录制报告：[recording-report.json](../qa/demo-web/recording-report.json)。已完整 ffmpeg 解码及 Chromium 实际播放，录制记录中的10个源码／数据文件 SHA-256 均与最终文件一致：[播放与版本核验](../qa/demo-video-validation.json)。旧 v0.2 视频保留在 v0.2.0 Git 标签，当前路径已更新。
+最后一步是**真实失败处理证据，不是真实模型成功证据**。本应用在完整 Shell 中的模型返回、用户确认、执行与恢复仍待验收。另有原生12项界面、4项存档／迁移、7组对照，以及5项Agent生产路径和21项临时响应检查；后者的模拟响应没有进入这部影片。
 
-![先核对生活画像](../qa/demo-web/portrait.png)
+![五题逐页：恢复方式](../qa/native-demo/02-scene-recovery.png)
 
-![拒绝首城后再次比较](../qa/demo-web/03-result.png)
+![先核对可编辑画像](../qa/native-demo/03-portrait.png)
+
+![真实 Agent 不可用状态](../qa/native-demo/08-agent-unavailable.png)
+
+## 辅助 Web 录像
+
+[Web MP4](demo-web.mp4)仅辅助说明交互与规则。该片151秒、1440×1000、H.264，展示合成用户首轮上海、明确拒绝后南京／深圳／北京，以及PNG下载和刷新恢复；这些不是原生影片的操作结果。原生当前没有PNG导出。
+
+Web 的[录制报告](../qa/demo-web/recording-report.json)和[播放核验](../qa/demo-video-validation.json)记录完整解码、Chromium播放和源码哈希。旧v0.2视频保留于旧Git标签，当前路径对应v0.3。
 
 ## 复现
 
-先运行 `node serve.mjs`，另在具备 Playwright、Chromium、ffmpeg 和中文字体的环境运行：
+原生运行与工具版本见 [octosense.md](octosense.md)、[runtime-lock.md](runtime-lock.md)。原生录制脚本为 `tools/record-native-demo.py`，使用独立临时状态目录，不读取用户存档；精确参数、阶段时间点及录像校验见原生报告。
 
-```sh
-DEMO_URL=http://127.0.0.1:4318 node qa/record-demo.mjs
-node qa/validate-demo.mjs
-```
-
-可用 `PLAYWRIGHT_MODULE`、`FFMPEG`、`DEMO_FONT` 指定工具位置。这些仅用于制作材料，不是产品运行依赖。脚本使用隔离浏览器，覆盖自己的 `qa/demo-web/` 输出和视频；原始录制及中间字幕留在系统临时目录。
-
-本地产品服务器不提供 docs 文件；观看请直接打开 MP4 或 GitHub 链接。GitHub Markdown 未必内嵌播放器，可下载观看。
+辅助 Web 可先执行 `node serve.mjs`，再在具备Playwright、Chromium、ffmpeg和中文字体的环境运行 `qa/record-demo.mjs`、`qa/validate-demo.mjs`。录制依赖不是原生应用运行依赖。本地Web服务器不提供docs文件；观看请直接打开MP4，发布后也可从仓库下载。

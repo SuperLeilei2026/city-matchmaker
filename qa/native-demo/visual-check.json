@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-03T15:17:07.290678+00:00",
+  "passed": true,
+  "videoSHA256": "81f4891a2074f739f2f8433ff7d097ce90ad96a10ed7bb86060b20e99f9ee2ff",
+  "framesCheckedSeconds": [
+    22,
+    83,
+    136
+  ],
+  "observations": [
+    "五维场景文本和按钮可读",
+    "首城成都与相近候选提示可读",
+    "Agent不可用及未修改资料提示可读",
+    "编辑字幕位于原生图像下方独立区域，没有覆盖产品界面",
+    "画面持续标注合成资料与非模型成功演示"
+  ],
+  "nativeFrameAreaUncoveredByCaptions": true
+}

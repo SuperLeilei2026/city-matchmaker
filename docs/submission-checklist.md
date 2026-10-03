@@ -1,41 +1,37 @@
-# 初赛仓库材料核对
+# 初赛源码交付核对
 
-核对日期：2026-10-03。目标版本：Joy City v0.3.0，源码、包、报告与演示一同归档。仓库登记、作品可运行、公开版本和真实 Agent 验收分别记录；只有主办方能确认评分、验收与晋级。
+核对日期：2026-10-03。**本项目以 `bundle/main.splash` 为入口的 OctoScript 应用是初赛主交付，Web 是辅助材料。** v0.3.0 仍为本地版本，未创建标签、未推送；公开仓库登记与新版源码交付分开记录。
 
-依据：[官方赛程·初赛交付](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/competition-schedule.md#初赛需求成立作品能跑)与[初赛仓库登记 Issue #13](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13)。赛程在“10/4 23:59 前提交”下列出简短需求、可运行原型及启动说明、固定版本、2–3 分钟演示、两张关键截图、数据来源与限制、已报名成员名单；未指定演示必须为某种视频格式或必须把视频字节提交到 Git。时间为北京时间。
+[官方初赛清单](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/competition-schedule.md#初赛需求成立作品能跑)要求 10/4 23:59（北京时间）前提供需求、可运行原型、启动说明、固定源码或包、演示、截图、数据限制及成员信息。[作品提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)明确现阶段无需等待 Hub 上架。`main.splash` 的技术路径依据 [OctoScript App Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/README.zh-CN.md#应用是什么)。
 
-## 已有材料与待完成事项
+## 主交付检查
 
-| 条目 | 状态 | 证据与边界 |
+| 条目 | 状态 | 证据与下一步 |
 | --- | --- | --- |
-| 初赛仓库登记 | 已验证 | [公开仓库](https://github.com/SuperLeilei2026/city-matchmaker)；[MOST暴躁队登记评论](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)。不代表 v0.3 已推送或评审通过。 |
-| 简短需求与目标用户 | 已有 v0.3 材料 | 五个生活场景 → 可编辑画像 → 城市探索 → 反馈修正；面向考虑毕业后城市生活、尤其关注 AI 应用／产品实践的人。见 [产品设计](product-design.md)。现实推荐效果仍待验证。 |
-| 可运行 Web 原型及启动说明 | 最终本地回归通过 | `node serve.mjs`；41 项 Node 测试、10 组浏览器流程通过，0 错误、0 远端资料请求。见 [验收记录](web-qa.md)。本地地址不能直接供其他机器访问。 |
-| 原生包及环境 | 五维流程、迁移、跨引擎一致性已验 | [native-joy-check.json](../qa/native-joy-check.json)：7 项界面、3 项存档／迁移、7 组原生与 JS 对照，试城计划与共享配置一致。最终 Hub gate 通过，仅 unsigned 警告。见 [原生记录](octosense.md)与[运行版本](runtime-lock.md)。 |
-| 受控 Agent 保护机制 | 生产路径与模拟响应已验 | [native-agent-check.json](../qa/native-agent-check.json)：5 项生产路径、21 项临时注入响应检查。真实模型未验；当前 CM1 有效操作为气候约束／排除城市，五维答案仍手动确认。 |
-| 固定源码版本 | v0.3.0 | 新标签包含最终包、演示与报告；保留旧 `v0.1.0`、`v0.2.0`，不移动历史标签。 |
-| 2–3 分钟当前演示 | v0.3 录制与播放验证通过 | `docs/demo-web.mp4`：151 秒，1440 × 1000，H.264，3,935,397 字节；[实际录制报告](../qa/demo-web/recording-report.json) passed 为 true。首轮上海，拒绝后南京／深圳／北京；无错误和外发请求。 |
-| 两张以上关键截图 | v0.3 本地文件已生成 | [画像确认](../qa/desktop-portrait.png)、[首次介绍](../qa/desktop-first-match.png)、[反馈结果](../qa/desktop-result.png)。使用合成资料；最终发布前确认与提交源码一致。 |
-| 操作结果与空／失败状态 | 本地已覆盖 | 五维改值、切换猫狗保留答案、明确拒绝保留、旧存档不猜新答案、空画像保持不确定；card-host 不提供模型时保留本地结果。 |
-| 数据来源与限制 | 已核对 | 8 城、32 来源；136 条 Joy 信号中 47 条非空且全部 `editorial`，89 条 `unknown`。见 [来源说明](data-sources.md)。不把部分历史资料当统一时点城市排名。 |
-| 作者、团队与支持方式 | 已有 | MOST暴躁队 / Leinstein；发布者 Leilei，支持入口为仓库 Issues。赛务报名资格未在本次独立复核。 |
-| 许可证与素材说明 | 已有 | `LICENSE` 为 Apache-2.0；素材说明见 `NOTICE`。新增发布材料须保持同一授权边界。 |
-| 隐私与合成资料 | 已列明 | [隐私说明](privacy.md)区分本地 Web、原生自由反馈发送与宿主历史；公开验收只用合成资料，注入逻辑仅存在于临时测试包。 |
-| 真实 Agent 任务演示 | 未完成 | 需完整 Shell 的宿主授权、真实响应、用户确认、实际执行、存档与恢复。连接测试或模拟响应不能替代。 |
-| App Hub 公开发布 | 未完成 | 本地包与签名测试不是公开上架。仓库登记与 App Hub 的提交／人工审核分别记录。 |
+| 初赛仓库登记 | 已登记 | [MOST暴躁队回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)；不代表 v0.3 已上传或评审通过。 |
+| 需求与目标用户 | 已有 | [产品设计](product-design.md)、[场景定位](competition-fit.md)：通过生活画像和反馈探索毕业后的城市，不预测幸福率或就业成功。 |
+| OctoScript 程序与包 | 已实现并回归 | [main.splash](../bundle/main.splash)与 bundle 中的 manifest、listing、素材。AI方向后五题逐页，支持跳过、返回和画像单题编辑。 |
+| 原生启动与复现 | 已提供命令及工具版本 | [octosense.md](octosense.md)、[runtime-lock.md](runtime-lock.md)。原生本地基本流程不依赖 Web 服务器或模型账户。 |
+| 原生实际交互 | 最终通过 | [Joy 报告](../qa/native-joy-check.json)：12项界面、4项存档／迁移、7组对照，含试城计划；报告源码哈希与当前main一致。编辑单题中退出重启仍正确返回画像。 |
+| 原生真实截图 | 已同步最终流程 | [逐题场景](../bundle/screenshots/06-scene.png)、[首次介绍](../bundle/screenshots/02-first-match.png)、[第二轮](../bundle/screenshots/03-second-match.png)、[画像](../bundle/screenshots/05-portrait.png)来自本轮真实 card-host。 |
+| 正常、空与失败状态 | 已回归 | 明确拒绝、空画像、不确定候选、29／30／38旧档迁移、39字段存档恢复及模型不可用保护均通过。 |
+| 包本地预检 | 最终通过 | `hub check --allow-unsigned` 仅 unsigned 警告，审核材料与生产源码一致。未来改包须重新 stamp/check。 |
+| 固定源码版本 | 未完成 | 本地 v0.3 尚未建标签／推送，远端仍为 v0.2。回归后固定提交号及新标签，保留历史标签。 |
+| 2–3 分钟演示 | 原生约2分31秒实录完成 | [主演示](demo.md)使用最终生产源码和独立card-host，无源码／状态注入；录制断言、完整解码、Chromium播放及成片画面检查通过。[报告](../qa/native-demo/recording-report.json)记录操作与影片指纹。Web影片另列为辅助。 |
+| 数据、权限与隐私 | 已说明 | [来源](data-sources.md)：8 城32来源，47/136非空且均人工整理；[隐私](privacy.md)及 manifest 列明权限。全部公开测试使用合成资料。 |
+| 作者与许可证 | 已有 | MOST暴躁队 / Leinstein，发布者 Leilei，支持为仓库 Issues；Apache-2.0，素材见 NOTICE。报名资格仍由赛务核验。 |
 
-## 复现环境
+## 分开记录的后续状态
 
-- Web 产品：Node.js 22+、现代浏览器；无第三方运行依赖、无构建步骤、无需 API Key。`npm test` 执行 Node 检查，服务测试需允许监听本机端口。
-- 浏览器验收：启动本地服务后运行 `APP_URL=http://127.0.0.1:4319 node qa/browser-smoke.mjs`，地址须与服务输出一致。需可用 Playwright／Chromium；若未装在默认模块路径，可用 `PLAYWRIGHT_MODULE` 指定模块入口。脚本使用独立上下文，不读取或清除日常浏览器资料。
-- 演示录制：Playwright、Chromium、ffmpeg 与中文字体属于材料制作工具，不是产品运行依赖。`qa/demo-web/recording-report.json` 现对应 v0.3 实际录制，含源码哈希及操作时间点；播放记录已与该次录制及源码哈希对应。
-- 原生：Apple silicon macOS 与记录中的 OctoSense／Makepad 工具；见 `tools/native_joy_smoke.py`、`tools/native_agent_smoke.py` 和 [运行版本](runtime-lock.md)。模拟窄屏不等于实体手机或其他宿主验证。
+- **真实 Agent：尚未完成应用全链路验收。** 用户报告宿主已连接，但需本应用的真实响应、确认、执行及恢复记录。最终5项生产路径、21项注入检查通过，只证明受控机制；CM1当前处理气候／排除，五维手选。不能用“未真实模型验收”推导“OctoScript 基础应用不能运行”。
+- **App Hub：未公开提交／上架。** 这是独立发布流程，包含签名与审核；不是当前源码初赛提交的前置阻断。本地预检也不等于人工批准。
+- **Web：辅助验证已完成。** 41项Node、10组浏览器检查，0错误、0远端资料请求；[浏览器说明](web-qa.md)和[录像](demo.md)只证明辅助版本，不替代原生交互。
 
-## 提交前最后核对
+## 复现顺序
 
-- 已完成两处修复后的最终回归：41 项 Node、10 组浏览器流程全部通过；发布前避免再引入未经验证的改动。
-- v0.3 演示已实际录制 151 秒，已通过完整解码与浏览器播放检查；不把 Web 录屏当真实模型证据。
-- 最终包 Hub gate 已通过，仅 unsigned 警告；包 BLAKE3 为 `383e79eaa30a4604d58df924464c12e4071706a053631ba1e31256bbcff3f81e`。以 v0.3.0 固定源码；本地检查不等于公开发布或 App Hub 批准。
-- 从干净目录按 README 启动，公开链接与材料能打开；本地存在不等于已发布。
-- 不公开密钥、真实档案、私有账号数据或临时测试注入逻辑。
-- 真实模型、App Hub、实体手机和现实收益等未验证项目继续明确标注，不写成“全部达标”。
+1. 先按 [原生说明](octosense.md)准备匹配版本的 `card-host`／`hub`，运行 `bundle/`；无需先启动 Web 或配置模型。
+2. 运行 `tools/native_joy_smoke.py`、`tools/native_agent_smoke.py`，核对报告哈希和真实截图；真实模型验证另在完整 Shell 中进行。
+3. 若需查看辅助 Web，再用 Node.js 22+ 执行 `node serve.mjs`。浏览器与录屏脚本所需 Playwright、Chromium、ffmpeg属于辅助验收工具。
+4. 原生最终改动完成后重新生成包摘要、检查、固定版本并推送。提交时核对公开文件可读、原生能按说明复现、材料没有隐私或密钥。
+
+当前不把尚未公开的本地 v0.3 写成已发布，也不把 Web 视频写成原生或真实 Agent 演示。

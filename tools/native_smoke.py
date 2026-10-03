@@ -42,23 +42,12 @@ def main():
         print('PASS: clear removed the local profile file.')
         top()
         shot('01-welcome.png')
-    click('填写我的资料 →')
-    top()
-    click('昵称（可跳过）')
-    request('/t',t='小舟',wait=1)
-    click('下一页：性格与相处 →')
-    assert '你喜欢怎样的相处？' in labels(), labels()
-    click('你的 MBTI（可跳过）')
-    request('/t',t='INFP',wait=1)
-    click('下一页：职业与生活 →')
-    assert '工作之外，日子也要过。' in labels(), labels()
-    click('○ 科技 / 互联网')
-    click('○ 户外与自然')
-    click('○ 演出与展览')
-    click('○ 2500')
-    click('下一页：五种日常场景 →')
-    for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']: click(text)
-    click('看看我的生活画像 →')
+    click('从想过的日子开始 →')
+    click('○ AI 应用与产品')
+    for n,text in enumerate(['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定'],1):
+        assert f'想过的日子 · {n} / 5' in labels(), labels()
+        click(text)
+    click('先核对我的生活画像 →')
     assert '这是你想过的日子吗？' in labels(), labels()
     click('画像准确，先认识一座城 →')
     first=labels()
@@ -79,7 +68,7 @@ def main():
     end=labels()
     assert any('不可用' in x for x in end),end
     state=json.loads((ROOT/'tools/local-state/leilei-city-matchmaker/match.json').read_text())
-    assert state[1]==7 and state[3]=='小舟' and state[10]=='INFP',state
+    assert state[1]==7 and state[35]=='product' and state[30:35]==['new','nature','new','build','explore'],state
     assert state[24] and state[25] in state[24],state
     (ROOT/'tools/native-smoke-result.json').write_text(json.dumps({'first':first,'second':second,'agent':end,'state_revision':state[27]},ensure_ascii=False,indent=2))
     print('PASS: profile entry, two matching rounds, explicit exclusion, local save, Agent unavailable fallback.')

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "subtitle": "从想过的日子，认识毕业第一站",
-  "description": "把新鲜感、恢复方式、关系、职业期待与不确定性说具体，核对一份由你的选择组成的生活画像。INTP猫和ENFP狗使用同一份八城资料，以不同取舍权重介绍城市；收到反馈后继续追问，可以切换视角比较。未知证据不加分，区间重叠时不硬判唯一首选，预算与通勤只作待核验条件。保留系统Agent的CM1受控修改、用户确认与保存核验，五维场景通过按钮修改。",
+  "description": "一次只聊一个生活场景，把新鲜感、恢复方式、关系、职业期待与不确定性说具体，核对一份由你的选择组成的生活画像。INTP猫和ENFP狗使用同一份八城资料，以不同取舍权重介绍城市；收到反馈后继续追问，可以切换视角比较。未知证据不加分，区间重叠时不硬判唯一首选，预算与通勤只作待核验条件。保留应用Agent的CM1受控修改、用户确认与保存核验，五维场景通过按钮修改。",
   "category": "lifestyle",
   "keywords": [
     "city",
@@ -12,6 +12,7 @@
   ],
   "screenshots": [
     "screenshots/01-welcome.png",
+    "screenshots/06-scene.png",
     "screenshots/05-portrait.png",
     "screenshots/02-first-match.png",
     "screenshots/03-second-match.png"

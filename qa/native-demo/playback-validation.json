@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-03T15:16:21.341Z",
+  "passed": true,
+  "playback": {
+    "duration": 150.96,
+    "width": 920,
+    "height": 1840,
+    "currentTime": 0.511297
+  },
+  "playbackMethod": "Headless Chromium; actual local MP4 bytes fulfilled in isolated route",
+  "fullDecode": "ffmpeg complete decode without errors, recorded in recording-report.json",
+  "productionMainSHA256": "a01414d00e7b9abe923ccbb6e3676895aa0b1b2c2f440b95db84a10cb1234577",
+  "productionMainStillCurrent": true,
+  "videoSHA256": "81f4891a2074f739f2f8433ff7d097ce90ad96a10ed7bb86060b20e99f9ee2ff",
+  "bytes": 4147584
+}

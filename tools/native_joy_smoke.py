@@ -30,7 +30,8 @@ def harness():
     out=['let joy_test_rows = []','let joy_test_checks = []', 'fn joy_check(passed_check, name){ joy_test_checks.push({name: name passed: passed_check}) }', 'fn run_joy_contract(){']
     for case in CASES:
         out += ['guide = '+json.dumps(case['guide']), 'joy_profile = '+json.dumps(case['joy']), 'climate_avoids = '+json.dumps(case.get('climate',[])), 'hard_climate = '+str(case.get('hard',False)).lower(), 'excluded_ids = '+json.dumps(case.get('excluded',[])), 'compute_ranking()', 'let result_rows = []', 'for item in ranked { result_rows.push({id: city_rows[item[0]][0] score: item[1] coverage: item[2] low: item[4] high: item[5]}) }', 'joy_test_rows.push({id: '+json.dumps(case['id'])+' ranked: result_rows trial: trial_plan_text()})']
-    out += ['screen = 7', 'excluded_ids = ["shanghai", "hangzhou"]', 'guide = "cat"', 'revision = 42', 'joy_profile = ["new", "nature", "solo", "build", "explore"]', 'ai_role = "product"', 'housing_type = "primary-shared"', 'max_commute = 30', 'save_local()', 'joy_profile = ["", "", "", "", ""]', 'load_local()', 'joy_check(joy_profile[0] == "new" && joy_profile[4] == "explore" && ai_role == "product" && max_commute == 30 && housing_type == "primary-shared", "v2_roundtrip_preserves_joy_housing_commute")']
+    out += ['screen = 10', 'reviewing_edit = true', 'excluded_ids = ["shanghai", "hangzhou"]', 'guide = "cat"', 'revision = 42', 'joy_profile = ["new", "nature", "solo", "build", "explore"]', 'ai_role = "product"', 'housing_type = "primary-shared"', 'max_commute = 30', 'save_local()', 'joy_profile = ["", "", "", "", ""]', 'load_local()', 'joy_check(joy_profile[0] == "new" && joy_profile[4] == "explore" && ai_role == "product" && max_commute == 30 && housing_type == "primary-shared" && reviewing_edit, "v2_roundtrip_preserves_joy_housing_commute_edit_context")']
+    out += ['let v2_legacy = []', 'let full_v2 = data_snapshot()', 'for i in 38 { v2_legacy.push(full_v2[i]) }', 'fs.write("match.json", v2_legacy.to_json())', 'load_local()', 'joy_check(joy_profile[0] == "new" && ai_role == "product" && !reviewing_edit && has_value(excluded_ids, "shanghai"), "legacy_38_migration_preserves_joy_and_rejections")']
     for length in [29,30]:
         out += ['let all_fields = data_snapshot()', 'let legacy = []', f'for i in {length} {{ legacy.push(all_fields[i]) }}', 'legacy[0] = "city-matchmaker-v1"', 'fs.write("match.json", legacy.to_json())', 'load_local()', 'joy_check(joy_profile.to_json() == ["", "", "", "", ""].to_json() && has_value(excluded_ids, "shanghai") && has_value(excluded_ids, "hangzhou") && guide == "cat" && revision == 42, "legacy_'+str(length)+'_migration_keeps_rejections_without_guessing")']
     out += ['fs.write("joy-parity.json", joy_test_rows.to_json())', 'fs.write("joy-contract.json", joy_test_checks.to_json())', '}', 'start_timeout(0.4, || run_joy_contract())']
@@ -49,19 +50,48 @@ def main():
     bundle=temp/'bundle';shutil.copytree(ROOT/'bundle',bundle)
     state=temp/'state';sf=state/'leilei-city-matchmaker/match.json'
     checks=[]
-    def prod(d):
+    def start_and_pause(d):
         assert any('ENFP 狗' in x for x in d.labels()),d.labels()
         d.shot(temp/'01-welcome.png')
-        d.click('填写我的资料 →');d.click('昵称（可跳过）');d.type('合成 Joy 验收')
-        d.click('下一页：性格与相处 →');d.click('下一页：职业与生活 →')
-        d.click('○ AI 应用与产品');d.click('○ 5000');d.click('○ 合租主卧');d.click('○ 单程 30 分钟')
-        d.click('下一页：五种日常场景 →')
-        for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']:d.click(text)
-        d.click('看看我的生活画像 →')
-        assert any('想把 AI 想法做成真实产品' in x for x in d.labels()),d.labels()
-        d.shot(temp/'02-portrait.png')
+        d.click('从想过的日子开始 →')
+        assert '你想怎样参与 AI 应用？' in d.labels()
+        assert not any('学校' in x or '星座' in x for x in d.labels())
+        d.click('○ AI 应用与产品')
+        d.shot(temp/'06-scene.png')
+        assert '想过的日子 · 1 / 5' in d.labels()
+        d.click('○ 经常换一种新玩法')
+        saved=json.loads(sf.read_text());assert saved[1]==10 and saved[30]=='new'
+        assert '想过的日子 · 2 / 5' in d.labels()
+    run_host(args,bundle,state,temp/'start-and-pause.log',start_and_pause)
+    def prod(d):
+        assert '想过的日子 · 2 / 5' in d.labels(),d.labels()
+        assert json.loads(sf.read_text())[35]=='product'
+        for n,text in enumerate(['○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定'],2):
+            assert f'想过的日子 · {n} / 5' in d.labels(),d.labels()
+            d.click(text)
+        assert '哪种天气让你最难受？' in d.labels(),d.labels()
+        d.click('补充预算、住房与通勤（可选）')
+        d.click('○ 5000');d.click('○ 合租主卧');d.click('○ 单程 30 分钟')
+        d.click('记下这些，核对生活画像 →')
+        assert '这是你想过的日子吗？' in d.labels(),d.labels()
+        assert json.loads(sf.read_text())[33]=='build'
+        before=json.loads(sf.read_text())[30:35]
+        d.click('修改：新鲜感');d.click('○ 回到喜欢的老地方')
+        assert '这是你想过的日子吗？' in d.labels(),d.labels()
+        saved=json.loads(sf.read_text());assert saved[30]=='familiar' and saved[31:35]==before[1:]
+        d.top();d.click('修改：新鲜感');d.click('○ 经常换一种新玩法')
+        d.top();d.click('修改：恢复精力')
+        saved=json.loads(sf.read_text());assert saved[1]==10 and saved[38] is True
+    run_host(args,bundle,state,temp/'edit-and-pause.log',prod)
+    def finish_prod(d):
+        assert '想过的日子 · 2 / 5' in d.labels(),d.labels()
+        d.click('● 到水边、树下走走')
+        assert '这是你想过的日子吗？' in d.labels(),d.labels()
+        saved=json.loads(sf.read_text());assert saved[1]==8 and saved[38] is False and saved[30:35]==CASES[1]['joy']
+        checks.append('portrait_edit_restart_preserves_return_to_portrait')
+        d.top();d.shot(temp/'02-portrait.png')
         d.click('画像准确，先认识一座城 →')
-        saved=json.loads(sf.read_text());assert saved[0]=='city-matchmaker-v2' and len(saved)==38 and saved[30:35]==CASES[1]['joy'] and saved[35]=='product'
+        saved=json.loads(sf.read_text());assert saved[0]=='city-matchmaker-v2' and len(saved)==39 and saved[30:35]==CASES[1]['joy'] and saved[35]=='product'
         first=saved[25];d.shot(temp/'03-first-match.png')
         d.click('想调整日常恢复方式');d.top();d.click('安安静静待一会儿');d.top()
         saved=json.loads(sf.read_text());assert saved[31]=='quiet' and saved[30]=='new'
@@ -70,8 +100,19 @@ def main():
         before_joy=saved[30:35];d.click('换另一位红娘看同一份资料')
         saved=json.loads(sf.read_text());assert saved[2]=='cat' and saved[30:35]==before_joy
         d.top();d.shot(temp/'04-result.png')
-        checks.extend(['default_dog','five_scenes_to_reviewable_portrait','portrait_confirmed_first_city','manual_feedback_refines_selected_dimension','other_guide_preserves_answers','housing_and_commute_are_verification_only','editorial_intervals_prevent_unique_best'])
-    run_host(args,bundle,state,temp/'production.log',prod)
+        checks.extend(['default_dog','ai_direction_first_without_legacy_profile_questions','five_scenes_one_per_page','mid_scene_restart_restores_exact_question','individual_portrait_edit_returns_without_repeating_form','portrait_confirmed_first_city','manual_feedback_refines_selected_dimension','other_guide_preserves_answers','housing_and_commute_are_verification_only','editorial_intervals_prevent_unique_best'])
+    run_host(args,bundle,state,temp/'production.log',finish_prod)
+    def unknown_flow(d):
+        d.click('从想过的日子开始 →');d.click('暂时说不准')
+        for _ in range(5):d.click('暂时说不准，留待确认')
+        d.click('先核对我的生活画像 →')
+        d.click('画像准确，先认识一座城 →')
+        saved=json.loads((temp/'unknown-state/leilei-city-matchmaker/match.json').read_text())
+        assert saved[30:35]==['']*5 and saved[35]=='' and saved[17]==0 and saved[36]=='' and saved[37]==0
+        assert saved[19]==[] and saved[20] is False
+        assert any('证据区间重叠' in x for x in d.labels()),d.labels()
+        checks.append('all_scenes_climate_and_reality_can_remain_unknown')
+    run_host(args,bundle,temp/'unknown-state',temp/'unknown.log',unknown_flow)
     source=(bundle/'main.splash').read_text()
     (bundle/'main.splash').write_text(source.replace('start_timeout(0.05, || load_local())','start_timeout(0.05, || load_local())\n'+harness()))
     result={}
@@ -102,6 +143,7 @@ def main():
     args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     for source,target in [('01-welcome.png','01-welcome.png'),('03-first-match.png','02-first-match.png'),('04-result.png','03-second-match.png')]:shutil.copyfile(temp/source,ROOT/'bundle/screenshots'/target)
     shutil.copyfile(temp/'02-portrait.png',ROOT/'bundle/screenshots/05-portrait.png')
+    shutil.copyfile(temp/'06-scene.png',ROOT/'bundle/screenshots/06-scene.png')
     print('PASS:',len(checks),'production UI checks,',len(result['contract']),'migration/storage checks,',len(CASES),'native/JS rank parity cases')
     print('Evidence:',temp)
 if __name__=='__main__':main()
