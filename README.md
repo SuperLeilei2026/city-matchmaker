@@ -4,7 +4,7 @@
 
 ![毕业第一站 · 城市红娘](docs/cover.png)
 
-**GOSIM Agentic App 2026｜MOST暴躁队｜Leinstein** · [初赛仓库登记](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13)
+**GOSIM Agentic App 2026｜MOST暴躁队｜Leinstein** · [初赛提交回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)
 
 城市红娘帮助准备毕业、找工作或考虑换城的人，把工作和日常生活的取舍想清楚。填写资料，让猫或狗问一个关键问题，先认识一座城市；告诉它哪里不合适，再看看推荐为什么变了。
 

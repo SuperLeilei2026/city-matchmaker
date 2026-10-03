@@ -1,6 +1,6 @@
 # 城市红娘：晨间交付（历史记录）
 
-后续更新：源码已进入 GitHub 发布流程；当前公开状态以 [publication.md](docs/publication.md) 为准。以下记录保留晨间验收时点，不代表后续发布进展。
+后续更新：源码已发布到 [GitHub](https://github.com/SuperLeilei2026/city-matchmaker)，并完成[初赛地址登记](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)；当前公开状态以 [publication.md](docs/publication.md) 为准。以下记录保留晨间验收时点，不代表后续发布进展。
 
 **2026-10-03 北京时间 08:40 更新。晨间验收于 08:30 触发，现已完成本轮本地体验交付。**
 

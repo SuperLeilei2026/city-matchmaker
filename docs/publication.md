@@ -6,6 +6,18 @@
 
 本次按初赛仓库登记要求提交源码地址；App Hub 发布另行完成。支持和隐私 URL 已指向本仓库的 Issues 与公开隐私说明。
 
+## 初赛源码提交回执
+
+2026-10-03 已发布公开仓库，并在赛事 Issue #13 留下两行登记：
+
+> 队伍名：MOST暴躁队
+>
+> GitHub 仓库地址：https://github.com/SuperLeilei2026/city-matchmaker
+
+[查看提交评论](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262) · [v0.1.0 源码标签](https://github.com/SuperLeilei2026/city-matchmaker/tree/v0.1.0)
+
+标签对应初赛源码提交 b7defc4；后续登记回执文档在 main 更新。源码提交成功不等于已晋级或已通过 App Hub 审核。
+
 ## 当前提供什么
 
 - **源码与本地 Web 试玩。** 从仓库根目录运行 `node serve.mjs`，再打开该服务输出的本地地址。没有公开在线 Demo；本机回环地址不能作为给其他人使用的试玩链接。
