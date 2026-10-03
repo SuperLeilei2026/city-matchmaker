@@ -1,46 +1,54 @@
-# README 产品首图
+# 首图制作记录
 
-- 成品：`docs/cover.png`
-- 生成方式：内置 `image_gen`，四张本地参考图引导的原创产品信息插画。
-- 实际尺寸：1672 × 941 px，约 16:9；非应用截图。
-- 背景：不透明暖白。
-- 用途：GitHub README 首页产品信息首图。
+- 日期：2026-10-03。
+- 用途：GitHub README 产品首图；本轮按用户要求重新生成。
+- 工具：内置 imagegen。
+- 版式参考：[城市潜像首图](https://github.com/SuperLeilei2026/city-afterimage/blob/main/public/og.png)。借鉴米白纸感、黑色大标题、蓝橙点色和用图形解释用途的方式。
+- 角色参考：[已确认的猫狗形象](../assets/mascots-concept-v1.png)。INTJ 黑白开脸德文猫、ENFP 线条小狗。
+- 成品：[cover.png](cover.png)。这是产品玩法示意插画，不是应用截图。
+- 图中上海到杭州是“用户反馈会影响推荐”的示例，不代表固定推荐、实时地图或幸福预测。
+- 本次仅替换仓库封面，不改变应用功能、参赛包或已提交的版本标签。
 
-## 参考素材
+## 完整提示词
 
-1. `assets/mascots-concept-v1.png`：已确认的猫狗角色与风格。
-2. `qa/desktop-welcome.png`：产品配色、档案和车票视觉。
-3. `assets/guide-cat.png`：黑白德文卷毛猫身份参考。
-4. `assets/guide-dog.png`：现有黑白线条狗身份参考。
-
-## 生成提示词（原文）
-
-```text
 Use case: ads-marketing.
-Asset type: a refined 16:9 GitHub README hero / product information cover, landscape 2048 × 1152.
-Create an original polished editorial illustration for the Chinese graduate city-choice product “毕业第一站 / 城市红娘”. This is a product cover illustration, NOT a screenshot and NOT a fake application screen.
-Reference image 1 (mascots-concept-v1.png): approved identities and drawing styles of the two guide characters.
-Reference image 2 (desktop-welcome.png): warm-white paper, black Chinese typography, restrained blue/orange visual language and document-folder/ticket metaphors. Do not reproduce its form or tiny UI text.
-Reference image 3 (guide-cat.png): strict cat identity reference — the SAME slender black-and-white Devon Rex kitten, very large upright ears, white central facial blaze and muzzle, curly black coat, white chest and paws, golden eyes, holding a blue-outlined ticket. Keep it Devon Rex, not a round-faced generic cat.
-Reference image 4 (guide-dog.png): strict dog identity reference — the SAME cheerful hand-drawn white dog with loose black ink outline, black floppy ears, happy open mouth and wagging curved tail, holding orange-outlined tickets. Keep this simple illustrated style; do not make it photorealistic.
+Asset type: a beautifully designed wide horizontal GitHub README hero poster, aspect ratio about 1.9:1, ideally 2400 x 1260.
+Primary request: regenerate the product cover for "毕业第一站 · 城市红娘", a playful city-selection explorer for graduates. A viewer should immediately understand WHO it is for and WHAT it does: graduates enter work and everyday-life preferences, see a suggested city, give feedback, and explore an adjusted suggestion.
 
-Visual direction: generous warm ivory negative space (#f7f5ef), black ink typography, saturated cobalt blue (#2e50c8) and small burnt-orange accents (#c65225). Subtle elegant paper texture, gentle ink irregularities; sophisticated editorial design that feels personal, legible and inviting. No gradient, no 3D plastic, no neon, no glossy dashboard, no chart clutter.
-Composition: strong black Chinese headline in the upper-left, occupying about 40% width, with the concise subtitle “城市红娘” in cobalt and small English “CITY MATCHMAKER”. An elegantly arranged chain of paper objects bridges the center and lower-middle: an ivory personal-file folder with a few blue line marks and checkboxes, a small folded map with a generic city skyline and a lake/green patch, a pair of speech shapes represented by simple blue/orange ink outlines, ending in a beautiful perforated city ticket. The objects clearly convey profile → city introduction → feedback conversation → take-away ticket, but are editorial metaphors, not real screenshots. The two approved mascots sit/play together to the right, naturally interacting with the final ticket, at comparable visual weight. Do not repeat the mascots.
-At the bottom, aligned with the main title, print the four-step text in a single clearly readable line with restrained arrows. Use fewer, larger words and let white space do the work.
+Input images:
+Image 1 (/Users/leijing/leileiCoding/projects/city-afterimage/public/og.png) is the precise editorial STYLE and COMPOSITION reference: warm ivory paper, very bold black Chinese display typography, ultramarine blue, vermilion orange, tiny acid-yellow accents, delicate map-like drawing, tactile halftone and fine print registration lines. Match its design sophistication, information clarity and strong asymmetric typography. Do not copy its Wuhan neighborhood geography, existing wording, logo, or claims.
+Image 2 (/Users/leijing/Documents/ChatGPT/Agentic App/city-matchmaker/assets/mascots-concept-v1.png) is the CHARACTER IDENTITY reference only. Preserve the black-and-white facial-blaze Devon Rex cat with very large pointed ears, slender body and short curly coat; preserve the lively minimal black-line white dog with floppy black ears. The cat and dog are small supporting guides, not the principal subjects and not giant character merchandise art.
 
-Text (verbatim; Chinese must be exact, no additions, no typos):
-“毕业第一站”
-“城市红娘”
-“CITY MATCHMAKER”
-“先留资料 → 认识一城 → 再聊一轮 → 收好车票”
+Composition:
+Left approximately 43%: superb typographic editorial hierarchy, very large black Chinese display title, generous breathing room, aligned margins. Use the main title on two lines: "毕业" then "第一站". A restrained small product name "城市红娘" sits above. Below the main title, a bold question "毕业去哪座城？". Then an ultramarine rectangular strip with crisp contrasting type reading "按工作与生活偏好，探索适合的城市". At the lower left, a compact three-step line "填资料 → 看推荐 → 反馈再选". All words should remain readable as a README image at about 850 px wide.
 
-Constraints: no happiness probability, match score, horoscope prediction, guaranteed career or happiness claim, fake data, badges, watermarks, sponsors, buttons, browser chrome, or fine-print gibberish. No extra written words on the folders, map or ticket. Preserve the recognizable cat and dog identities from the references. Make the purpose understandable at first glance and the title readable as a GitHub thumbnail.
-```
+Right approximately 57%: one coherent, spacious, editorial illustration that demonstrates the recommendation feedback loop. It is a conceptual city-selection journey, not a literal map or fabricated app screenshot. At the upper-right/top-center, a small neat personal-preferences card titled "我的偏好", with three legible small tab labels "行业" "兴趣" "气候". A fine vivid blue route connects it to a first city postcard clearly titled "上海", containing a beautifully simplified blue city skyline. An orange feedback note along the route says "更想亲近自然". The orange path continues toward a larger foreground beautifully printed ticket titled "城市车票", showing "杭州" in bold and an attractive blue lake, trees and city illustration. The two city cards have room to breathe and subtly overlap, with restrained pale abstract street-grid print texture connecting the composition. A small hand-drawn return arrow makes feedback visibly iterative without a dense flowchart. The skyline and lake are evocative illustrations, not factual data graphics.
+At the bottom of this illustrated area, place the confirmed cat and dog as small guides interacting with the foreground ticket (cat sitting next to it, dog pointing or leaning toward it). Together they should occupy less than 15% of the entire poster. Retain their reference identities while integrating subtle paper grain and print texture with the overall design. Their faces remain expressive and appealing but do not overwhelm the product narrative.
+
+Palette and medium: warm cream textured paper, deep near-black title, electric ultramarine, vivid orange and very small acid yellow. Tactile modern Chinese editorial poster, confident type hierarchy, crisp information design, restrained halftone, fine thin technical lines. Mostly flat print illustration. No shiny 3D, no generic corporate dashboard, no large empty white hole, no fluffy mascot-dominant layout.
+
+Use ONLY these exact Chinese text strings, with correct clear glyphs:
+"城市红娘"
+"毕业"
+"第一站"
+"毕业去哪座城？"
+"按工作与生活偏好，探索适合的城市"
+"填资料 → 看推荐 → 反馈再选"
+"我的偏好"
+"行业"
+"兴趣"
+"气候"
+"上海"
+"更想亲近自然"
+"城市车票"
+"杭州"
+A single small English line "CITY MATCHMAKER" is optional under the product name.
+
+Constraints: all text comfortably within the canvas with clear hierarchy. Do not add percentages, happiness predictions, scores, scientific personality claims, MBTI scoring, astrology symbols, job guarantees, real estate claims, App Hub publication badges, AI-agent claims, awards, fake interface controls, URLs, QR codes, GitHub logos, watermarks, decorative illegible text, extra characters, or city factual annotations. The image should communicate an illustrative exploration example, not a guaranteed recommendation for all graduates.
 
 ## 视觉核验
 
-- “毕业第一站”“城市红娘”“CITY MATCHMAKER”与底部四步中文均可读且文字准确。
-- 档案、城市地图、对话和车票形成清晰的体验递进；并非截图或伪造界面。
-- 猫保留黑白德文的大立耳、白色中线、卷毛与金色眼睛；狗保留黑耳白身的手绘线条形象。
-- 无幸福概率、匹配分数、人格预测、保证发展或幸福的承诺。
-- 首图已作为本仓库 README 的产品信息插画使用。
+- 已对照原图核验：产品名、毕业选城问题、偏好说明、流程、两座城市名与反馈文字清楚且无错字。
+- 大标题说明目标人群，个人偏好、城市卡与反馈线路解释玩法；猫狗作为引导角色。
+- 保留已确认的黑白开脸德文猫与活泼线条狗。
+- 不包含幸福概率、城市评分、Agent 已接通或 App Hub 已上架等声明。

@@ -2,7 +2,7 @@
 
 **毕业去哪里？先和一座城市约会，再决定要不要继续了解。**
 
-![毕业第一站 · 城市红娘](docs/cover.png)
+![毕业第一站 · 城市红娘：按工作与生活偏好探索城市，根据反馈调整推荐](docs/cover.png)
 
 **GOSIM Agentic App 2026｜MOST暴躁队｜Leinstein** · [初赛提交回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)
 
