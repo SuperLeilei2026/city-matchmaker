@@ -1,28 +1,20 @@
-[
-  {
-    "passed": true,
-    "firstCityId": "shanghai",
-    "finalCityNames": [
-      "杭州",
-      "武汉",
-      "成都"
-    ],
-    "checks": [
-      "profile tabs and inputs",
-      "first recommendation",
-      "explicit rejection removed",
-      "second-round response",
-      "guide invariance",
-      "reload persistence",
-      "PNG download",
-      "source dialog",
-      "390px and 320px overflow",
-      "edit invalidation",
-      "clear local storage",
-      "empty-profile ties",
-      "no page errors",
-      "no remote profile request"
-    ],
-    "errors": []
-  }
-]
+{
+  "version": "0.3.0",
+  "passed": true,
+  "firstCityId": "shanghai",
+  "afterFeedbackCityId": "shanghai",
+  "checks": [
+    "5 scenes → editable portrait → first city → dimension feedback → refinement → result",
+    "cat/dog change lens and preserve answers/constraints",
+    "reload persistence",
+    "PNG download and source links",
+    "390px/320px overflow",
+    "explicit rejection survives metadata edits",
+    "v1 migration survives backup quota failure and retains exclusions with null new dimensions",
+    "new session reasks chosen feedback dimension",
+    "clear deletes both state and migration backup",
+    "empty portrait remains explicitly uncertain"
+  ],
+  "errors": [],
+  "remoteProfileRequests": 0
+}

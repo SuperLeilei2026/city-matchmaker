@@ -1,6 +1,6 @@
 {
   "name": "city-matchmaker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,6 @@
     "start": "node serve.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.0.0"
   }
 }

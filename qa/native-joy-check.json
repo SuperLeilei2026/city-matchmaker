@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-03",
+  "version": "0.3.0",
+  "production_main_sha256": "1e3af73b54e4ad29c7b907f715327fa4535161bfb9a5a7e5e5f5dea1a4cc8bb2",
+  "synthetic_inputs_only": true,
+  "real_model_called": false,
+  "production_ui_checks": [
+    "default_dog",
+    "five_scenes_to_reviewable_portrait",
+    "portrait_confirmed_first_city",
+    "manual_feedback_refines_selected_dimension",
+    "other_guide_preserves_answers",
+    "housing_and_commute_are_verification_only",
+    "editorial_intervals_prevent_unique_best"
+  ],
+  "archive_contract_checks": [
+    {
+      "name": "v2_roundtrip_preserves_joy_housing_commute",
+      "passed": true
+    },
+    {
+      "name": "legacy_29_migration_keeps_rejections_without_guessing",
+      "passed": true
+    },
+    {
+      "name": "legacy_30_migration_keeps_rejections_without_guessing",
+      "passed": true
+    }
+  ],
+  "native_vs_js_parity_cases": [
+    "cat_complete",
+    "dog_complete",
+    "all_unknown",
+    "unknown_evidence",
+    "climate_soft",
+    "climate_hard",
+    "explicit_rejection"
+  ],
+  "same_city_order_score_coverage_and_ranges": true,
+  "trial_plan_matches_shared_config": true,
+  "number_tolerance": 0.0001,
+  "number_note": "OctoScript f32 versus JavaScript f64; same weights/evidence/range formulas, float-only tolerance",
+  "evidence_directory": "/var/folders/5_/qx8p5th144s5l5b2fswg2w5c0000gn/T/city-native-joy-w9jj28l8"
+}

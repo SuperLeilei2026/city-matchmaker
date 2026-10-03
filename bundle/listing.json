@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "subtitle": "毕业下一站，先和一座城市约会",
-  "description": "填写自己的资料，由猫或狗问关键问题，认识城市，按反馈进一步比较。六城数据保留公开来源与未知项，本地规则负责匹配，不预测幸福概率。在支持系统 Agent 且配置模型的 OctoSense 中，可用一句自由反馈请求偏好修改建议；用户确认后应用重排、保存并核验，拒绝或失败不修改资料。",
+  "subtitle": "从想过的日子，认识毕业第一站",
+  "description": "把新鲜感、恢复方式、关系、职业期待与不确定性说具体，核对一份由你的选择组成的生活画像。INTP猫和ENFP狗使用同一份八城资料，以不同取舍权重介绍城市；收到反馈后继续追问，可以切换视角比较。未知证据不加分，区间重叠时不硬判唯一首选，预算与通勤只作待核验条件。保留系统Agent的CM1受控修改、用户确认与保存核验，五维场景通过按钮修改。",
   "category": "lifestyle",
   "keywords": [
     "city",
@@ -12,9 +12,9 @@
   ],
   "screenshots": [
     "screenshots/01-welcome.png",
+    "screenshots/05-portrait.png",
     "screenshots/02-first-match.png",
-    "screenshots/03-second-match.png",
-    "screenshots/04-changes.png"
+    "screenshots/03-second-match.png"
   ],
   "icon": "assets/icon.svg",
   "platforms": [
@@ -25,7 +25,7 @@
     "support": "https://github.com/SuperLeilei2026/city-matchmaker/issues",
     "privacy_policy_url": "https://github.com/SuperLeilei2026/city-matchmaker/blob/main/docs/privacy.md"
   },
-  "release_notes": "系统 Agent 入口升级为自由反馈、受控修改提案、用户确认、重排与本机保存核验。保留无模型的六城探索、三页资料、两轮反馈、来源与清除。实际模型验收范围见公开版本说明。",
+  "release_notes": "Joy v0.3：五维场景与可核对画像、猫狗双视角、AI应用与产品方向、按反馈复核场景、来源与不确定区间。旧存档保留原资料和明确拒绝；CM1安全确认链保持兼容。",
   "age_rating": "all",
   "license": "Apache-2.0"
 }

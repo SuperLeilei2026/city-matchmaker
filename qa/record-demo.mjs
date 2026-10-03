@@ -15,25 +15,24 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const out = 'qa/demo-web';
 await mkdir(out, { recursive: true });
 const scratch = await mkdtemp(path.join(tmpdir(), 'city-matchmaker-demo-'));
-const url = process.env.DEMO_URL || 'http://127.0.0.1:4318';
+const url = process.env.DEMO_URL || 'http://127.0.0.1:4319';
 const speed = Number(process.env.DEMO_TIME_SCALE || 1);
 const chapters = [
-  [0, 8, '毕业第一站：先认识一座城市，再用反馈把选择聊清楚。'],
-  [8, 18, '资料留空时，会明确说分不出先后，不假装算出唯一答案。'],
-  [18, 33, '重新开始。小舟、示例大学及下面的资料，均为合成演示数据。'],
-  [33, 40, '性格标签用来自我介绍；MBTI、星座和院校不参与排序。'],
-  [40, 54, '科技方向，喜欢户外和演出；房租预算只留下待核验条件。'],
-  [54, 60, '第一问确认取舍：这次把更对口的工作放在前面。'],
-  [60, 78, '先认识上海。看推荐理由，也看资料缺口与需要接受的代价。'],
-  [78, 90, '明确不考虑上海；第二问追问生活里最想经常做的事。'],
-  [90, 104, '选择户外后重新比较：上海已移出，结果说明为什么变化。'],
-  [104, 117, '翻到车票背面：查看公开来源，区分人工整理与未知条件。'],
-  [117, 125, '换小狗介绍人，只换表达方式，候选排序保持不变。'],
-  [125, 140, '生成并实际下载城市车票；分享不包含昵称、学校、年龄或预算。'],
-  [140, 151, '刷新后进度仍在。此片是 Web 本地规则演示，不代表真实 Agent 已接通。'],
+ [0,8,'Joy City：给想做 AI 产品的你，找一座愿意留下的城市。'],
+ [8,18,'先看空资料状态：没有依据时，不把展示顺序当成适合程度。'],
+ [18,30,'重新开始，选择 AI 产品设计。全程使用独立的合成演示资料。'],
+ [30,62,'五个生活场景：新鲜感、恢复方式、关系、职业期待与不确定性。'],
+ [62,75,'天气和现实条件可以选填；先核对画像，每句话都能改。'],
+ [75,90,'第一座城市：看有依据的吸引力，也看代价和暂时未知的部分。'],
+ [90,106,'明确不考虑首城，再确认一个生活选择，拒绝记录不会被抹掉。'],
+ [106,119,'第二轮重新比较，解释变化；按个人偏好给出试城验证计划。'],
+ [119,129,'车票背面能查看来源。人工分档不是幸福概率。'],
+ [129,138,'猫狗使用同一份事实、不同侧重；切换视角保留答案和底线。'],
+ [138,146,'实际生成并下载城市车票，只分享城市与生活关键词。'],
+ [146,151,'刷新后进度仍在。这是 Web 规则演示，不代表真实模型已验收。']
 ];
 await writeFile(`${out}/chapters.json`, JSON.stringify(chapters, null, 2));
-const sourcePaths = ['web/app.mjs', 'web/styles.css', 'web/index.html', 'core/matcher.mjs', 'core/questions.mjs', 'data/cities.json'];
+const sourcePaths = ['web/app.mjs', 'web/styles.css', 'web/index.html', 'core/matcher.mjs', 'core/questions.mjs', 'core/profile.mjs', 'core/joy.mjs', 'core/joy-questions.mjs', 'data/joy-config.json', 'data/cities.json'];
 const sourceHashes = {};
 for (const file of sourcePaths) {
   try { sourceHashes[file] = createHash('sha256').update(await readFile(file)).digest('hex'); }
@@ -65,51 +64,29 @@ const field = (key, value) => page.locator(`[data-field="${key}"]${value ? `[dat
 const scrollTo = async loc => { await loc.scrollIntoViewIfNeeded(); await page.waitForTimeout(250 * speed); };
 let videoPath;
 try {
-  await page.goto(url); await page.waitForSelector('input[data-field="nickname"]');
-  started = Date.now(); mark('welcome');
-  await at(5); await click('next-profile'); await at(6); await click('next-profile'); await at(7); await click('next-profile');
-  await at(8); await click('skip-question');
-  assert.match(await page.locator('.result-limit').first().innerText(), /分不出先后/); mark('empty-profile-tie');
-  await at(13); await page.screenshot({ path: `${out}/01-empty.png`, fullPage: false });
-  await at(18); await click('privacy'); await at(19); await click('confirm-reset'); await at(20); await click('reset');
-  assert.equal(await page.evaluate(() => localStorage.getItem('city-matchmaker-v1')), null);
-  await at(22); await field('nickname').fill('小舟'); await at(24); await field('ageBand').selectOption('21-24');
-  await at(26); await field('currentCity').fill('武汉'); await at(28); await field('school').fill('示例大学');
-  await at(30); await field('major').fill('数字媒体'); mark('synthetic-profile');
-  await at(33); await click('profile-tab', '1'); await at(35); await field('mbti').selectOption('INFP');
-  await at(37); await field('admiredTraits', 'independent').click();
-  await at(40); await click('profile-tab', '2'); await at(42); await field('industry', 'tech').click();
-  await at(44); await field('role').fill('产品设计'); await at(46); await field('rentBudget').selectOption('2500');
-  await at(48); await field('interests', 'nature').click(); await at(50); await field('interests', 'live').click();
-  await at(54); await click('next-profile'); await at(58); await click('answer', 'career');
-  report.firstCityId = (await state()).firstCityId; assert.equal(report.firstCityId, 'shanghai'); mark('first-city-shanghai');
-  await at(64); await page.screenshot({ path: `${out}/02-first-city.png`, fullPage: false });
-  await at(67); await scrollTo(page.locator('.tradeoff').first());
-  await at(75); await scrollTo(page.locator('.feedback-grid'));
-  await at(78); await click('feedback', 'not-this-city'); mark('explicit-rejection');
-  await at(87); await click('answer', 'nature');
-  const resultState = await state(); assert.equal(resultState.route, 'result');
-  assert(resultState.profile.excludedCityIds.includes('shanghai'));
-  report.finalCityNames = await page.locator('.shortlist button b').allTextContents();
-  assert(!report.finalCityNames.includes('上海')); mark('reordered-result');
-  await at(95); await page.screenshot({ path: `${out}/03-result.png`, fullPage: false });
-  await at(100); await scrollTo(page.locator('.tradeoff').first());
-  await at(104); await click('evidence'); assert(await page.locator('#dialog-content a').count() > 0); mark('source-modal');
-  await at(110); await scrollTo(page.locator('#dialog-content a').first());
-  await at(114); await page.screenshot({ path: `${out}/04-sources.png`, fullPage: false });
-  await at(117); await click('close-dialog'); await page.evaluate(() => scrollTo(0, 0));
-  await at(119); await click('guide', 'dog');
-  assert.deepEqual(await page.locator('.shortlist button b').allTextContents(), report.finalCityNames); mark('guide-switch-preserves-ranking');
-  await at(124); await scrollTo(page.locator('.share-actions'));
-  await at(127); await click('share-card'); await page.waitForSelector('.share-preview-image'); mark('share-preview');
-  await at(133); await scrollTo(page.locator('a[download]'));
-  const downloadEvent = page.waitForEvent('download'); await page.locator('a[download]').click();
-  const download = await downloadEvent; await download.saveAs(`${out}/share-ticket.png`); mark('downloaded-real-png');
-  await at(137); await click('close-dialog');
-  await at(140); await page.reload(); await page.waitForSelector('.shortlist');
-  assert.equal((await state()).route, 'result'); await page.evaluate(() => scrollTo(0, 0)); mark('reload-restored-result');
-  await at(145); await page.screenshot({ path: `${out}/05-restored.png`, fullPage: false });
-  await at(151); mark('recording-complete');
+  await page.goto(url); await page.waitForSelector('[data-action="role"]');
+  started=Date.now();mark('joy-city-welcome');
+  await at(8);await click('preview-portrait');await click('confirm-portrait');assert.match(await page.locator('.result-limit').first().innerText(),/不足/);mark('empty-portrait-uncertainty');
+  await at(13);await page.screenshot({path:`${out}/01-empty.png`});
+  await at(18);await click('privacy');await click('confirm-reset');await click('reset');
+  await at(22);await click('role','design');await page.locator('.optional-details summary').click();await field('nickname').fill('小舟');await field('school').fill('示例大学');mark('synthetic-ai-design-profile');
+  await at(30);await click('next-profile');
+  for(const [i,v] of ['new','nature','regular','build','balanced'].entries()){await at(32+i*6);await click('scene',v);await at(36+i*6);await click('next-profile');}
+  await at(62);await page.screenshot({path:`${out}/weather.png`});await at(66);await click('next-profile');assert.equal((await state()).route,'portrait');mark('reviewable-portrait');
+  await at(70);await page.screenshot({path:`${out}/portrait.png`});
+  await at(75);await click('confirm-portrait');report.firstCityId=(await state()).firstCityId;mark('first-city');
+  await at(80);await page.screenshot({path:`${out}/02-first-city.png`});await at(84);await scrollTo(page.locator('.tradeoff').first());
+  await at(90);await click('feedback','not-this-city');mark('explicit-rejection');
+  await at(101);await click('answer',(await page.locator('[data-action="answer"]').first().getAttribute('data-value')));
+  const resultState=await state();assert.equal(resultState.route,'result');assert(resultState.profile.excludedCityIds.includes(report.firstCityId));
+  report.finalCityNames=await page.locator('.shortlist button b').allTextContents();assert.equal(await page.locator(`.shortlist [data-value="${report.firstCityId}"]`).count(),0);mark('second-round-with-rejection-preserved');
+  await at(106);await page.screenshot({path:`${out}/03-result.png`});await at(113);await scrollTo(page.locator('.trial-plan'));
+  await at(119);await click('evidence');assert(await page.locator('#dialog-content a').count()>0);mark('traceable-sources');await at(124);await page.screenshot({path:`${out}/04-sources.png`});
+  await at(129);await click('close-dialog');await page.evaluate(()=>scrollTo(0,0));const answers=(await state()).profile.joy;await click('guide','cat');assert.deepEqual((await state()).profile.joy,answers);assert((await state()).profile.excludedCityIds.includes(report.firstCityId));mark('other-lens-same-profile');
+  await at(136);await scrollTo(page.locator('.share-actions'));await at(138);await click('share-card');await page.waitForSelector('.share-preview-image');mark('share-preview');
+  await at(143);await scrollTo(page.locator('a[download]'));const downloadEvent=page.waitForEvent('download');await page.locator('a[download]').click();await (await downloadEvent).saveAs(`${out}/share-ticket.png`);mark('downloaded-real-png');
+  await at(146);await click('close-dialog');await page.reload();await page.waitForSelector('.shortlist');assert.equal((await state()).route,'result');await page.evaluate(()=>scrollTo(0,0));mark('reload-restored');
+  await at(149);await page.screenshot({path:`${out}/05-restored.png`});await at(151);mark('recording-complete');
   assert.equal(errors.length, 0, errors.join('\n'));
   assert(requests.every(r => r.startsWith(url + '/') || r.startsWith('blob:')), 'Unexpected outbound request');
   report.passed = true; report.errors = errors; report.outboundRequests = requests.filter(r => !r.startsWith(url + '/') && !r.startsWith('blob:'));

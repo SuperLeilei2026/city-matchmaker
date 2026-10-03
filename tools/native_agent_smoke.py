@@ -26,6 +26,9 @@ let test_checks = []
 fn test_record(passed_check, name){ test_checks.push({name: name passed: passed_check}) }
 fn test_fixture(){
     screen = 7
+    joy_profile = ["new", "nature", "new", "build", "explore"]
+    ai_role = "product"
+    guide = "cat"
     revision = 10
     industry = 0
     priority = 0
@@ -56,6 +59,11 @@ fn test_agent_contract(){
     test_record(agent_proposal.len() == 8 && priority == 0 && focus_interest == 4 && revision == 10 && fs.read("match.json") == before, "valid_proposal_does_not_mutate_or_save")
     reject_agent_proposal()
     test_record(agent_proposal.len() == 0 && fs.read("match.json") == before, "person_reject_preserves_state")
+
+    test_fixture()
+    before = fs.read("match.json")
+    test_accept("CM2|10|" + city_rows[ranked[0][0]][0] + "|life|quiet|cold|yes|未启用的新协议不能回退执行")
+    test_record(agent_proposal.len() == 0 && fs.read("match.json") == before, "unsupported_cm2_has_no_cm1_fallback")
 
     test_fixture()
     before = fs.read("match.json")
@@ -202,10 +210,14 @@ def main():
         d.click('填写我的资料 →');d.click('昵称（可跳过）');d.type('合成原生测试者')
         d.click('下一页：性格与相处 →');d.click('下一页：职业与生活 →')
         for text in ['○ 科技 / 互联网','○ 户外与自然','○ 演出与展览','○ 2500']:d.click(text)
-        d.click('资料填好了，红娘来问 →');d.click('职业机会优先')
-        assert any('上海，先见一面' in x for x in d.labels())
-        d.click('这座城我明确不考虑');d.top();d.click('户外与自然');d.top()
-        assert any('先去了解 杭州' in x for x in d.labels())
+        d.click('下一页：五种日常场景 →')
+        for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']: d.click(text)
+        d.click('看看我的生活画像 →');d.click('画像准确，先认识一座城 →')
+        assert any('，先见一面' in x for x in d.labels())
+        first_city_id=json.loads(statefile.read_text())[25]
+        d.click('这座城我明确不考虑');d.top();d.click('保留原回答');d.top()
+        assert any('先去了解 ' in x for x in d.labels())
+        assert first_city_id in json.loads(statefile.read_text())[24]
         actual.extend(['profile_and_two_round_flow','explicit_city_rejection'])
         before=statefile.read_bytes()
         d.click('让 Agent 提出修改');d.scroll(120)

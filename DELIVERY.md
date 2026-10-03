@@ -1,3 +1,5 @@
+> **当前版本已更新为 Joy City v0.3.0。** 五个生活场景、可修改画像、两轮城市反馈和猫狗不同视角见 [README](README.md)；当前验证与发布情况见 [publication.md](docs/publication.md)。下面仅为 v0.1 晨间历史记录，不能代表当前能力与待办。
+
 # 城市红娘：晨间交付（历史记录）
 
 后续更新：源码已发布到 [GitHub](https://github.com/SuperLeilei2026/city-matchmaker)，并完成[初赛地址登记](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)；当前公开状态以 [publication.md](docs/publication.md) 为准。以下记录保留晨间验收时点，不代表后续发布进展。

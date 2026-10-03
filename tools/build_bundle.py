@@ -17,6 +17,13 @@ def readable_note(note):
 
 def main():
     cities = json.loads((ROOT / 'data/cities.json').read_text())
+    config = json.loads((ROOT / 'data/joy-config.json').read_text())
+    dimensions = config['dimensions']
+    assert [d['id'] for d in dimensions] == ['novelty', 'recovery', 'relationships', 'career', 'uncertainty']
+    signal_keys = [d['id'] + ':' + option['id'] for d in dimensions for option in d['options']]
+    weights = [[config['weights'][guide][d['id']] for d in dimensions] for guide in ['cat', 'dog']]
+    assert all(abs(sum(row) - 1) < 1e-10 for row in weights)
+    dimension_rows = [[d['id'], d['label'], d['question'], d['why'], [[o['id'], o['label'], o['description'], o['portrait']] for o in d['options']]] for d in dimensions]
     rows = []
     for city in sorted(cities, key=lambda c: c['id']):
         values, evidence = [], []
@@ -24,9 +31,10 @@ def main():
             value = city['features'].get(key)
             ev = city['featureEvidence'].get(key, {})
             source_ids = {s['id'] for s in city.get('sources', [])}
-            cited = [sid for sid in ev.get('sourceIds', []) if sid in source_ids]
+            declared = set(sid for sid in ev.get('sourceIds', []) if isinstance(sid, str))
+            cited = declared & source_ids
             status = ev.get('status', 'unknown')
-            if status == 'sourced' and not cited:
+            if status == 'sourced' and (not cited or cited != declared):
                 status = 'unknown'
             valid = isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 3 and status in ['sourced', 'editorial']
             values.append(value if valid else -1)
@@ -35,8 +43,24 @@ def main():
         # the source data/cities.json; avoid unused network permissions.
         source_text = '\n'.join(s['title'] + '\n' + s['url'].removeprefix('https://') for s in city['sources'])
         notes = [readable_note(city['featureEvidence'].get(key, {}).get('note', '')) for key in KEYS]
-        rows.append([city['id'], city['name'], city['tagline'], values, evidence, city['scenes'][0], '\n'.join(city['tradeoffs']), source_text, '\n'.join(city['unknowns']), city['persona'], notes, city['tradeoffs'][0]])
-    prefix = 'let city_rows = ' + json.dumps(rows, ensure_ascii=False, separators=(',', ':')) + '\n'
+        joy_values, joy_evidence, joy_notes, joy_caveats = [], [], [], []
+        for key in signal_keys:
+            signal = city.get('joySignals', {}).get(key, {})
+            value, status = signal.get('value'), signal.get('status', 'unknown')
+            declared = set(sid for sid in signal.get('sourceIds', []) if isinstance(sid, str))
+            cited = declared & source_ids
+            if status == 'sourced' and (not cited or cited != declared):
+                status = 'unknown'
+            valid = isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 3 and status in ['sourced', 'editorial']
+            joy_values.append(value if valid else -1)
+            joy_evidence.append(2 if valid and status == 'sourced' else 1 if valid else 0)
+            joy_notes.append(signal.get('note', '缺少可比较证据。'))
+            joy_caveats.append(signal.get('caveat', ''))
+        rows.append([city['id'], city['name'], city['tagline'], values, evidence, city['scenes'][0], '\n'.join(city['tradeoffs']), source_text, '\n'.join(city['unknowns']), city['persona'], notes, city['tradeoffs'][0], joy_values, joy_evidence, joy_notes, joy_caveats])
+    generated = {'city_rows': rows, 'joy_dimensions': dimension_rows, 'joy_signal_keys': signal_keys, 'joy_weights': weights, 'joy_climate_weight': config['climateWeight'], 'joy_editorial_radius': config['editorialRadius'], 'joy_roles': [[r['id'], r['label']] for r in config['aiRoles']], 'joy_ranking_factor': 10 ** config.get('rankingPrecision', 4), 'joy_reason_order': [sorted(range(len(dimensions)), key=lambda d: (-row[d], d)) for row in weights]}
+    dimension_index = {d['id']: i for i, d in enumerate(dimensions)}
+    generated['joy_trial_plan'] = [[dimension_index[key], table['unknown']['title'], table['unknown']['text'], [[option, item['title'], item['text']] for option, item in table.items() if option != 'unknown']] for key, table in config.get('trialPlan', {}).items()]
+    prefix = ''.join('let ' + key + ' = ' + json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n' for key, value in generated.items())
     template = (ROOT / 'tools/main.template.splash').read_text()
     (ROOT / 'bundle/main.splash').write_text(prefix + template)
     # The gate treats URLs in non-script JSON as external asset references.
@@ -48,6 +72,8 @@ def main():
     art = ROOT / 'assets/mascots-concept-v1.png'
     if art.exists():
         shutil.copyfile(art, ROOT / 'bundle/assets/mascots.png')
+    for name in ['guide-cat.png', 'guide-dog.png']:
+        shutil.copyfile(ROOT / 'assets' / name, ROOT / 'bundle/assets' / name)
     print(f'Generated {len(rows)} cities; data and native source are synchronized.')
 
 if __name__ == '__main__':

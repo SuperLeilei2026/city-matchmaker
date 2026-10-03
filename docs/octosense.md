@@ -1,34 +1,28 @@
 # 城市红娘 OctoScript 包
 
-更新：2026-10-03。应用 ID：`leilei-city-matchmaker`，版本：`0.2.0`。实际发布及未完成项见 [publication.md](publication.md)。
+更新：2026-10-03。应用 ID：`leilei-city-matchmaker`，版本：**0.3.0**。当前公开状态见 [publication.md](publication.md)。
 
-## 已实现的流程
+## 已实现
 
-三页可跳过资料 → 第一问 → 首座城市及依据 → 明确反馈与第二问 → 候选、变化原因和未知项。猫狗只改变口吻，核心匹配、保存、恢复与清除不依赖模型。
+生活场景选择 → 核对画像 → 首城 → 心动／代价反馈 → 关键问题 → 重新比较与三条试城计划。ENFP 狗优先生活，INTP 猫优先职业期待；共享城市事实、权重配置与底线。原生与 Web 的页面布局不同，原生不含 PNG 分享。
 
-新增的系统 Agent 任务：
+生成器从 `data/joy-config.json` 和 `data/cities.json` 生成八城数据、问题、权重、来源及行动文案。修改 `tools/main.template.splash` 后重新生成，不要只改产物。
 
-1. 在结果页输入自由反馈，点击“让 Agent 提出修改”。
-2. 通过宿主的 `octos.session.open`、`octos.turn.start` 请求受控提案。
-3. 展示原偏好与拟修改内容；用户可确认或放弃。
-4. 确认后修改允许字段，实际重排、保存并读回核验。
-5. 旧请求、旧版本、陌生城市、非法字段、错误格式和重复确认不执行；45 秒超时及取消不修改资料。
+存档升级为 38 字段，兼容原 29／30 字段格式。新五维缺省为未知，保留原拒绝记录，不按 MBTI 或旧兴趣补答案。
 
-协议为 `CM1|revision|city_id|priority|focus|avoid|exclude|reason`。只允许改变职业/生活取舍、强调一项兴趣、追加气候避开项或排除当前候选。不能恢复已拒绝城市、放宽原气候底线、修改预算或人格、直接指定得分。没有证据的项目继续保持未知。
+## 系统 Agent 与边界
 
-自由反馈与未确认提案只在应用内存中；确认后存档保存新偏好、版本与执行变化说明。宿主可能保留 Agent 历史，参见 [隐私说明](privacy.md)。
+结果页自由反馈 → 宿主 `octos.session.open`／`octos.turn.start` → 受控提案 → 用户确认 → 执行重排、保存与读回核验。
 
-## 与 Web 的关系
+协议仍为 `CM1|revision|city_id|priority|focus|avoid|exclude|reason`。新版提示词要求旧 priority／focus 为 keep，主动操作限于追加气候避开项或按明确拒绝排除当前候选；**五维答案与介绍人通过应用按钮修改**。兼容旧字段不代表旧字段能改变新的 Joy 权重。
 
-两者共用 `data/cities.json`。生成器将六城特征、依据、生活场景与来源嵌入原生脚本；Web 与原生各自实现交互状态机。原生不含 Web 的 PNG 车票功能，Web 不含系统 Agent 请求。
+不能恢复已拒绝城市、放宽气候底线、修改预算、伪造城市数据或直接指定分数。过期、非法、多行、陌生城市、不同协议、重复确认不执行；45 秒超时或取消保留资料。自由反馈与待确认提案只在应用内存中；宿主可能保存会话历史，见 [隐私说明](privacy.md)。
 
-请修改 `tools/main.template.splash` 和共享数据，再运行 `python3 tools/build_bundle.py`，不要只改生成的 `bundle/main.splash`。
+用户已报告宿主连接完成；本应用的真实模型返回、确认、执行与恢复全链路仍没有验收证据。card-host 的不可用路径和注入响应不能替代真实模型。
 
-## 运行与复现
+## 运行
 
-精确源码基底、二进制校验、依赖与 Shell 配置见 [运行环境锁定记录](runtime-lock.md)。先准备对应的 `card-host`、`hub`；它们不随应用源码打包。已验证平台为 Apple silicon macOS；原生工具需要图形会话，Python 3.9+ 用于生成和测试。
-
-从仓库根目录运行，路径换成自己准备的工具：
+需独立准备 OctoSense / Makepad 工具，精确基底见 [runtime-lock.md](runtime-lock.md)。已验证 Apple silicon macOS；生成与测试用 Python 3.9+。
 
 ```sh
 export OCTO_CARD_HOST="/path/to/card-host"
@@ -39,41 +33,22 @@ python3 tools/build_bundle.py
 "$OCTO_CARD_HOST" --bundle bundle --app-data .local-state/card-host --allow-unsigned --size 460x820
 ```
 
-card-host 不提供系统模型服务。点击 Agent 会显示不可用，本地功能继续运行；真实调用必须在配置了 provider 的完整 Shell 中验证。独立 Shell 启动脚本为 `tools/start-shell.sh`，设置方法见环境记录。
+card-host 不提供模型服务，完整调用需 OctoSense Shell。Shell 启动脚本为 `tools/start-shell.sh`。每次改包都要重新 stamp，正式签名包改动后也需重新签名。私钥与个人状态不进入仓库。
 
-每次修改最终包后都需重新 stamp；正式签名包有变动还需重新签名。不要把测试状态或私钥提交到仓库。
+## 最终验证
 
-## 实际测试证据
-
-原有真实 card-host 操作验证了首页、三页资料、两轮推荐、明确排除、保存、重启恢复、清除与滚动。四张基础截图在 `bundle/screenshots/`，使用合成资料。
-
-v0.2.0 追加检查：
-
-- **5 项生产路径检查通过**：资料及两轮流程、明确排除、空反馈拒绝、反馈未确认不落盘、真实 card-host 服务不可用时存档不变。
-- **20 项临时响应注入检查通过**：确认前不修改、拒绝、非法/额外字段、错误城市、多行、旧请求、旧版本、无变化、改反馈、过期确认、执行、底线保留、重排、未知证据、存档读回、重复确认与恢复。
-- 注入检查真实点击确认后，合成案例从杭州变为武汉，版本 10 → 11，原先拒绝的上海保持排除；它验证执行机制，**不验证真实模型**。
-- 测试只修改临时复制的包，生产源中没有注入按钮或函数。报告记录生产脚本 SHA-256。
-
-复现：
+- **Joy 生产界面 7 项通过**：默认狗、五场景与画像、首次推荐、定向反馈修订、另一视角保留答案、现实条件待核验、区间重叠不声称唯一最优。
+- **存档 3 项通过**：38 字段往返与 29／30 旧档迁移。
+- **原生与 JS 对照 7 组通过**：猫、狗、空资料、未知、软／硬气候、明确拒绝；排序、分数、覆盖、区间与试城计划一致。f32／f64 数值容差为 0.0001。
+- **Agent 5 项生产路径、21 项临时响应注入检查通过**：确认、放弃、格式／版本保护、底线、保存读回与恢复。没有调用外部 provider。
 
 ```sh
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_joy_smoke.py
 OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_agent_smoke.py
 ```
 
-脚本只使用合成资料、独立临时状态和本机端口，默认端口占用时会退出，可用 `--port` 指定。报告：[qa/native-agent-check.json](../qa/native-agent-check.json)。测试工具关闭自己启动的进程，不连接真实 provider。
+报告：[Joy](../qa/native-joy-check.json)、[Agent](../qa/native-agent-check.json)。生产 main SHA-256 与两报告一致；测试注入只发生在临时包。截图使用合成资料。
 
-## 最终包本地预检
+最终 **v0.3.0 `hub check --allow-unsigned` PASSED**，仅 publisher-signature unsigned warning。Bundle BLAKE3：`383e79eaa30a4604d58df924464c12e4071706a053631ba1e31256bbcff3f81e`。
 
-```text
-leilei-city-matchmaker 0.2.0 — PASSED
-  [warning] publisher-signature: unsigned: accountability rests on the hub alone
-  grants: capabilities {"octos.session.open", "octos.turn.interrupt", "octos.turn.start", "storage"}, hosts {}, storage 16777216 bytes, agent none
-```
-
-当前 bundle 摘要：`d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c`。
-
-`hub scan` 已生成七题，书面回答在 [REVIEW-ANSWERS.md](../tools/REVIEW-ANSWERS.md)。未运行外部 reviewer；本地通过不等于人工审核或比赛合格。gate 的 `agent none` 指清单未写独立 agent 块，不能据此判断 Shell 没有应用 Agent；本包声明精确 `octos.*` 权限。
-
-## 验收边界
-
-真实 MiniMax/Kimi 或其他 provider 的成功请求仍待完成，不借用旧项目或模拟模型的记录。实体手机、其他操作系统、真实毕业生满意度和现实推荐准确性均未验证。本次提交产品仓库，不以 App Hub 已上架为前提，也不宣称已经公开上架。
+本地预检不代表 App Hub 人工批准或比赛合格。本轮提交产品仓库，未公开上架；实体手机、其他平台与现实推荐效果仍待验证。

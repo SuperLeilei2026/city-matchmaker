@@ -1,127 +1,131 @@
 {
-  "recordedAt": "2026-10-03T03:43:07.754Z",
-  "url": "http://127.0.0.1:4318",
+  "recordedAt": "2026-10-03T14:08:32.833Z",
+  "url": "http://127.0.0.1:4319",
   "kind": "real-web-browser-recording",
-  "baseCommit": "e48be21b23454518ecee6935f166e17755e53bb6",
+  "baseCommit": "131e752a844d0210cd6f086cbb87244f3a815478",
   "scope": "Synthetic profile; deterministic local ranking; no native or real-model claim",
   "sourceHashes": {
-    "web/app.mjs": "85e35856c01fea819bee2cbb9105109936f6a7f4859d2221f18340a9bf77f5fa",
-    "web/index.html": "46f669de6cf2fb0cff698d137080bd7fb30ccb2f49b1eb7b30e234dbeecad4b3",
-    "core/matcher.mjs": "df7fb3a6678da2c5bd89edb5738723a337e7bbfe0ced20cb83403e85144c320d",
-    "core/questions.mjs": "ff8eb62f9180efb89e05af48960ece2e311baca367679e50d8670d1bbf90ebdc",
-    "data/cities.json": "bc630373d7b8fe958a8d1065f54ae76b32dd76314b6422d27f69a6d6f93f0744"
+    "web/app.mjs": "58eb8010c0594a7b36b7fae978f0e36b54e8f50f2f84722597750e82f0d3d228",
+    "web/styles.css": "fb8fbe316520c745bb16ac9e68640524d9ec8d905ff24a9725ce4eb5d8facf96",
+    "web/index.html": "b9206a1b1e3a746368cb68342f60d5069bfc608b2426a716f359125bc60fd73c",
+    "core/matcher.mjs": "bca18d559c91f85fee236c8559bbd9297e796d2689d16efe15b3dc6422cc3077",
+    "core/questions.mjs": "acc086a339b0b56e6adc74d5eb8e32a2c83b710ad0af1ed415026e9c0a064d84",
+    "core/profile.mjs": "3f43330155270f1a39a4e5bb2b8164e5d25db4eb6389e7b55f24abff36b2ae01",
+    "core/joy.mjs": "9455480539af18a93fd122f1bc2e7a9d4c18f8246ed5e68d863c423728acca5c",
+    "core/joy-questions.mjs": "89591a95ebf615b1fbe6ede3ca729f9b884a685de451d7bbd7900323e29f31df",
+    "data/joy-config.json": "f23f9347b3cf327338d1e5b0512698dcc6adac7a1db041331158c3a1767e3d4f",
+    "data/cities.json": "8a4fc62f40b6132f60d95422f935befefcc1ff2feb4beaab874b700e9a82aaa5"
   },
   "chapters": [
     [
       0,
       8,
-      "毕业第一站：先认识一座城市，再用反馈把选择聊清楚。"
+      "Joy City：给想做 AI 产品的你，找一座愿意留下的城市。"
     ],
     [
       8,
       18,
-      "资料留空时，会明确说分不出先后，不假装算出唯一答案。"
+      "先看空资料状态：没有依据时，不把展示顺序当成适合程度。"
     ],
     [
       18,
-      33,
-      "重新开始。小舟、示例大学及下面的资料，均为合成演示数据。"
+      30,
+      "重新开始，选择 AI 产品设计。全程使用独立的合成演示资料。"
     ],
     [
-      33,
-      40,
-      "性格标签用来自我介绍；MBTI、星座和院校不参与排序。"
+      30,
+      62,
+      "五个生活场景：新鲜感、恢复方式、关系、职业期待与不确定性。"
     ],
     [
-      40,
-      54,
-      "科技方向，喜欢户外和演出；房租预算只留下待核验条件。"
+      62,
+      75,
+      "天气和现实条件可以选填；先核对画像，每句话都能改。"
     ],
     [
-      54,
-      60,
-      "第一问确认取舍：这次把更对口的工作放在前面。"
-    ],
-    [
-      60,
-      78,
-      "先认识上海。看推荐理由，也看资料缺口与需要接受的代价。"
-    ],
-    [
-      78,
+      75,
       90,
-      "明确不考虑上海；第二问追问生活里最想经常做的事。"
+      "第一座城市：看有依据的吸引力，也看代价和暂时未知的部分。"
     ],
     [
       90,
-      104,
-      "选择户外后重新比较：上海已移出，结果说明为什么变化。"
+      106,
+      "明确不考虑首城，再确认一个生活选择，拒绝记录不会被抹掉。"
     ],
     [
-      104,
-      117,
-      "翻到车票背面：查看公开来源，区分人工整理与未知条件。"
+      106,
+      119,
+      "第二轮重新比较，解释变化；按个人偏好给出试城验证计划。"
     ],
     [
-      117,
-      125,
-      "换小狗介绍人，只换表达方式，候选排序保持不变。"
+      119,
+      129,
+      "车票背面能查看来源。人工分档不是幸福概率。"
     ],
     [
-      125,
-      140,
-      "生成并实际下载城市车票；分享不包含昵称、学校、年龄或预算。"
+      129,
+      138,
+      "猫狗使用同一份事实、不同侧重；切换视角保留答案和底线。"
     ],
     [
-      140,
+      138,
+      146,
+      "实际生成并下载城市车票，只分享城市与生活关键词。"
+    ],
+    [
+      146,
       151,
-      "刷新后进度仍在。此片是 Web 本地规则演示，不代表真实 Agent 已接通。"
+      "刷新后进度仍在。这是 Web 规则演示，不代表真实模型已验收。"
     ]
   ],
   "events": [
     {
       "seconds": 0,
-      "label": "welcome"
+      "label": "joy-city-welcome"
     },
     {
-      "seconds": 8.1,
-      "label": "empty-profile-tie"
+      "seconds": 8.22,
+      "label": "empty-portrait-uncertainty"
     },
     {
-      "seconds": 30.01,
-      "label": "synthetic-profile"
+      "seconds": 22.09,
+      "label": "synthetic-ai-design-profile"
     },
     {
-      "seconds": 58.07,
-      "label": "first-city-shanghai"
+      "seconds": 66.08,
+      "label": "reviewable-portrait"
     },
     {
-      "seconds": 78.07,
+      "seconds": 75.08,
+      "label": "first-city"
+    },
+    {
+      "seconds": 90.08,
       "label": "explicit-rejection"
     },
     {
-      "seconds": 87.08,
-      "label": "reordered-result"
-    },
-    {
-      "seconds": 104.07,
-      "label": "source-modal"
+      "seconds": 101.09,
+      "label": "second-round-with-rejection-preserved"
     },
     {
       "seconds": 119.08,
-      "label": "guide-switch-preserves-ranking"
+      "label": "traceable-sources"
     },
     {
-      "seconds": 128.37,
+      "seconds": 129.15,
+      "label": "other-lens-same-profile"
+    },
+    {
+      "seconds": 139.4,
       "label": "share-preview"
     },
     {
-      "seconds": 133.3,
+      "seconds": 143.31,
       "label": "downloaded-real-png"
     },
     {
-      "seconds": 140.07,
-      "label": "reload-restored-result"
+      "seconds": 146.14,
+      "label": "reload-restored"
     },
     {
       "seconds": 151,
@@ -130,9 +134,9 @@
   ],
   "firstCityId": "shanghai",
   "finalCityNames": [
-    "杭州",
-    "武汉",
-    "成都"
+    "南京",
+    "深圳",
+    "北京"
   ],
   "passed": true,
   "errors": [],

@@ -1,7 +1,7 @@
 {
   "date": "2026-10-03",
-  "bundle_version": "0.2.0",
-  "production_main_sha256": "b87a280fb076b16274c83d48021b509d582cdda78daa9dbe311249165411a1b8",
+  "bundle_version": "0.3.0",
+  "production_main_sha256": "1e3af73b54e4ad29c7b907f715327fa4535161bfb9a5a7e5e5f5dea1a4cc8bb2",
   "synthetic_inputs_only": true,
   "real_model_verified": false,
   "test_method": "Real hidden Makepad card-host. Production unavailable path plus explicit response injection in a temporary bundle copy only. No external provider call.",
@@ -34,6 +34,10 @@
     },
     {
       "name": "person_reject_preserves_state",
+      "passed": true
+    },
+    {
+      "name": "unsupported_cm2_has_no_cm1_fallback",
       "passed": true
     },
     {

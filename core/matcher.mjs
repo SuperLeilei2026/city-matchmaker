@@ -1,3 +1,6 @@
+import { isJoyProfile, normalizeProfile, JOY_CONFIG } from './profile.mjs';
+import { rankJoyCities } from './joy.mjs';
+export { normalizeProfile, buildPortrait, buildTrialPlan, createProfile, migrateProfile, JOY_CONFIG } from './profile.mjs';
 /** Deterministic matching. Scores are comparison aids, never probabilities. */
 const INDUSTRIES = { tech: '科技与互联网', creative: '创意与内容', manufacturing: '制造与工程', service: '服务与商业' };
 const INTERESTS = { nature: '自然与户外', live: '现场演出', food: '饮食选择', ball: '球类运动', quiet: '安静的日常' };
@@ -78,7 +81,7 @@ function decisionGap(key, label) {
  * Pure public API. coverage is 0..1; score is 0..100 and must not be labeled
  * happiness, employment chance, or real-world success probability.
  */
-export function rankCities(profile = {}, cities = []) {
+function rankLegacyCities(profile = {}, cities = []) {
   const interests = knownKeys(profile.interests, INTERESTS);
   const avoids = knownKeys(profile.climateAvoids, CLIMATES);
   const industry = Object.hasOwn(INDUSTRIES, profile.industry) ? profile.industry : null;
@@ -173,4 +176,29 @@ export function rankCities(profile = {}, cities = []) {
   excluded.sort((a, b) => idCompare(a.city.id, b.city.id));
   if (!ranked.length && excluded.length) missing.push('当前城市都被明确拒绝或触及硬条件；需要检查条件或扩充城市库，不能强行给出首选。');
   return { ranked, excluded, missing };
+}
+
+/** Existing callers remain valid; migration explicitly opts into the five dimensions. */
+export function rankCities(profile = {}, cities = []) {
+  return isJoyProfile(profile) ? rankJoyCities(profile, cities) : rankLegacyCities(profile, cities);
+}
+
+export function explainChanges(beforeProfile = {}, afterProfile = {}, cities = []) {
+  const before = rankCities(beforeProfile, cities), after = rankCities(afterProfile, cities);
+  const changes = [];
+  const add = (path, oldValue, newValue, label) => {
+    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) changes.push({ path, before: oldValue, after: newValue, label });
+  };
+  const a = normalizeProfile(beforeProfile), b = normalizeProfile(afterProfile);
+  add('guide', a.guide, b.guide, '比较视角');
+  for (const dimension of JOY_CONFIG.dimensions) add(`joy.${dimension.id}`, a.joy[dimension.id], b.joy[dimension.id], dimension.label);
+  for (const [key, label] of Object.entries({ climateAvoids: '天气偏好', hardClimate: '气候底线', excludedCityIds: '明确不考虑的城市', aiRole: 'AI 方向', rentBudget: '租住预算', housingType: '居住方式', maxCommuteMinutes: '通勤上限' })) add(key, a[key], b[key], label);
+  const previousCityId = before.ranked[0]?.city.id || null, currentCityId = after.ranked[0]?.city.id || null;
+  const moved = previousCityId !== currentCityId;
+  const labels = changes.map((item) => item.label).join('、');
+  const summary = changes.length ? `你调整了${labels}。${moved ? '先了解的城市随之变化' : '先了解的城市暂时没变'}；${after.ambiguous ? '候选区间仍有重叠，还不能确定唯一首选。' : '具体生活条件仍需验证。'}`
+    : '没有新增已确认的偏好，排序依据保持不变。';
+  return { changed: changes.length > 0, previousCityId, currentCityId, moved, title: moved ? '这次为什么换了一城' : '这次哪些理解更清楚了', summary, changes,
+    cityChanges: after.ranked.map((item, index) => { const old = before.ranked.find((other) => other.city.id === item.city.id); return { cityId: item.city.id, previousRank: old ? before.ranked.indexOf(old) + 1 : null, currentRank: index + 1, scoreDelta: old ? rounded(item.score - old.score) : null }; }),
+    ambiguous: after.ambiguous ?? false };
 }

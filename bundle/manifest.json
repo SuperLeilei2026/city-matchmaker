@@ -7,12 +7,12 @@
   ],
   "id": "leilei-city-matchmaker",
   "integrity": {
-    "bundle_blake3": "d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c"
+    "bundle_blake3": "383e79eaa30a4604d58df924464c12e4071706a053631ba1e31256bbcff3f81e"
   },
   "name": "城市红娘",
   "network": {
     "hosts": []
   },
   "schema": 1,
-  "version": "0.2.0"
+  "version": "0.3.0"
 }

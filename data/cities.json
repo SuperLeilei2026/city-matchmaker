@@ -134,6 +134,20 @@
         "url": "https://tc.wuhan.gov.cn/yxwh/202410/t20241009_2465283.shtml",
         "published": "2024-10-09",
         "checked": "2026-10-03"
+      },
+      {
+        "id": "wh-ai-apps",
+        "title": "武汉东湖高新区：紫东太初4.0与应用生态报道",
+        "url": "https://www.wehdz.gov.cn/2022/ggxw_68627/cydt_68630/202509/t20250922_2650392.shtml",
+        "published": "2025-09-22",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "wh-greenway",
+        "title": "武汉市人民政府：东湖绿道串起人民生活（三期已开放）",
+        "url": "https://www.wuhan.gov.cn/zjwh/whly/202406/t20240625_2420151.shtml",
+        "published": "2024-06-25",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -141,7 +155,152 @@
       "预算内可租到的住房、押金及到工作地点的实际通勤",
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 1,
+        "status": "editorial",
+        "note": "已有专业艺术团体、剧目与文化活动线索，可从近期节目单里挑一种没试过的体验。",
+        "sourceIds": [
+          "wh-economy"
+        ],
+        "caveat": "统计背景不是当前节目单；你偏爱的题材、票价与地点待查。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "江湖自然资源与艺术活动同时存在，可以把固定散步和偶尔看场演出组合起来。",
+        "sourceIds": [
+          "wh-geography",
+          "wh-economy"
+        ],
+        "caveat": "这是可试的生活组合，不能保证两处距离近或下班后有时间。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 3,
+        "status": "editorial",
+        "note": "已开放的东湖环湖绿道提供水边、林间的户外空间，可先用一段短步行测试自己的恢复感。",
+        "sourceIds": [
+          "wh-greenway"
+        ],
+        "caveat": "只证明空间可探索；是否靠近住处、当天天气和人流需核验。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": 3,
+        "status": "editorial",
+        "note": "东湖绿道资料明确记录步行和骑行活动，能把活动身体安排为一次具体的小实验。",
+        "sourceIds": [
+          "wh-greenway"
+        ],
+        "caveat": "按体力选短段，路线当前开放、交通与器材另查；不要求骑完整圈。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "光谷已有多模态模型应用开发平台及教育、制造、医疗合作案例，可据此寻找真实场景问题。",
+        "sourceIds": [
+          "wh-ai-apps"
+        ],
+        "caveat": "生态合作不等于个人可以直接入职或取得数据；权限、团队和岗位要求另查。"
+      },
+      "career:learn": {
+        "value": 1,
+        "status": "editorial",
+        "note": "东湖AI论坛展示了多模态推理与行业应用，可作为追踪应用产品实践的学习入口线索。",
+        "sourceIds": [
+          "wh-ai-apps"
+        ],
+        "caveat": "记录对应2025年活动，下一场开放报名与适合入门者的内容尚未核验。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你想把做应用和走到水边放在同一周，先试试这份江湖之间的安排。",
+      "delights": [
+        "沿东湖挑一小段，留意走完后是否真的松弛一些。",
+        "从教育或制造的AI应用案例里，找一个想亲手改好的问题。"
+      ],
+      "frictions": [
+        "湖边不是每个住处的楼下，需要看工作地与住房。",
+        "季节体感和企业作息，可能比城市名更影响你的日常。"
+      ]
+    }
   },
   {
     "id": "shanghai",
@@ -285,6 +444,20 @@
         "url": "https://english.shanghai.gov.cn/en-Overview/20241225/ce046a2a1e754fde8c02804d6d66db18.html",
         "published": "2024-12-25",
         "checked": "2026-10-03"
+      },
+      {
+        "id": "sh-ai-workshop",
+        "title": "上海市人民政府转载解放日报：2025全球开发者先锋大会与模速空间专场",
+        "url": "https://www.shanghai.gov.cn/nw4411/20250222/25adb1ce19ab4479b31d425dc8383897.html",
+        "published": "2025-02-22",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "sh-ai-community",
+        "title": "上海市人民政府转载解放日报：徐汇人工智能创新生态与模速空间活动",
+        "url": "https://www.shanghai.gov.cn/nw4411/20260428/794c9a35e02542cea4a0b966ee6c00c5.html",
+        "published": "2026-04-28",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -292,7 +465,151 @@
       "预算内可租到的住房、押金及到工作地点的实际通勤",
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 3,
+        "status": "editorial",
+        "note": "公开概览记载多类展览、文博与营业性演出资源，可围绕你喜欢的主题持续找新体验。",
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "caveat": "总量不代表符合口味、预算或居住位置；仍需查当前场次。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "滨水公共空间与演出展览并存，可以先固定一段散步路线，再偶尔加入一张展演票。",
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "caveat": "这个组合需要实际活动半径支持，不能保证散场回家方便。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 2,
+        "status": "editorial",
+        "note": "滨江滨河空间、公园与崇明湿地提供不同尺度的户外选择，可先测试离生活圈最近的一处。",
+        "sourceIds": [
+          "sh-overview"
+        ],
+        "caveat": "市域郊野目的地与家门口公园不能混算，往返成本需另外核验。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": null,
+        "status": "unknown",
+        "note": "现有资料不足以支持这一生活偏好的城市级判断，暂时保留未知。",
+        "sourceIds": [],
+        "caveat": "需要核实具体场所、日程与个人可达性，不将没查到记为没有。"
+      },
+      "relationships:new": {
+        "value": 1,
+        "status": "editorial",
+        "note": "面向观众的AI展品互动和开发者工作坊曾提供交流入口，可尝试围绕一个作品认识同行。",
+        "sourceIds": [
+          "sh-ai-workshop"
+        ],
+        "caveat": "单次活动不保证交到朋友；企业专属社群与公众活动不能混为一谈。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 3,
+        "status": "editorial",
+        "note": "模速空间记录了企业智能体、AI视频及陪伴产品等应用实践，适合带着产品问题去找案例。",
+        "sourceIds": [
+          "sh-ai-community"
+        ],
+        "caveat": "园区服务和工位有条件；已有产品不等于有适合你的招聘岗位。"
+      },
+      "career:learn": {
+        "value": 2,
+        "status": "editorial",
+        "note": "开发者大会曾安排深度学习工作坊、实时代码挑战与生态开放日，提供动手学习的具体线索。",
+        "sourceIds": [
+          "sh-ai-workshop"
+        ],
+        "caveat": "这是已举办活动的证据；当期报名、费用和技术门槛要重查。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你靠新作品和新想法充电，可以试着让一次开发者交流与一张展演票进入日常。",
+      "delights": [
+        "带着自己的小作品，先找一次可报名的工作坊交流。",
+        "固定一段滨水散步路线，让新鲜内容之外也有重复的锚点。"
+      ],
+      "frictions": [
+        "想参加的活动很多，不代表时间和预算装得下。",
+        "园区社群有准入条件，参与者多也不等于关系容易稳定。"
+      ]
+    }
   },
   {
     "id": "hangzhou",
@@ -434,6 +751,13 @@
         "url": "https://www.hangzhou.gov.cn/art/2025/2/28/art_812262_59109961.html",
         "published": "2025-02-28",
         "checked": "2026-10-03"
+      },
+      {
+        "id": "hz-modelscope",
+        "title": "杭州网：魔搭社区（杭州）开发者中心正式启用",
+        "url": "https://hznews.hangzhou.com.cn/chengshi/content/2025-11/25/content_9130629.htm",
+        "published": "2025-11-25",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -442,7 +766,150 @@
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间",
       "杭州冬季体感尚未在当前数据集中充分核验，怕冷时需要补问和补查"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 2,
+        "status": "editorial",
+        "note": "数字文化、游戏、大视听与剧场平台提供不同内容线索，可以从一个有兴趣的展演主题开始探索。",
+        "sourceIds": [
+          "hz-culture"
+        ],
+        "caveat": "平台存在不是本周活动清单，具体内容、预算和交通仍需核实。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "西湖自然空间与文化平台并存，可以试着保留固定户外时间，另挑少量新内容。",
+        "sourceIds": [
+          "hz-climate",
+          "hz-culture"
+        ],
+        "caveat": "工作地、云谷与湖边不自动属于同一生活圈，不能只按旅游印象安排。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 2,
+        "status": "editorial",
+        "note": "西湖水体与周边生态是已确认的自然线索，可以用一次湖边停留判断是否适合自己放松。",
+        "sourceIds": [
+          "hz-climate"
+        ],
+        "caveat": "生态效应不等于全城舒适，离家距离、人流和季节决定实际体验。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": null,
+        "status": "unknown",
+        "note": "现有资料不足以支持这一生活偏好的城市级判断，暂时保留未知。",
+        "sourceIds": [],
+        "caveat": "需要核实具体场所、日程与个人可达性，不将没查到记为没有。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "已启用的魔搭开发者中心设有AI应用体验区与公共服务平台，为从创意到产品提供具体场所线索。",
+        "sourceIds": [
+          "hz-modelscope"
+        ],
+        "caveat": "报道来自2025年启用时点；个人进入方式、服务资格及是否适合自己的项目待核验。"
+      },
+      "career:learn": {
+        "value": 2,
+        "status": "editorial",
+        "note": "线下开发者中心设置研讨和开源应用体验空间，可作为了解模型工具与应用共创的候选入口。",
+        "sourceIds": [
+          "hz-modelscope"
+        ],
+        "caveat": "常态活动时间、免费范围和新手可参与程度尚未逐项确认，不能承诺随到随学。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你想一边把想法做成小应用，一边保留看水看绿的时间，先检验两件事能否在同一生活圈发生。",
+      "delights": [
+        "把一个模型应用问题带去查开发者中心的活动与进入方式。",
+        "挑一处实际可达的湖边空间，试一次没有打卡任务的停留。"
+      ],
+      "frictions": [
+        "云谷、办公室与西湖未必同路，不能把地图上的资源叠在一起。",
+        "可体验的工具和空间，不会自动变成工作机会或熟人。"
+      ]
+    }
   },
   {
     "id": "chengdu",
@@ -584,6 +1051,20 @@
         "url": "https://www.unesco.org/en/creative-cities/chengdu",
         "published": null,
         "checked": "2026-10-03"
+      },
+      {
+        "id": "cd-ai-salon",
+        "title": "成都智算中心：AI垂直领域落地应用交流活动记录",
+        "url": "https://www.cdzs.cn/news/157",
+        "published": null,
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "cd-greenway",
+        "title": "成都市政务服务网：环城生态公园全环贯通一周",
+        "url": "https://cds.sczwfw.gov.cn/art/2022/1/9/art_15395_168114.html",
+        "published": "2022-01-09",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -592,7 +1073,152 @@
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间",
       "成都冬季体感、近期演出日程与居住片区尚未充分核验"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 2,
+        "status": "editorial",
+        "note": "UNESCO记录川菜与饮食文化活动，可把尝试一种新做法或饮食主题当作轻量探索。",
+        "sourceIds": [
+          "cd-food"
+        ],
+        "caveat": "饮食文化特色不代表人人爱辣或预算友好；具体菜单与个人忌口另查。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "已有饮食文化与环城公园资源，可试一段常走绿道，再偶尔探索一顿不同的饭。",
+        "sourceIds": [
+          "cd-food",
+          "cd-greenway"
+        ],
+        "caveat": "吃饭与绿道需按同一片区挑选，不能默认城市中的选择都在身边。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 3,
+        "status": "editorial",
+        "note": "已开放的锦城湖、桂溪、青龙湖等生态园为户外休息提供具体去处，可以先选离住处近的一处。",
+        "sourceIds": [
+          "cd-greenway"
+        ],
+        "caveat": "2022年开放记录不是当前施工清单；路线可达性与环境状况需再核实。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": 3,
+        "status": "editorial",
+        "note": "官方资料记录环城生态公园的慢行、跑步等设施，可把运动落实到一条短线而非全城印象。",
+        "sourceIds": [
+          "cd-greenway"
+        ],
+        "caveat": "不推断球场空位、球友或长期健身习惯，出发前核验开放与交通。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 1,
+        "status": "editorial",
+        "note": "AI垂直领域交流曾讨论可信数据、算力与场景落地，并展示人才项目，提供应用选题线索。",
+        "sourceIds": [
+          "cd-ai-salon"
+        ],
+        "caveat": "来源为参与方活动记录，发布时间未确认；融资和应用权限不是面向每个人的承诺。"
+      },
+      "career:learn": {
+        "value": 1,
+        "status": "editorial",
+        "note": "菁蓉汇的交流记录包含AI应用分享与项目路演，可作为寻找行业学习活动的线索。",
+        "sourceIds": [
+          "cd-ai-salon"
+        ],
+        "caveat": "报道参与者主要为人才与机构代表；普通毕业生能否报名及后续日程尚待查。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你想让做项目之外还有饭菜和绿道，可以先用一个短周末测试这套节奏。",
+      "delights": [
+        "只选一段绿道，走完再决定是否愿意每周回来。",
+        "从一种感兴趣的饮食主题开始探索，不必默认自己爱辣。"
+      ],
+      "frictions": [
+        "城市的休闲资源不能证明具体公司的工作时长。",
+        "AI交流资料还较少，报名入口和岗位匹配需单独查。"
+      ]
+    }
   },
   {
     "id": "guangzhou",
@@ -738,6 +1364,20 @@
         "url": "https://www.gz.gov.cn/ysgz/xwdt/ysdt/content/post_10489953.html",
         "published": "2025-10-16",
         "checked": "2026-10-03"
+      },
+      {
+        "id": "gz-ai-salon",
+        "title": "广州市商务局：广州人工智能外资沙龙成功举办",
+        "url": "https://sw.gz.gov.cn/gkmlpt/content/10/10424/post_10424172.html",
+        "published": "2025-08-29",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "gz-baiyun",
+        "title": "广州市人民政府（市林业和园林局）：白云山",
+        "url": "https://www.gz.gov.cn/zlgz/gzly/wzgz/ylgy/content/post_9497810.html",
+        "published": "2024-04-19",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -745,7 +1385,152 @@
       "预算内可租到的住房、押金及到工作地点的实际通勤",
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 2,
+        "status": "editorial",
+        "note": "公开食在广州报道展示粤味与多菜系选择，可围绕个人口味设一个小范围的新鲜体验。",
+        "sourceIds": [
+          "gz-food"
+        ],
+        "caveat": "榜单是品牌信息，不等于每家都合口味，也不代表日常消费水平。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "饮食选择与白云山园林空间可以组成一份有重复路线、也能换口味的周末提案。",
+        "sourceIds": [
+          "gz-food",
+          "gz-baiyun"
+        ],
+        "caveat": "需要核验餐饮与公园是否在可接受的活动半径内，不能照搬游客路线。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 2,
+        "status": "editorial",
+        "note": "白云山官方介绍列出麓湖、摩星岭、明珠楼等游览区域，可先试一处山水园林空间。",
+        "sourceIds": [
+          "gz-baiyun"
+        ],
+        "caveat": "景区并非全城人的日常后院；开放、门票、天气和往返时间仍要核验。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": 2,
+        "status": "editorial",
+        "note": "白云山有明确的登高与游览空间，适合把一次短程步行或登山作为身体恢复实验。",
+        "sourceIds": [
+          "gz-baiyun"
+        ],
+        "caveat": "不把登山适合所有人当事实，应按身体情况、坡度和天气选择路线。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "商务局记录已发布AI应用场景，涉及制造、交通与城市治理，可从行业痛点寻找产品题目。",
+        "sourceIds": [
+          "gz-ai-salon"
+        ],
+        "caveat": "场景清单不等于项目已经完成，也不等于个人能直接承接或拿到数据。"
+      },
+      "career:learn": {
+        "value": 1,
+        "status": "editorial",
+        "note": "AI主题外资沙龙有政企分享与产业对接，适合追踪企业如何讨论实际应用问题。",
+        "sourceIds": [
+          "gz-ai-salon"
+        ],
+        "caveat": "活动主要面向企业代表；不能把它写成毕业生随时能进入的开放课堂。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你更愿意从真实行业问题切入AI，同时给吃饭和活动身体留位置，可以先从一个片区体验。",
+      "delights": [
+        "从制造、交通等具体应用问题里挑一个产品观察题。",
+        "在同一活动半径里找一次合口味的饭和一段山边步行。"
+      ],
+      "frictions": [
+        "企业沙龙不是人人可进入的课堂，需要核实参加资格。",
+        "白云山和餐饮选择都要经过交通、天气与预算这一关。"
+      ]
+    }
   },
   {
     "id": "nanjing",
@@ -880,6 +1665,20 @@
         "url": "https://www.nanjing.gov.cn/zjnj/zrzk/202509/t20250919_5652875.html",
         "published": null,
         "checked": "2026-10-03"
+      },
+      {
+        "id": "nj-ai-apps",
+        "title": "南京经济技术开发区：2025南京人工智能产业发展对接活动",
+        "url": "https://jjkfq.nanjing.gov.cn/gzdt/202506/t20250626_5593737.html",
+        "published": "2025-06-26",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "nj-ai-learning",
+        "title": "南京市人民政府：第十一届NJSD软件开发者会议在软件谷举行",
+        "url": "https://www.nanjing.gov.cn/zgnjsjb/jrtt/202510/t20251027_5676482.html",
+        "published": "2025-10-27",
+        "checked": "2026-10-03"
       }
     ],
     "unknowns": [
@@ -887,6 +1686,709 @@
       "预算内可租到的住房、押金及到工作地点的实际通勤",
       "能否形成稳定的熟人关系、社群和日常支持",
       "具体公司的工作时段，以及你真正能支配的下班和周末时间"
-    ]
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 2,
+        "status": "editorial",
+        "note": "公开统计有博物馆与文化平台线索，可以从一类展品或主题慢慢拓展新的兴趣。",
+        "sourceIds": [
+          "nj-economy"
+        ],
+        "caveat": "这不等于你喜欢的展览持续更新；当前展期、预约与交通需查。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "山湖资源与文博空间可以支持“固定散步、偶尔看展”的生活提案，适合先做小范围尝试。",
+        "sourceIds": [
+          "nj-geography",
+          "nj-economy"
+        ],
+        "caveat": "跨片区通勤可能改变可行性，不能把所有城市资源视为步行可达。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 3,
+        "status": "editorial",
+        "note": "钟山与河湖资源提供可辨认的自然去处，可以先从一个湖边或山林入口试起。",
+        "sourceIds": [
+          "nj-geography"
+        ],
+        "caveat": "自然条件不是住处条件，夏冬体验和从家出发的路线仍需核验。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": null,
+        "status": "unknown",
+        "note": "现有资料不足以支持这一生活偏好的城市级判断，暂时保留未知。",
+        "sourceIds": [],
+        "caveat": "需要核实具体场所、日程与个人可达性，不将没查到记为没有。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "已启用的大模型公共服务平台和已发布智能体产品覆盖客服、医疗、交通等场景，可据此观察应用落地。",
+        "sourceIds": [
+          "nj-ai-apps"
+        ],
+        "caveat": "企业级服务有准入和合作条件；不把项目签约金额当就业或个人收益。"
+      },
+      "career:learn": {
+        "value": 2,
+        "status": "editorial",
+        "note": "NJSD开发者会议已举办多届，2025年聚焦智能体与生成式AI应用开发，提供实践交流线索。",
+        "sourceIds": [
+          "nj-ai-learning"
+        ],
+        "caveat": "会议有明确时间窗口；报名门槛、下一届内容和初学者适配性仍需核验。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你喜欢把问题想清楚，也想在山湖和展馆之间换换注意力，可以先试一份少而具体的安排。",
+      "delights": [
+        "挑一个智能体应用案例，追踪它的场景和实际限制。",
+        "在一个文博主题与一处自然空间之间，留出不赶场的空白。"
+      ],
+      "frictions": [
+        "年度开发者会议不能替代平日的持续学习与同行支持。",
+        "办公室、住处和自然资源的位置，决定这份安排能否成为日常。"
+      ]
+    }
+  },
+  {
+    "id": "beijing",
+    "name": "北京",
+    "english": "BEIJING",
+    "region": "north",
+    "tagline": "把一个AI应用想法带去交流，再留半天给公园和展览。",
+    "persona": "像一位先邀请你试过一段真实日常，再一起讨论是否留下的介绍人。",
+    "color": "#BA6B52",
+    "coords": [
+      116.4,
+      39.9
+    ],
+    "features": {
+      "tech": 2,
+      "creative": null,
+      "manufacturing": null,
+      "service": null,
+      "nature": 2,
+      "live": 2,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": null,
+      "cold": null,
+      "humidity": null,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "bj-ai-carnival"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。海淀AI嘉年华展示零代码、多模态和3D生成应用，并有开发者交流；不推算个人就业机会。"
+      },
+      "creative": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "manufacturing": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "service": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "nature": {
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。官方活动表列出香山、颐和园和园博馆等自然与园林空间；个人日常可达性未知。"
+      },
+      "live": {
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。公园活动表包含展览、文化市集和艺术活动；历史日程不能作为当前票务。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验日常球场开放、费用和球友，公共步道不等于球类场地。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无街区和住房层面的噪声资料，不用城市印象推断安静。"
+      },
+      "heat": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年夏季气候资料。"
+      },
+      "cold": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年冬季气候资料。"
+      },
+      "humidity": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年湿度资料。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无与目标办公片区相配的租赁样本，不能判断预算内是否租得到。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：先查一场面向公众的AI活动，再去公园或园博馆；一次只安排一片区域，不把跨城通勤式赶场当作生活。"
+    ],
+    "tradeoffs": [
+      "AI活动与公园分布在不同片区，能否下班参加要从实际住处和工作地计算。",
+      "历史活动说明曾经开放，不代表今天仍可报名或所有空间都可随时进入。",
+      "岗位要求、薪酬、租金及常年气候比较尚未补齐，先把这些条件查清。"
+    ],
+    "sources": [
+      {
+        "id": "bj-ai-carnival",
+        "title": "北京市科委、中关村管委会转载中新网：AI创造者嘉年华在北京海淀举办",
+        "url": "https://kw.beijing.gov.cn/xwdt/kcyx/kcyxkchd/202509/t20250922_4207458.html",
+        "published": "2025-09-22",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "bj-park-culture",
+        "title": "北京市园林绿化局：2025年全市公园暑期文化活动统计表",
+        "url": "https://yllhj.beijing.gov.cn/ggfw/gyfjqyl/gyhd/202507/t20250709_4145018.shtml",
+        "published": "2025-07-07",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 3,
+        "status": "editorial",
+        "note": "官方公园活动表涵盖艺术展、非遗、文化市集与园林科普，可从感兴趣的内容类型寻找新体验。",
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "caveat": "资料对应历史暑期，不等于现在仍有同样活动；部分活动要门票或限定亲子。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "公园自然空间和园博馆等文化内容能够相互补充，可先固定一处去处，再按日程换主题。",
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "caveat": "熟悉感要靠个人重复体验建立，不由历史文化资源自动产生。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 2,
+        "status": "editorial",
+        "note": "香山、颐和园与园博馆等具体场所提供山地和园林空间，可选择一处测试自己的户外恢复感。",
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "caveat": "是否日常可达、季节气候与预约限制仍未核验，不能承诺下班就到。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": 2,
+        "status": "editorial",
+        "note": "活动表明确列出香山智慧步道登山，游客可参与，给需要活动身体的人一个具体候选。",
+        "sourceIds": [
+          "bj-park-culture"
+        ],
+        "caveat": "登山体力要求、当日开放和交通须确认，不用一种运动代表所有偏好。"
+      },
+      "relationships:new": {
+        "value": 1,
+        "status": "editorial",
+        "note": "海淀AI创造者嘉年华曾向开发者、高校师生和市民开放，并有人才交流区，可作为接触同行的线索。",
+        "sourceIds": [
+          "bj-ai-carnival"
+        ],
+        "caveat": "2025年活动已经结束，后续报名需重查；一次碰面不等于稳定关系。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "嘉年华展示零代码、多模态和3D生成等应用，能围绕可体验产品观察需求与实现之间的取舍。",
+        "sourceIds": [
+          "bj-ai-carnival"
+        ],
+        "caveat": "展品存在不证明商业成效；职业门槛、团队岗位和个人项目适配仍待验证。"
+      },
+      "career:learn": {
+        "value": 2,
+        "status": "editorial",
+        "note": "开放活动包含炉边对谈、产品互动与方向咨询，为AI应用初学者提供曾实际存在的学习入口。",
+        "sourceIds": [
+          "bj-ai-carnival"
+        ],
+        "caveat": "历史开放记录不是当前报名保证，也不是能力成长或录用的因果证据。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你容易被新想法点亮，也愿意在公园和展览里停下来，可以带一个小作品先来试探。",
+      "delights": [
+        "找一场对个人开放的AI活动，用一个具体问题开始交流。",
+        "挑一片公园或园博馆，把新知识与慢下来安排在同一区域。"
+      ],
+      "frictions": [
+        "跨片区赶场可能消耗体验，先算实际来回时间。",
+        "活动曾经开放不代表今日有名额，住房、岗位与气候仍待补查。"
+      ]
+    }
+  },
+  {
+    "id": "shenzhen",
+    "name": "深圳",
+    "english": "SHENZHEN",
+    "region": "south",
+    "tagline": "让产品想法接触应用现场，也给自己留一条走向山海的路。",
+    "persona": "像一位先邀请你试过一段真实日常，再一起讨论是否留下的介绍人。",
+    "color": "#5C9C98",
+    "coords": [
+      114.1,
+      22.5
+    ],
+    "features": {
+      "tech": 2,
+      "creative": null,
+      "manufacturing": null,
+      "service": null,
+      "nature": 3,
+      "live": 2,
+      "food": null,
+      "ball": null,
+      "quiet": null,
+      "heat": null,
+      "cold": null,
+      "humidity": null,
+      "cost": null
+    },
+    "featureEvidence": {
+      "tech": {
+        "sourceIds": [
+          "sz-ai-apps"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。兴智杯总决赛有行业AI应用成果及专业分享，支持应用生态线索，不是岗位供需分。"
+      },
+      "creative": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "manufacturing": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "service": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "nature": {
+        "sourceIds": [
+          "sz-trails"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。已建成的塘朗山—大沙河—深圳湾通廊连接山、河与海滨；不等同住处附近。"
+      },
+      "live": {
+        "sourceIds": [
+          "sz-park-culture"
+        ],
+        "status": "editorial",
+        "note": "人工分档，非统计测量。已举办的赏花周包含艺术展、音乐、市集和露天电影；当前场次仍需另查。"
+      },
+      "food": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "当前新增来源不足以支持这一旧版特征，保留未知并等待专项核验。"
+      },
+      "ball": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验日常球场开放、费用和球友，公共步道不等于球类场地。"
+      },
+      "quiet": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无街区和住房层面的噪声资料，不用城市印象推断安静。"
+      },
+      "heat": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年夏季气候资料。"
+      },
+      "cold": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年冬季气候资料。"
+      },
+      "humidity": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚未核验与其余城市同口径的常年湿度资料。"
+      },
+      "cost": {
+        "sourceIds": [],
+        "status": "unknown",
+        "note": "尚无与目标办公片区相配的租赁样本，不能判断预算内是否租得到。"
+      }
+    },
+    "scenes": [
+      "一种可能的周末：挑一段山海通廊走走，另找时间去看一次AI应用展示；不必把工作交流和户外都塞进同一天。"
+    ],
+    "tradeoffs": [
+      "前海的行业活动与其他片区的工作生活未必同路，必须核验实际路线。",
+      "山海步道有长度、坡度和天气条件，选择适合自己的短段并确认最新开放情况。",
+      "AI赛事是阶段性机会，不是随时可加入的熟人社群或工作录用承诺。"
+    ],
+    "sources": [
+      {
+        "id": "sz-ai-apps",
+        "title": "深圳市发改委（来源：前海管理局）：第二届兴智杯人工智能创新应用大赛总决赛",
+        "url": "https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/xwzl/cyfz/content/post_12568080.html",
+        "published": "2025-12-17",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "sz-park-culture",
+        "title": "深圳市城市管理和综合执法局：2025深圳簕杜鹃赏花周正式启幕",
+        "url": "https://cgj.sz.gov.cn/xsmh/gysz/gydt/content/post_12482394.html",
+        "published": "2025-11-10",
+        "checked": "2026-10-03"
+      },
+      {
+        "id": "sz-trails",
+        "title": "深圳市城市管理和综合执法局：穿行山海逛深圳，新增远足径郊野径",
+        "url": "https://cgj.sz.gov.cn/zjcg/cgxw/content/post_10449290.html",
+        "published": "2023-02-27",
+        "checked": "2026-10-03"
+      }
+    ],
+    "unknowns": [
+      "目标岗位的当前招聘要求、录取机会和实际薪酬",
+      "预算内可租到的住房、押金及到工作地点的实际通勤",
+      "能否形成稳定的熟人关系、社群和日常支持",
+      "具体公司的工作时段，以及你真正能支配的下班和周末时间"
+    ],
+    "joySignals": {
+      "novelty:new": {
+        "value": 2,
+        "status": "editorial",
+        "note": "赏花周曾把艺术展、市集、音乐与露天电影放入公园，为想尝试新内容的人提供具体线索。",
+        "sourceIds": [
+          "sz-park-culture"
+        ],
+        "caveat": "节庆活动有时间窗口，下一次内容、费用和拥挤程度需另查。"
+      },
+      "novelty:mix": {
+        "value": 2,
+        "status": "editorial",
+        "note": "可重复走的山海步道与阶段性公园文化活动并存，可先固定户外路线，偶尔换一种内容。",
+        "sourceIds": [
+          "sz-park-culture",
+          "sz-trails"
+        ],
+        "caveat": "不同公园与工作片区未必相邻，这份组合需要真实交通条件支持。"
+      },
+      "novelty:familiar": {
+        "value": null,
+        "status": "unknown",
+        "note": "熟悉感来自你已经使用的路线、店铺和生活经验，现有城市资料无法代你判断。",
+        "sourceIds": [],
+        "caveat": "需要一次实际停留和重复日常，不能把历史街区自动等同你的归属感。"
+      },
+      "recovery:nature": {
+        "value": 3,
+        "status": "editorial",
+        "note": "已贯通的塘朗山—大沙河—深圳湾通廊连接山、河与海滨，提供可区分的自然体验。",
+        "sourceIds": [
+          "sz-trails"
+        ],
+        "caveat": "路线存在不等于处处开放或适合当天天气；住处到入口的距离仍未知。"
+      },
+      "recovery:quiet": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无目标街区、房屋隔音、夜间噪声与个人作息相结合的证据。",
+        "sourceIds": [],
+        "caveat": "公园或低密度景观不能证明你的住处安静，也不能保证独处后更有精力。"
+      },
+      "recovery:people": {
+        "value": null,
+        "status": "unknown",
+        "note": "活动存在不等于见人能让你恢复精力，尚未核验适合你的活动节奏与相处体验。",
+        "sourceIds": [],
+        "caveat": "先试一次低负担活动，再确认是否愿意重复参加；不把热闹等同恢复。"
+      },
+      "recovery:move": {
+        "value": 3,
+        "status": "editorial",
+        "note": "官方记录已建成远足径与郊野径，可按体力选择短段，把运动落实到具体路线。",
+        "sourceIds": [
+          "sz-trails"
+        ],
+        "caveat": "山路坡度、补给和当前开放需要另查，不把长距离徒步当成轻松散步。"
+      },
+      "relationships:new": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验对个人开放且适合你进入的社交活动入口，不能用人口或企业数量代替。",
+        "sourceIds": [],
+        "caveat": "报名资格、费用、活动是否继续和你愿不愿意参加都需逐项核实。"
+      },
+      "relationships:regular": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚未核验你能稳定重复参加的具体社群、日程和成员互动，稳定关系保持未知。",
+        "sourceIds": [],
+        "caveat": "一年办多场活动或园区企业聚集，不等于同一批人定期见面。"
+      },
+      "relationships:close": {
+        "value": null,
+        "status": "unknown",
+        "note": "城市资料不知道你现有的家人、朋友、伴侣在哪，也无法证明能在此建立亲密支持。",
+        "sourceIds": [],
+        "caveat": "需要本人确认重要关系的位置、往返时间与可接受频率。"
+      },
+      "relationships:solo": {
+        "value": null,
+        "status": "unknown",
+        "note": "独处是否自在取决于具体住处、出行与个人经验，不能由居民刻板印象赋分。",
+        "sourceIds": [],
+        "caveat": "先核验实际居住和活动安排，不将人口密度或城市口号当作独处适配证据。"
+      },
+      "career:build": {
+        "value": 2,
+        "status": "editorial",
+        "note": "兴智杯总决赛展示AI行业解决方案，并讨论应用落地与国产软硬件实践，适合找具体产品案例。",
+        "sourceIds": [
+          "sz-ai-apps"
+        ],
+        "caveat": "获奖与参赛案例不代表本地每家公司都在招聘，更不能推断个人收入。"
+      },
+      "career:learn": {
+        "value": 1,
+        "status": "editorial",
+        "note": "前海举办的创新应用赛事有专业分享与场景讨论，可作为追踪应用产品实践的学习线索。",
+        "sourceIds": [
+          "sz-ai-apps"
+        ],
+        "caveat": "历史赛事的下一届资格、线下参与方式和技术门槛需重新确认。"
+      },
+      "career:steady": {
+        "value": null,
+        "status": "unknown",
+        "note": "产业或AI活动存在不能证明目标岗位稳定、合同可靠或工作生活边界清晰。",
+        "sourceIds": [],
+        "caveat": "需要公司、岗位、合同和团队层面的证据，不能用城市发展规划替代。"
+      },
+      "uncertainty:explore": {
+        "value": null,
+        "status": "unknown",
+        "note": "对不确定性的承受方式是个人取舍，尚无可比较的城市试错成本证据。",
+        "sourceIds": [],
+        "caveat": "需核验现金储备、住房、合同与退路，不能把创业活动多等同适合冒险。"
+      },
+      "uncertainty:balanced": {
+        "value": null,
+        "status": "unknown",
+        "note": "当前资料无法把一种平衡生活承诺给任何城市，试错成本和支持网络仍未知。",
+        "sourceIds": [],
+        "caveat": "把实际工作、住房与熟人支持一起核验后再谈平衡。"
+      },
+      "uncertainty:settled": {
+        "value": null,
+        "status": "unknown",
+        "note": "尚无可比较的住房持续性、岗位稳定性和个人支持网络资料。",
+        "sourceIds": [],
+        "caveat": "长期安顿需要具体条件，不能由城市气质或单个政策推导。"
+      }
+    },
+    "joyPortrait": {
+      "invitation": "如果你想让应用想法碰一碰真实场景，再用山海路线切换状态，可以先体验一个缩小版的周末。",
+      "delights": [
+        "看一份AI应用案例，问清楚它真正解决了谁的问题。",
+        "从山海通廊的一小段开始，观察户外是否真能帮自己恢复。"
+      ],
+      "frictions": [
+        "路线有距离和坡度，活动也有窗口，不能只凭照片作决定。",
+        "有应用生态不等于稳定岗位，城市里是否有你的支持网络仍未知。"
+      ]
+    }
   }
 ]

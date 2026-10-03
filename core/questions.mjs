@@ -1,5 +1,8 @@
+import { isJoyProfile, normalizeProfile, JOY_CONFIG } from './profile.mjs';
+import { getJoyQuestion } from './joy-questions.mjs';
+export { joyQuestionPriorities } from './joy-questions.mjs';
 const INDUSTRIES = new Set(['tech', 'creative', 'manufacturing', 'service']);
-const FEEDBACK = new Set(['like', 'cost', 'climate', 'career', 'too-busy', 'not-this-city', 'unsure']);
+const FEEDBACK = new Set(['like', 'cost', 'climate', 'career', 'too-busy', 'not-this-city', 'unsure', 'heart', 'unbearable']);
 const array = (value) => Array.isArray(value) ? value : [];
 const distinct = (value) => [...new Set(array(value))];
 const clone = (value) => structuredClone(value);
@@ -79,6 +82,7 @@ function repeatedLifeQuestion(profile) {
 
 /** First question (round 1), then a feedback-led second question (round 2). */
 export function getNextQuestion(profile = {}, ranking = {}, round = 1) {
+  if (isJoyProfile(profile)) return getJoyQuestion(profile, ranking, round);
   const confirmed = new Set(array(profile.confirmations).map((item) => typeof item === 'string' ? item : item?.id));
   const unasked = (question) => confirmed.has(question.id) ? null : question;
   const initial = () => {
@@ -113,16 +117,32 @@ export function applyAnswer(profile = {}, question, optionId) {
   const selected = array(question?.options).find((item) => item.id === optionId);
   if (!selected) throw new RangeError(`未知选项：${optionId}`);
   if (!question?.id) throw new TypeError('问题缺少 id');
-  const next = { ...clone(profile), ...clone(selected.patch || {}) };
+  let next = { ...clone(profile), ...clone(selected.patch || {}) };
+  if (isJoyProfile(profile) || selected.patch?.joy) {
+    next.joy = { ...clone(profile.joy || {}), ...clone(selected.patch?.joy || {}) };
+    next = normalizeProfile(next);
+    for (const [key, value] of Object.entries(selected.patch || {})) {
+      const paths = key === 'joy' ? Object.keys(value || {}).map((dimension) => `joy.${dimension}`) : [key];
+      for (const path of paths) next.answerSources[path] = { questionId: question.id, optionId, label: selected.label,
+        value: clone(path.startsWith('joy.') ? next.joy[path.slice(4)] : next[path]) };
+    }
+  }
   next.confirmations = distinct([...array(profile.confirmations), question.id]);
   return next;
 }
 
-export function applyFeedback(profile = {}, cityId, reasonId) {
+export function applyFeedback(profile = {}, cityId, reasonId, details = {}) {
+  if (reasonId && typeof reasonId === 'object') {
+    details = { ...reasonId, ...details };
+    reasonId = reasonId.reasonId || reasonId.kind;
+  }
   if (!FEEDBACK.has(reasonId)) throw new RangeError(`未知反馈：${reasonId}`);
   if (typeof cityId !== 'string' || !cityId) throw new TypeError('反馈缺少城市 id');
   const next = clone(profile);
-  next.feedback = [...array(next.feedback), { cityId, reasonId }];
+  const feedback = { cityId, reasonId };
+  if (JOY_CONFIG.dimensions.some((item) => item.id === details?.dimension) || details?.dimension === 'climate') feedback.dimension = details.dimension;
+  if (typeof details?.text === 'string' && details.text.trim()) feedback.text = details.text.trim().slice(0, 300);
+  next.feedback = [...array(next.feedback), feedback];
   next.excludedCityIds = distinct(next.excludedCityIds);
   if (reasonId === 'not-this-city') next.excludedCityIds = distinct([...next.excludedCityIds, cityId]);
   return next;
