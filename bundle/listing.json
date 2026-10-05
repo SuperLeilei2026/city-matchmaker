@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "subtitle": "从想过的日子，认识毕业第一站",
-  "description": "一次只聊一个生活场景，把新鲜感、恢复方式、关系、职业期待与不确定性说具体，核对一份由你的选择组成的生活画像。INTP猫和ENFP狗使用同一份八城资料，以不同取舍权重介绍城市；收到反馈后继续追问，可以切换视角比较。未知证据不加分，区间重叠时不硬判唯一首选，预算与通勤只作待核验条件。保留应用Agent的CM1受控修改、用户确认与保存核验，五维场景通过按钮修改。",
+  "subtitle": "先看看生活，喜欢再留下",
+  "description": "打开就是一座城：一句生活吸引点、一个代价。留第一座继续逛，留两座直接对比；路过不等于排除，也不拿收藏猜性格。难取舍时，只在有可比较证据时可选聊一句。资料与来源随时查看，气候底线和明确拒绝保留。详情可按需请求应用 Agent 提案，确认后才执行。",
   "category": "lifestyle",
   "keywords": [
     "city",
@@ -11,11 +11,10 @@
     "agent"
   ],
   "screenshots": [
-    "screenshots/01-welcome.png",
-    "screenshots/06-scene.png",
-    "screenshots/05-portrait.png",
-    "screenshots/02-first-match.png",
-    "screenshots/03-second-match.png"
+    "screenshots/01-discovery.png",
+    "screenshots/02-comparison.png",
+    "screenshots/03-optional-question.png",
+    "screenshots/04-profile.png"
   ],
   "icon": "assets/icon.svg",
   "platforms": [
@@ -26,7 +25,7 @@
     "support": "https://github.com/SuperLeilei2026/city-matchmaker/issues",
     "privacy_policy_url": "https://github.com/SuperLeilei2026/city-matchmaker/blob/main/docs/privacy.md"
   },
-  "release_notes": "Joy v0.3：五维场景与可核对画像、猫狗双视角、AI应用与产品方向、按反馈复核场景、来源与不确定区间。旧存档保留原资料和明确拒绝；CM1安全确认链保持兼容。",
+  "release_notes": "0.4：直接城市卡、最多两城收藏对比、可选单题、随时补资料；保存浏览与收藏，不猜偏好。兼容旧存档，保留应用 Agent 受控确认。",
   "age_rating": "all",
   "license": "Apache-2.0"
 }

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-05",
+  "version": "0.4.0",
+  "passed": true,
+  "production_main_sha256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+  "production_main_still_current": true,
+  "synthetic_inputs_only": true,
+  "real_model_called": false,
+  "production_bundle_modified_by_test": false,
+  "storage_contract_checks": [
+    {
+      "name": "v3_46_roundtrip_preserves_complete_profile_and_comparison_context",
+      "passed": true
+    },
+    {
+      "name": "legacy_29_migration_retains_explicit_fields_without_inferred_joy",
+      "passed": true
+    },
+    {
+      "name": "legacy_30_migration_retains_explicit_fields_without_inferred_joy",
+      "passed": true
+    },
+    {
+      "name": "legacy_38_migration_retains_explicit_fields_without_inferred_joy",
+      "passed": true
+    },
+    {
+      "name": "legacy_39_migration_retains_explicit_fields_without_inferred_joy",
+      "passed": true
+    }
+  ],
+  "temporary_contract_ui_refresh_suppressed": true,
+  "discovery_parity_steps": [
+    "init",
+    "next",
+    "keep1",
+    "keep2",
+    "question",
+    "answer",
+    "remove",
+    "restart"
+  ],
+  "same_cursor_favorites_browsed_view_joy_and_question": true,
+  "native_vs_js_parity_cases": [
+    "cat_complete",
+    "dog_complete",
+    "all_unknown",
+    "unknown_evidence",
+    "climate_soft",
+    "climate_hard",
+    "explicit_rejection"
+  ],
+  "same_city_order_score_coverage_and_ranges": true,
+  "trial_plan_matches_shared_config": true,
+  "number_tolerance": 0.0001,
+  "test_method": "Real hidden card-host with function-level assertions injected into a temporary bundle copy. Only draw_page and refresh UI rendering are suppressed in that copy; state, storage and ranking functions execute unchanged. Production pointer UI regression is separate."
+}

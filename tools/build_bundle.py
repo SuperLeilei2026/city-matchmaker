@@ -56,7 +56,7 @@ def main():
             joy_evidence.append(2 if valid and status == 'sourced' else 1 if valid else 0)
             joy_notes.append(signal.get('note', '缺少可比较证据。'))
             joy_caveats.append(signal.get('caveat', ''))
-        rows.append([city['id'], city['name'], city['tagline'], values, evidence, city['scenes'][0], '\n'.join(city['tradeoffs']), source_text, '\n'.join(city['unknowns']), city['persona'], notes, city['tradeoffs'][0], joy_values, joy_evidence, joy_notes, joy_caveats])
+        rows.append([city['id'], city['name'], city['tagline'], values, evidence, city['scenes'][0], '\n'.join(city['tradeoffs']), source_text, '\n'.join(city['unknowns']), city['persona'], notes, city['tradeoffs'][0], joy_values, joy_evidence, joy_notes, joy_caveats, city.get('card', {}).get('appeal', city['tagline']), city.get('card', {}).get('cost', city['tradeoffs'][0]), city.get('card', {}).get('sceneAsset', '')])
     generated = {'city_rows': rows, 'joy_dimensions': dimension_rows, 'joy_signal_keys': signal_keys, 'joy_weights': weights, 'joy_climate_weight': config['climateWeight'], 'joy_editorial_radius': config['editorialRadius'], 'joy_roles': [[r['id'], r['label']] for r in config['aiRoles']], 'joy_ranking_factor': 10 ** config.get('rankingPrecision', 4), 'joy_reason_order': [sorted(range(len(dimensions)), key=lambda d: (-row[d], d)) for row in weights]}
     dimension_index = {d['id']: i for i, d in enumerate(dimensions)}
     generated['joy_trial_plan'] = [[dimension_index[key], table['unknown']['title'], table['unknown']['text'], [[option, item['title'], item['text']] for option, item in table.items() if option != 'unknown']] for key, table in config.get('trialPlan', {}).items()]
@@ -74,6 +74,9 @@ def main():
         shutil.copyfile(art, ROOT / 'bundle/assets/mascots.png')
     for name in ['guide-cat.png', 'guide-dog.png']:
         shutil.copyfile(ROOT / 'assets' / name, ROOT / 'bundle/assets' / name)
+    scene_dir = ROOT / 'assets/scenes'
+    if scene_dir.exists():
+        shutil.copytree(scene_dir, ROOT / 'bundle/assets/scenes', dirs_exist_ok=True)
     print(f'Generated {len(rows)} cities; data and native source are synchronized.')
 
 if __name__ == '__main__':

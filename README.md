@@ -6,22 +6,21 @@
 
 **GOSIM Agentic App 2026｜MOST暴躁队｜Leinstein** · [初赛仓库登记](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)
 
-缩小职业范围之后，决定下一站的，往往还有一整周怎么过。你需要多少新鲜感、靠什么恢复精力、想要怎样的关系、期待怎样做 AI、能接受多少变化？Joy City 把这些选择整理成一份可修改的生活画像，再介绍城市的吸引力、代价和未知。
+先看看城市里的一种生活。喜欢就留下，翻过也没关系。留下两座以后，再一起看看各自的吸引力与代价；拿不准时，只补一个有用的问题。
 
 本项目的参赛作品是 **OctoSense 原生脚本应用**：`bundle/main.splash`，采用官方 [script-app 流程](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/flows/script-app/FLOW.md)。无需用浏览器承载界面，也无需编写或编译本应用的 Rust 代码。
 
-当前版本 **v0.3.0**，聚焦 AI 应用、产品、设计与落地。它帮助你找到值得了解和试住的城市，不预测幸福概率，也不保证就业结果。公开仓库与版本标签状态见 [publication.md](docs/publication.md)。
+当前版本 **v0.4.0**，聚焦 AI 应用、产品、设计与落地。它帮助你找到值得了解和试住的城市，不预测幸福概率，也不保证就业结果。公开仓库与版本标签状态见 [publication.md](docs/publication.md)。
 
 ## 怎么玩
 
-1. **选日常。** 5 个生活场景，天气和现实条件可选填。无需先聊天，也不用交出一长串个人信息。
-2. **核对画像。** 每句话都来自你的选择，点开就能修改。
-3. **认识一座城。** 看推荐依据、吸引力与代价。
-4. **说心动或介意的地方。** 再确认一个关键选择，重新比较；明确拒绝的城市会保留排除。
-5. **换个视角。** ENFP 线条小狗先看生活，INTP 黑白德文猫先看职业期待。事实相同，侧重不同，排序可以不同。
-6. **准备去看看。** 看个人试城计划，收好不含身份资料的分享摘要。
+1. **打开就看城市。** 一幅日常插画，一句吸引力，一句代价。点“留着看看”或“下一座”。
+2. **留下两座，直接比较。** 也可以移除一座，继续找。
+3. **拿不准，再问一件事。** 只问两城已有依据、而你还没表达过的偏好；资料不足就保留未知。
 
-![原生应用：核对生活画像](bundle/screenshots/05-portrait.png)
+没有必填问卷。资料、猫狗视角、来源与应用 Agent 按需打开；“下一座”不代表拒绝，“留着”也不会偷偷改性格或加分。ENFP 线条狗侧重生活，INTP 黑白德文猫侧重职业期待。
+
+![原生应用：打开就看城市](bundle/screenshots/01-discovery.png)
 
 ## 启动参赛应用
 
@@ -48,13 +47,13 @@ OCTO_HUB=/path/to/hub \
 - 活动、公共空间、AI 实践入口可以提供探索线索；安静程度、稳定关系、工作强度和个人能承受的变化不能凭城市印象打分。
 - 无法比较的偏好仍用于画像和试城计划，**不会冒充已影响排序**。未知项不补成平均值；候选区间重叠时明确保留不确定性。
 - 房租、合租方式和通勤上限只形成待核验条件；需具体工作地、房源及路线才能判断。
-- 反馈不是“点喜欢就偷偷加分”。应用复核对应维度，再按你确认的答案重排；没有新依据时也会如实保留原推荐。
+- 收藏只是表达想继续了解。只有明确回答才更新五维，明确拒绝才排除城市；没有资料时不把第一张卡称为个性化推荐。
 
 详细规则见 [匹配模型](docs/matching-model.md)、[城市来源](docs/data-sources.md)、[产品设计](docs/product-design.md)。
 
 ## 当前能力与边界
 
-原生包实现五维场景、可编辑画像、推荐与反馈重排、猫狗双视角、来源、试城计划、本地存档与旧版迁移。其 `main.splash` 是官方支持的 Makepad Script / Splash 入口；`page.card` 是另一条 L0 卡片路线，不是本项目的入口。
+原生包实现城市浏览、两城收藏与比较、可选追问、可编辑画像、猫狗双视角、来源、试城计划、本地存档与旧版迁移。日常 SVG 是生活想象，不是实景照片或路线承诺。`main.splash` 是官方支持的 Makepad Script / Splash 入口；`page.card` 是另一条 L0 卡片路线，不是本项目的入口。
 
 应用 Agent 使用宿主 `octos.*` 服务提出受控修改，再由用户确认执行。当前 CM1 有效操作主要是新增气候避开项与明确拒绝城市；五维答案由本人按钮确认。提案不能改写城市数据、恢复已拒绝城市或撤销天气底线。真实模型完整成功链路仍待验收；临时响应注入测试只证明执行保护机制。
 
@@ -65,15 +64,15 @@ OCTO_HUB=/path/to/hub \
 原生界面、存档与排序对照：
 
 ```sh
-OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_joy_smoke.py
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_discovery_smoke.py
 OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_agent_smoke.py
 ```
 
-原生真实操作脚本为 `tools/native_joy_smoke.py`，Agent 执行保护检查为 `tools/native_agent_smoke.py`。测试检查真实窗口、存档与迁移、失败状态、明确排除、规则一致性；公开截图均用合成资料。已经验证的是 Apple silicon macOS，未据此声称手机或其他平台已验证。
+v0.4 原生真实操作脚本为 `tools/native_discovery_smoke.py`，Agent 执行保护检查为 `tools/native_agent_smoke.py`。测试检查真实窗口、存档与迁移、失败状态、明确排除和编辑返回；公开截图均用合成资料。已经验证的是 Apple silicon macOS，未据此声称手机或其他平台已验证。旧 `native_joy_smoke.py` 与影片对应 v0.3 历史流程。
 
 共享规则的补充测试为 `node --test tests/*.test.mjs`；原生与 JavaScript 对照测试需安装 Node.js 22+，应用本身的运行不需要。
 
-[原生 Joy 验收报告](qa/native-joy-check.json) · [Agent 协议验收报告](qa/native-agent-check.json) · [演示材料及范围](docs/demo.md)
+[原生极简流程验收报告](qa/native-discovery-check.json) · [Agent 协议验收报告](qa/native-agent-check.json) · [历史演示及范围](docs/demo.md)
 
 这些验证证明流程能运行，不证明推荐准确率、传播效果或真实用户满意度。下一步需要目标用户实际体验，检验画像是否贴切、理由是否有用，以及第二轮是否更符合偏好。
 
@@ -96,6 +95,6 @@ docs/                   产品、来源、发布边界
 
 ## 辅助 Web 体验
 
-`node serve.mjs` 可在同一台电脑的 http://127.0.0.1:4318 打开交互研究版，需 Node.js 22+。它按本地规则运行、未接模型，不是参赛包，也不是公开在线 Demo。PNG 分享车票目前只在 Web 实现。资料存在浏览器本机，默认分享不含身份、预算或自由文本。见 [Web 验收](docs/web-qa.md)。
+`node serve.mjs` 可在同一台电脑的 http://127.0.0.1:4318 打开交互研究版，需 Node.js 22+。**Web 暂保留 v0.3 问卷流程，未同步本次极简原生交互。** 它按本地规则运行、未接模型，不是参赛包，也不是公开在线 Demo。PNG 分享车票目前只在 Web 实现。资料存在浏览器本机，默认分享不含身份、预算或自由文本。见 [Web 验收](docs/web-qa.md)。
 
 [Apache-2.0](LICENSE) · [素材声明](NOTICE) · [问题与建议](https://github.com/SuperLeilei2026/city-matchmaker/issues)

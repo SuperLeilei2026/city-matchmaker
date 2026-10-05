@@ -1,17 +1,13 @@
 {
-  "date": "2026-10-03",
-  "bundle_version": "0.3.0",
-  "production_main_sha256": "a01414d00e7b9abe923ccbb6e3676895aa0b1b2c2f440b95db84a10cb1234577",
+  "date": "2026-10-05",
+  "bundle_version": "0.4.0",
+  "production_main_sha256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
   "synthetic_inputs_only": true,
   "real_model_verified": false,
   "test_method": "Real hidden Makepad card-host. Production unavailable path plus explicit response injection in a temporary bundle copy only. No external provider call.",
   "production_checks": [
     {
-      "name": "profile_and_two_round_flow",
-      "passed": true
-    },
-    {
-      "name": "explicit_city_rejection",
+      "name": "detail_agent_targets_the_displayed_nonleading_city",
       "passed": true
     },
     {
@@ -106,6 +102,14 @@
     },
     {
       "name": "saved_execution_survives_reload",
+      "passed": true
+    },
+    {
+      "name": "nonleading_displayed_city_accepts_own_proposal_without_mutation",
+      "passed": true
+    },
+    {
+      "name": "changing_detail_city_invalidates_confirmation",
       "passed": true
     },
     {

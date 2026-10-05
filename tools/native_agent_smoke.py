@@ -46,6 +46,11 @@ fn test_fixture(){
     agent_proposal = []
     agent_feedback = "生活优先，更在意安静，也怕冷，不考虑当前城市。"
     compute_ranking()
+    detail_city_id = city_rows[ranked[0][0]][0]
+    show_agent = true
+    liked_ids = []
+    browsed_ids = []
+    current_card_id = ""
     save_local()
 }
 fn test_reply(priority_token, focus_token, avoid_token, exclude_token){
@@ -126,6 +131,15 @@ fn test_agent_contract(){
     agent_proposal = []
     load_local()
     test_record(revision == 11 && priority == 2 && focus_interest == 8 && change_text.search("你确认了 Agent 建议") >= 0, "saved_execution_survives_reload")
+    test_fixture()
+    detail_city_id = city_rows[ranked[1][0]][0]
+    before = fs.read("match.json")
+    let detail_reply = "CM1|10|" + detail_city_id + "|keep|keep|cold|keep|测试详情实际城市的气候修改。"
+    accept_agent(detail_reply, request_id, 10, detail_city_id)
+    test_record(agent_proposal.len() == 8 && fs.read("match.json") == before, "nonleading_displayed_city_accepts_own_proposal_without_mutation")
+    detail_city_id = city_rows[ranked[0][0]][0]
+    apply_agent_proposal()
+    test_record(agent_proposal.len() == 0 && fs.read("match.json") == before, "changing_detail_city_invalidates_confirmation")
     fs.write("agent-test-report.json", test_checks.to_json())
 
     // Leave a fresh proposal for a real pointer click on the confirmation UI.
@@ -204,24 +218,21 @@ def main():
     args.card_host=str(Path(args.card_host).resolve());args.hub=str(Path(args.hub).resolve())
     temp=Path(tempfile.mkdtemp(prefix='city-native-agent-check-'))
     bundle=temp/'bundle';shutil.copytree(ROOT/'bundle', bundle)
+    initial_sha=hashlib.sha256((bundle/'main.splash').read_bytes()).hexdigest()
     state=temp/'state';statefile=state/'leilei-city-matchmaker/match.json'
     actual=[]
     def production(d):
-        d.click('从想过的日子开始 →');d.click('○ AI 应用与产品')
-        for text in ['○ 经常换一种新玩法','○ 到水边、树下走走','○ 不断遇到新朋友','○ 把自己的想法做出来','○ 先试一段，再决定']:d.click(text)
-        d.click('先核对我的生活画像 →');d.click('画像准确，先认识一座城 →')
-        assert any('，先见一面' in x for x in d.labels())
-        first_city_id=json.loads(statefile.read_text())[25]
-        d.click('这座城我明确不考虑');d.top();d.click('保留原回答');d.top()
-        assert any('先去了解 ' in x for x in d.labels())
-        assert first_city_id in json.loads(statefile.read_text())[24]
-        actual.extend(['profile_and_two_round_flow','explicit_city_rejection'])
+        d.click('下一座 →')
+        actual_city=json.loads(statefile.read_text())[39]
+        d.click('细节与来源');d.click('用一句话请 Agent 帮忙')
+        assert json.loads(statefile.read_text())[43]==actual_city
+        actual.append('detail_agent_targets_the_displayed_nonleading_city')
         before=statefile.read_bytes()
         d.click('让 Agent 提出修改');d.scroll(120)
         assert any('先写下' in x for x in d.labels())
         assert statefile.read_bytes()==before
         actual.append('empty_feedback_rejected_without_state_change')
-        d.top();d.click('我想调整的是…');d.type('比起工作机会，我现在更想常去户外。')
+        d.top();d.click('我想调整的是…');d.type('请帮我避开潮湿天气。')
         assert statefile.read_bytes()==before
         actual.append('free_feedback_not_saved_before_confirmation')
         d.click('让 Agent 提出修改');d.scroll(120)
@@ -255,6 +266,7 @@ def main():
         injected.append({'name':'real_ui_confirmation_executes_and_verifies','passed':True})
         d.shot(temp/'injected-confirmed-result.png')
     run_host(args,bundle,state,temp/'injected.log',contract)
+    assert hashlib.sha256((ROOT/'bundle/main.splash').read_bytes()).hexdigest()==initial_sha,'Production changed during Agent verification'
     report={'date':datetime.date.today().isoformat(),'bundle_version':json.loads((ROOT/'bundle/manifest.json').read_text())['version'],'production_main_sha256':hashlib.sha256((ROOT/'bundle/main.splash').read_bytes()).hexdigest(),'synthetic_inputs_only':True,'real_model_verified':False,'test_method':'Real hidden Makepad card-host. Production unavailable path plus explicit response injection in a temporary bundle copy only. No external provider call.','production_checks':[{'name':x,'passed':True} for x in actual],'injected_response_checks':injected,'production_bundle_modified_by_test':False,'screenshots_published':False}
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

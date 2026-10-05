@@ -1,8 +1,10 @@
-# Joy City v0.3 · 原生实际操作演示
+# Joy City v0.3 · 历史原生演示
+
+**版本提示（2026-10-05）：本页影片与截图记录 v0.3 问卷流程，不能代表 v0.4“看城市、留两座”的新交互。** 新版请按 [原生运行说明](octosense.md)体验，并核对 [产品设计](product-design.md)与本次原生截图。旧影片保留用于追溯初赛已提交材料；其哈希只与下述固定提交一致。
 
 [观看原生 MP4](demo-native.mp4) · [原生录制报告](../qa/native-demo/recording-report.json) · [初赛清单](submission-checklist.md)
 
-**主交付是 `bundle/main.splash` 的 OctoScript 应用。** 本片使用最终生产源码，在独立隐藏 card-host 窗口中实际操作并连续采帧，使用合成资料；没有源码注入、状态注入，也没有操作用户已有窗口。录像报告中的程序 SHA-256 与当前生产文件一致。
+**主交付是 `bundle/main.splash` 的 OctoScript 应用。** 本片使用 v0.3 生产源码，在独立隐藏 card-host 窗口中实际操作并连续采帧，使用合成资料；没有源码注入、状态注入，也没有操作用户已有窗口。录像报告中的程序 SHA-256 对应 v0.3，不是当前 v0.4。
 
 原生影片约 **2分31秒，920×1840，H.264／25fps编码，4,147,584字节**。原生画面为920×1640，底部添加说明字幕；窗口约每秒采集5帧，未用静态概念图替代交互。录制断言、完整视频解码与 [Chromium 实际播放](../qa/native-demo/playback-validation.json)均通过；[成片画面检查](../qa/native-demo/visual-check.json)核对22／83／136秒，确认场景、首城及不可用提示可读，字幕没有遮挡应用。
 

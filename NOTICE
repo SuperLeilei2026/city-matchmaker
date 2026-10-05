@@ -3,5 +3,6 @@ Copyright 2026 SuperLeilei2026
 
 Original project code, product copy and project artwork are provided under Apache-2.0.
 Project illustrations were produced with AI assistance; the cover prompt and asset provenance are recorded in docs/cover-prompt.md.
+The eight original SVG city-life illustrations in assets/scenes are conceptual illustrations, not photographs, maps, or evidence of an available route. Their short card copy and source IDs are recorded in data/cities.json.
 City sources are linked for attribution in data/cities.json and docs/data-sources.md. The license does not grant rights to third-party websites or their content.
 OctoSense and Makepad are separate projects; platform binaries are not included in this repository.

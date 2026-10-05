@@ -2,13 +2,13 @@
 
 核验日期：2026-10-03。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入或本地签名目录当作真实模型成功。
 
-## 当前状态
+## 2026-10-03 的 Shell 准备记录
 
 - 独立 OctoSense Shell 已启动，AI providers 页面可用；新状态目录没有继承故事排练场的 mock provider。
 - 城市红娘 `0.2.0` 已复制到专用测试目录并以临时测试发布者签名。`hub check` 无警告通过，本地 catalog `sequence 1`、`1 entries` 验签通过。
 - 本地包摘要为 `d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c`。测试签名没有写回仓库中的 `bundle/`。
 - **用户已报告模型连接完成。** 本应用的真实响应、确认执行与恢复仍待独立验收；不再将等待填写密钥列为阻塞。没有读取或记录用户密钥。
-- **上面两项包与 catalog 记录仅适用于旧 v0.2.0。** 当前 v0.3 的真实 card-host 验收见 [原生说明](octosense.md)；尚无 v0.3 经完整 Shell 安装并成功调用模型的证据。本地测试发布不是公开 App Hub 审核。
+- **上面两项包与 catalog 记录仅适用于旧 v0.2.0。** 当前版本的真实 card-host 验收见 [原生说明](octosense.md)；本页历史 catalog 不能证明新版已安装到完整 Shell 或成功调用模型。本地测试发布不是公开 App Hub 审核。
 
 本次重新核对官方 [App Design Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/0e59346e810ed694702b1df48f4283dc8104358c/README.zh-CN.md)：`main.splash` 是正式支持的 script-app 入口；无需改成 Web 或重写为 `page.card`。官方最新源码基底已前进，下表识别的是实际测过的工具，不能据此宣称最新宿主全部兼容。
 

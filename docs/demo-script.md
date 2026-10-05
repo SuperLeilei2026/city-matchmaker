@@ -1,4 +1,6 @@
-# Joy City v0.3 演示镜头
+# Joy City v0.3 历史演示镜头
+
+本页对应 v0.3 影片。v0.4 已改为直接浏览城市、收藏两座再比较；本页不作为新版验收脚本。当前流程见 [产品设计](product-design.md)。
 
 真实 Web 录制、独立合成资料、本地规则。完整操作断言见 `qa/demo-web/recording-report.json`。
 

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-05",
+  "version": "0.4.0",
+  "production_main_sha256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+  "synthetic_inputs_only": true,
+  "real_model_called": false,
+  "production_ui_checks": [
+    "native_svg_scene_visible_at_160px",
+    "profile_from_optional_question_returns_to_comparison",
+    "opens_directly_to_city_card",
+    "two_primary_actions_visible_at_460x820",
+    "next_is_browse_not_rejection_or_preference",
+    "first_favorite_advances_second_opens_compare",
+    "favorites_never_guess_joy_profile",
+    "optional_question_uses_comparable_evidence",
+    "explicit_answer_has_specific_pair_response",
+    "clearing_answer_keeps_favorites_without_crash",
+    "cleared_comparison_answer_survives_restart",
+    "restart_preserves_portrait_edit_and_comparison_return",
+    "guide_switch_preserves_likes_and_explicit_answers",
+    "third_favorite_requires_removal",
+    "remove_favorite_preserves_profile",
+    "eight_city_round_has_explicit_exhausted_state",
+    "restart_round_keeps_likes_and_profile",
+    "agent_detail_targets_displayed_city",
+    "unavailable_agent_keeps_profile"
+  ]
+}

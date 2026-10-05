@@ -1,4 +1,4 @@
-let screen = 0
+let screen = 20
 let guide = "dog"
 let nickname = ""
 let school = ""
@@ -41,6 +41,14 @@ let housing_type = ""
 let max_commute = 0
 let joy_feedback_dimension = 1
 let reviewing_edit = false
+let current_card_id = ""
+let liked_ids = []
+let browsed_ids = []
+let profile_return_screen = 20
+let detail_city_id = ""
+let detail_return_screen = 20
+let comparison_dimension = -1
+let show_agent = false
 let score_weights = [0.65, 0.5, 0.3]
 let industry_names = ["科技 / 互联网", "设计 / 内容 / 文创", "制造 / 工程", "商贸 / 生活服务"]
 let interest_names = ["户外与自然", "演出与展览", "好好吃饭", "球类运动", "安静独处"]
@@ -73,7 +81,7 @@ fn city_index(id){
     return -1
 }
 fn data_snapshot(){
-    return ["city-matchmaker-v2", screen, guide, nickname, school, major, current_city, home_city, age_band, life_stage, mbti, zodiac, admired_mbti, admired_zodiac, admired_traits, role_name, industry, rent_budget, interests, climate_avoids, hard_climate, relationship, priority, pace, excluded_ids, first_id, feedback_id, revision, change_text, focus_interest, joy_profile[0], joy_profile[1], joy_profile[2], joy_profile[3], joy_profile[4], ai_role, housing_type, max_commute, reviewing_edit]
+    return ["city-matchmaker-v3", screen, guide, nickname, school, major, current_city, home_city, age_band, life_stage, mbti, zodiac, admired_mbti, admired_zodiac, admired_traits, role_name, industry, rent_budget, interests, climate_avoids, hard_climate, relationship, priority, pace, excluded_ids, first_id, feedback_id, revision, change_text, focus_interest, joy_profile[0], joy_profile[1], joy_profile[2], joy_profile[3], joy_profile[4], ai_role, housing_type, max_commute, reviewing_edit, current_card_id, liked_ids, browsed_ids, profile_return_screen, detail_city_id, detail_return_screen, comparison_dimension]
 }
 fn save_local(){
     if fs.write("match.json", data_snapshot().to_json()) != nil {
@@ -84,21 +92,23 @@ fn save_local(){
 }
 fn draw_page(){
     ui.page.render()
+    ui.actions.render()
     ui.guide_header.set_text(guide_name())
     ui.status.set_text(status_text)
     start_timeout(0.01, || refresh())
 }
 fn refresh(){
-    if screen == 0 { ui.pane0.render() }
     if screen == 1 { ui.pane1.render() }
     if screen == 2 { ui.pane2.render() }
     if screen == 3 { ui.pane3.render() }
-    if screen == 4 { ui.pane4.render() }
-    if screen == 5 { ui.pane5.render() }
-    if screen == 6 { ui.pane6.render() }
     if screen == 7 { ui.pane7.render() }
     if screen == 8 { ui.pane8.render() }
     if screen >= 9 && screen <= 13 { ui.pane9.render() }
+    if screen == 20 { ui.pane20.render() }
+    if screen == 21 { ui.pane21.render() }
+    if screen == 22 { ui.pane22.render() }
+    if screen == 23 { ui.pane23.render() }
+    ui.actions.render()
     ui.guide_header.set_text(guide_name())
     ui.status.set_text(status_text)
 }
@@ -112,7 +122,7 @@ fn go(next_screen){
 fn load_local(){
     if fs.exists("match.json") {
         let saved = fs.read("match.json").parse_json()
-        if saved != nil && (((saved.len() == 29 || saved.len() == 30) && saved[0] == "city-matchmaker-v1") || ((saved.len() == 38 || saved.len() == 39) && saved[0] == "city-matchmaker-v2")) {
+        if saved != nil && (((saved.len() == 29 || saved.len() == 30) && saved[0] == "city-matchmaker-v1") || ((saved.len() == 38 || saved.len() == 39) && saved[0] == "city-matchmaker-v2") || (saved.len() == 46 && saved[0] == "city-matchmaker-v3")) {
             screen = saved[1]
             guide = saved[2]
             nickname = saved[3]
@@ -153,13 +163,30 @@ fn load_local(){
                 if has_value(["primary-shared", "alone", "either"], saved[36]) { housing_type = saved[36] }
                 if has_value([0, 30, 45, 60], saved[37]) { max_commute = saved[37] }
             }
-            if saved.len() == 39 && saved[38] == true && (screen == 1 || screen == 2 || screen == 3 || (screen >= 9 && screen <= 13)) { reviewing_edit = true }
+            if saved.len() >= 39 && saved[38] == true && (screen == 1 || screen == 2 || screen == 3 || (screen >= 9 && screen <= 13)) { reviewing_edit = true }
             if feedback_id.search("joy:") == 0 {
                 for d in 5 { if feedback_id == "joy:" + joy_dimensions[d][0] { joy_feedback_dimension = d } }
             }
-            if screen == 4 { screen = 8 }
-            if screen < 0 || screen > 13 || priority < 0 || priority > 2 || industry < -1 || industry > 3 {
-                screen = 0
+            current_card_id = ""
+            liked_ids = []
+            browsed_ids = []
+            profile_return_screen = 20
+            detail_city_id = ""
+            detail_return_screen = 20
+            comparison_dimension = -1
+            if saved.len() == 46 {
+                if city_index(saved[39]) >= 0 { current_card_id = saved[39] }
+                for id in saved[40] { if city_index(id) >= 0 && !has_value(liked_ids, id) && liked_ids.len() < 2 { liked_ids.push(id) } }
+                for id in saved[41] { if city_index(id) >= 0 && !has_value(browsed_ids, id) { browsed_ids.push(id) } }
+                if has_value([20, 21, 22], saved[42]) { profile_return_screen = saved[42] }
+                if city_index(saved[43]) >= 0 { detail_city_id = saved[43] }
+                if has_value([20, 21, 22], saved[44]) { detail_return_screen = saved[44] }
+                if saved[45] >= -7 && saved[45] < 5 { comparison_dimension = saved[45] }
+            }
+            else { screen = 20; reviewing_edit = false }
+            if has_value([0, 4, 5, 6], screen) { screen = 20 }
+            if !has_value([1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 20, 21, 22, 23], screen) || priority < 0 || priority > 2 || industry < -1 || industry > 3 {
+                screen = 20
                 priority = 1
                 industry = -1
                 status_text = "本地资料字段不兼容，已返回首页。"
@@ -172,6 +199,9 @@ fn load_local(){
         else { status_text = "未读取到兼容存档；原文件尚未覆盖。" }
     }
     compute_ranking()
+    reconcile_discovery()
+    if screen == 20 { ensure_current_card() }
+    if screen == 7 && !eligible_id(detail_city_id) { screen = 20; ensure_current_card() }
     draw_page()
 }
 fn reset_all(){
@@ -213,24 +243,39 @@ fn reset_all(){
     change_text = ""
     agent_text = "可以再说一句，让应用 Agent 提出偏好修改；你确认后才会生效。"
     revision = revision + 1
-    screen = 0
+    screen = 20
+    current_card_id = ""
+    liked_ids = []
+    browsed_ids = []
+    profile_return_screen = 20
+    detail_city_id = ""
+    detail_return_screen = 20
+    comparison_dimension = -1
+    show_agent = false
+    compute_ranking()
+    ensure_current_card()
     if fs.exists("match.json") { fs.remove("match.json") }
     status_text = "本机资料和结果已清除。"
     draw_page()
 }
 fn edit_profile(){
-    agent_proposal = []
-    agent_feedback = ""
-    if agent_busy { cancel_agent() }
-    request_id = request_id + 1
-    revision = revision + 1
-    first_id = ""
-    feedback_id = ""
-    ranked = []
-    change_text = ""
-    agent_text = "资料已修改，旧建议失效。"
+    invalidate_proposal()
+    if has_value([20, 21, 22], screen) { profile_return_screen = screen }
+    else if screen == 7 { profile_return_screen = detail_return_screen }
+    else if screen == 23 { profile_return_screen = 21 }
     reviewing_edit = false
     go(8)
+}
+fn return_from_profile(){
+    invalidate_proposal()
+    reviewing_edit = false
+    revision = revision + 1
+    compute_ranking()
+    reconcile_discovery()
+    screen = profile_return_screen
+    if screen == 20 { ensure_current_card() }
+    save_local()
+    draw_page()
 }
 fn invalidate_proposal(){
     if agent_busy { cancel_agent() }
@@ -242,6 +287,8 @@ fn choose_guide(value){
     guide = value
     revision = revision + 1
     compute_ranking()
+    reconcile_discovery()
+    if screen == 20 { ensure_current_card() }
     change_text = "已切换红娘视角：同一份城市依据，采用不同生活权重；你的答案与拒绝城市保留。"
     save_local()
     refresh()
@@ -261,18 +308,13 @@ fn choose_ai_role(value){ ai_role = value; save_local(); refresh() }
 fn choose_housing(value){ housing_type = value; save_local(); refresh() }
 fn choose_commute(value){ max_commute = value; save_local(); refresh() }
 fn edit_review(section){ invalidate_proposal(); reviewing_edit = true; go(section) }
-fn continue_role(){
-    if reviewing_edit { reviewing_edit = false; go(8) }
-    else { go(9) }
-}
+fn continue_role(){ return_from_profile() }
 fn answer_scene(value){
     invalidate_proposal()
     joy_profile[screen - 9] = value
-    if reviewing_edit { reviewing_edit = false; go(8) }
-    else if screen < 13 { go(screen + 1) }
-    else { go(2) }
+    return_from_profile()
 }
-fn review_done(){ reviewing_edit = false; go(8) }
+fn review_done(){ return_from_profile() }
 fn ai_role_label(){
     for role in joy_roles { if role[0] == ai_role { return role[1] } }
     return "AI 方向还未确认"
@@ -492,6 +534,155 @@ fn unknowns_for(city){
     return out
 }
 
+fn eligible_id(id){
+    for item in ranked { if city_rows[item[0]][0] == id { return true } }
+    return false
+}
+fn reconcile_discovery(){
+    let valid_likes = []
+    for id in liked_ids { if eligible_id(id) && !has_value(valid_likes, id) && valid_likes.len() < 2 { valid_likes.push(id) } }
+    if liked_ids.to_json() != valid_likes.to_json() { comparison_dimension = -1 }
+    liked_ids = valid_likes
+    if !eligible_id(current_card_id) || has_value(liked_ids, current_card_id) { current_card_id = "" }
+}
+fn ensure_current_card(){
+    if eligible_id(current_card_id) && !has_value(liked_ids, current_card_id) && !has_value(browsed_ids, current_card_id) { return }
+    current_card_id = ""
+    for item in ranked {
+        let id = city_rows[item[0]][0]
+        if current_card_id == "" && !has_value(browsed_ids, id) && !has_value(liked_ids, id) { current_card_id = id }
+    }
+    if current_card_id == "" { screen = 22 }
+}
+fn next_card(){
+    invalidate_proposal()
+    if current_card_id != "" && !has_value(browsed_ids, current_card_id) { browsed_ids.push(current_card_id) }
+    current_card_id = ""
+    screen = 20
+    ensure_current_card()
+    status_text = ""
+    save_local()
+    draw_page()
+}
+fn keep_card(){
+    if liked_ids.len() >= 2 { go(21); status_text = "已留两座，先移除一座再留新的。"; refresh(); return }
+    if !eligible_id(current_card_id) { return }
+    if !has_value(liked_ids, current_card_id) { liked_ids.push(current_card_id); comparison_dimension = -1 }
+    next_card()
+    if liked_ids.len() == 2 { go(21) }
+}
+fn continue_browsing(){ invalidate_proposal(); screen = 20; ensure_current_card(); save_local(); draw_page() }
+fn restart_browsing(){ browsed_ids = []; current_card_id = ""; continue_browsing() }
+fn remove_like(id){
+    let kept = []
+    for old in liked_ids { if old != id { kept.push(old) } }
+    liked_ids = kept
+    comparison_dimension = -1
+    save_local()
+    refresh()
+}
+fn has_preferences(){
+    for value in joy_profile { if value != "" { return true } }
+    return climate_avoids.len() > 0
+}
+fn browse_caption(){
+    if has_preferences() { return "参考你已填写的偏好 · 仍待实地了解" }
+    return "先看看你喜欢的日常"
+}
+fn open_detail(id){
+    if !eligible_id(id) { return }
+    invalidate_proposal()
+    detail_city_id = id
+    if has_value([20, 21, 22], screen) { detail_return_screen = screen }
+    show_agent = false
+    agent_feedback = ""
+    agent_text = "只有你确认，建议才会生效。"
+    go(7)
+}
+fn close_detail(){
+    invalidate_proposal()
+    show_agent = false
+    screen = detail_return_screen
+    if screen == 20 { ensure_current_card() }
+    save_local()
+    draw_page()
+}
+fn comparison_question(){
+    if comparison_dimension <= -2 { go(23); return }
+    comparison_dimension = -1
+    let best = -1.0
+    let best_weight = -1.0
+    let perspective = 0
+    if guide == "dog" { perspective = 1 }
+    if liked_ids.len() == 2 {
+        let a = city_rows[city_index(liked_ids[0])]
+        let b = city_rows[city_index(liked_ids[1])]
+        for d in 5 {
+            if joy_profile[d] == "" {
+                let contrast = 0.0
+                for option in joy_dimensions[d][4] {
+                    let i = joy_signal_index(d, option[0])
+                    if i >= 0 && a[13][i] > 0 && b[13][i] > 0 { contrast = max(contrast, abs(a[12][i] - b[12][i]) / 3) }
+                }
+                let weight = joy_weights[perspective][d]
+                if climate_avoids.len() > 0 { weight = weight * (1 - joy_climate_weight) }
+                let score = round(contrast * weight * joy_ranking_factor)
+                if contrast > 0 && (score > best || (score == best && round(weight * joy_ranking_factor) > round(best_weight * joy_ranking_factor))) { best = score; best_weight = weight; comparison_dimension = d }
+            }
+        }
+    }
+    go(23)
+}
+fn answer_comparison(value){
+    if comparison_dimension < 0 { return }
+    joy_profile[comparison_dimension] = value
+    comparison_dimension = -2 - comparison_dimension
+    revision = revision + 1
+    compute_ranking()
+    reconcile_discovery()
+    go(21)
+    status_text = "已记下这一项偏好；保留你亲自留住的城市，不替你决定。"
+    refresh()
+}
+
+fn comparison_fact(city){
+    let d = -2 - comparison_dimension
+    if d < 0 || d > 4 { return "" }
+    let i = joy_signal_index(d, joy_profile[d])
+    let o = joy_option_index(d, joy_profile[d])
+    if i < 0 || o < 0 { return "这一项还未确认。" }
+    let label = joy_dimensions[d][4][o][1]
+    if city[13][i] == 0 { return label + "：还缺可比较资料。" }
+    if city[13][i] == 1 { return label + "：已有线索，属于编辑判断。" }
+    return label + "：有已核验来源支持。"
+}
+fn comparison_response(){
+    if comparison_dimension == -7 { return "这次先不多问，收藏和原有偏好保持不变。" }
+    let d = -2 - comparison_dimension
+    if d < 0 || d > 4 || liked_ids.len() != 2 { return "现在先保留选择，继续了解。" }
+    let a = city_rows[city_index(liked_ids[0])]
+    let b = city_rows[city_index(liked_ids[1])]
+    let i = joy_signal_index(d, joy_profile[d])
+    let o = joy_option_index(d, joy_profile[d])
+    if i < 0 || o < 0 { return "这一项已清空，暂不据此比较；收藏保持不变。" }
+    let out = "你选了“" + joy_dimensions[d][4][o][1] + "”。"
+    if i < 0 || a[13][i] == 0 || b[13][i] == 0 { out = out + "这一项的两城资料还没齐。" }
+    else if a[12][i] == b[12][i] { out = out + "这一项的现有线索接近。" }
+    else if a[12][i] > b[12][i] { out = out + "这一项线索更偏向" + a[1] + "。" }
+    else { out = out + "这一项线索更偏向" + b[1] + "。" }
+    let a_low = 0.0
+    let a_high = 100.0
+    let b_low = 0.0
+    let b_high = 100.0
+    for item in ranked {
+        if city_rows[item[0]][0] == a[0] { a_low = item[4]; a_high = item[5] }
+        if city_rows[item[0]][0] == b[0] { b_low = item[4]; b_high = item[5] }
+    }
+    if round(a_high * joy_ranking_factor) >= round(b_low * joy_ranking_factor) && round(b_high * joy_ranking_factor) >= round(a_low * joy_ranking_factor) { out = out + "整体目前还没分清先后。" }
+    else { out = out + "按现有偏好看见了差异，仍需用实际生活核验。" }
+    return out
+}
+
 fn finish_agent(message){
     agent_busy = false
     agent_text = message
@@ -546,11 +737,11 @@ fn accept_agent(raw, serial, expected_revision, expected_city){
     if answer.len() > 2400 { finish_agent("应用 Agent 返回过长，未修改任何资料。"); return }
     let parts = answer.trim().split("|")
     if parts.len() != 8 || parts[0] != "CM1" { finish_agent("应用 Agent 返回格式不合要求，未修改任何资料。可再试一次。"); return }
-    if parts[1] != "" + expected_revision || parts[2] != expected_city || revision != expected_revision || ranked.len() == 0 {
+    if parts[1] != "" + expected_revision || parts[2] != expected_city || revision != expected_revision || !eligible_id(detail_city_id) {
         finish_agent("应用 Agent 返回的资料版本或候选已过期，建议已丢弃。")
         return
     }
-    if city_rows[ranked[0][0]][0] != expected_city { finish_agent("候选已改变，旧建议已丢弃。"); return }
+    if detail_city_id != expected_city { finish_agent("候选已改变，旧建议已丢弃。"); return }
     if token_value(parts[3], ["career", "balance", "life"], 0) == -2 || token_value(parts[4], ["nature", "live", "food", "ball", "quiet"], 4) == -2 || token_value(parts[5], ["heat", "cold", "humidity"], 9) == -2 || (parts[6] != "keep" && parts[6] != "yes") {
         finish_agent("应用 Agent 提出了不允许的修改，建议已丢弃。")
         return
@@ -567,19 +758,19 @@ fn accept_agent(raw, serial, expected_revision, expected_city){
 fn apply_agent_proposal(){
     if agent_proposal.len() != 8 || agent_busy || screen != 7 { return }
     let parts = agent_proposal
-    if parts[1] != "" + revision || ranked.len() == 0 {
+    if parts[1] != "" + revision || !eligible_id(detail_city_id) {
         agent_proposal = []
         finish_agent("资料版本已改变，请重新提出建议。")
         return
     }
-    if parts[2] != city_rows[ranked[0][0]][0] {
+    if parts[2] != detail_city_id {
         agent_proposal = []
         finish_agent("候选已改变，请重新提出建议。")
         return
     }
     let changes = proposal_changes(parts)
     if changes == "" { reject_agent_proposal(); return }
-    let old_city = city_rows[ranked[0][0]][1]
+    let old_city = city_rows[city_index(detail_city_id)][1]
     let old_revision = revision
     let next_priority = token_value(parts[3], ["career", "balance", "life"], 0)
     let next_focus = token_value(parts[4], ["nature", "live", "food", "ball", "quiet"], 4)
@@ -605,9 +796,11 @@ fn apply_agent_proposal(){
     }
     if hard_climate { change_text = change_text + " 气候底线保留，人工分档仍不足以证明满足。" }
     agent_text = "已执行你确认的修改。城市事实、未知证据与已拒绝城市均保持保护。"
+    reconcile_discovery()
+    if !eligible_id(detail_city_id) { screen = 20; ensure_current_card() }
     if save_local() {
         let saved = fs.read("match.json").parse_json()
-        if saved != nil && saved.len() == 39 && saved[27] == revision && saved[22] == priority && saved[29] == focus_interest && saved[18].to_json() == interests.to_json() && saved[19].to_json() == climate_avoids.to_json() && saved[24].to_json() == excluded_ids.to_json() && saved[30] == joy_profile[0] && saved[31] == joy_profile[1] && saved[32] == joy_profile[2] && saved[33] == joy_profile[3] && saved[34] == joy_profile[4] {
+        if saved != nil && saved.len() == 46 && saved[27] == revision && saved[22] == priority && saved[29] == focus_interest && saved[18].to_json() == interests.to_json() && saved[19].to_json() == climate_avoids.to_json() && saved[24].to_json() == excluded_ids.to_json() && saved[30] == joy_profile[0] && saved[31] == joy_profile[1] && saved[32] == joy_profile[2] && saved[33] == joy_profile[3] && saved[34] == joy_profile[4] {
             status_text = "已核验本机保存：资料版本 " + revision + "，新偏好与排除条件一致。"
         }
         else { status_text = "修改已在当前页面生效，但存档读回未通过核验；请勿关闭窗口。" }
@@ -627,7 +820,7 @@ fn cancel_agent(){
     finish_agent("本次应用 Agent 请求已取消，资料和推荐未改变。")
 }
 fn request_agent(){
-    if agent_busy || ranked.len() == 0 { return }
+    if agent_busy || screen != 7 || !eligible_id(detail_city_id) { return }
     if agent_feedback.trim().len() < 2 || agent_feedback.len() > 900 {
         finish_agent("先写下你希望调整的一句话（2–900 字符），不要填写隐私或密钥。")
         return
@@ -637,7 +830,7 @@ fn request_agent(){
     request_id = request_id + 1
     let serial = request_id
     let expected_revision = revision
-    let city = city_rows[ranked[0][0]]
+    let city = city_rows[city_index(detail_city_id)]
     let expected_city = city[0]
     agent_text = "正在请应用 Agent 理解反馈、提出修改；确认之前不会改资料。"
     refresh()
@@ -684,44 +877,103 @@ let Primary = ButtonFlat{width: Fill height: 46 draw_bg +: {color: green color_h
 let Choice = ButtonFlat{width: Fill height: 42 draw_bg +: {color: #xe9dfcf color_hover: #xddd0bc color_down: #xd4c6b1 border_radius: 10 border_size: 0} draw_text +: {color: ink color_hover: ink color_down: ink}}
 let Field = TextInput{width: Fill height: 42 draw_bg +: {color: #xffffff color_hover: #xffffff color_focus: #xffffff color_empty: #xffffff border_radius: 8} draw_text +: {color: ink color_hover: ink color_focus: ink color_empty: muted color_empty_hover: muted}}
 
-SolidView{width: Fill height: Fill flow: Down padding: 18 spacing: 10 draw_bg.color: canvas
-    View{width: Fill height: Fit flow: Right align: Align{y: 0.5}
-        Label{width: Fill text: "城市红娘" draw_text.color: ink draw_text.text_style: theme.font_bold{font_size: 24}}
-        Label{text: "毕业下一站" draw_text.color: coral draw_text.text_style.font_size: 13}
+SolidView{width: Fill height: Fill flow: Down padding: 16 spacing: 8 draw_bg.color: canvas
+    View{width: Fill height: 38 flow: Right spacing: 6 align: Align{y: 0.5}
+        Label{width: Fill text: "城市红娘" draw_text.color: ink draw_text.text_style: theme.font_bold{font_size: 21}}
+        Image{width: 26 height: 32 fit: ImageFit.Smallest src: http_resource("{{assets}}/assets/guide-cat.png")}
+        Image{width: 26 height: 32 fit: ImageFit.Smallest src: http_resource("{{assets}}/assets/guide-dog.png")}
+        Choice{width: 64 height: 30 text: "资料" on_click: || edit_profile()}
     }
-    guide_header := Small{text: "INTP 猫 · 职业建设视角"}
+    View{width: Fill height: 30 flow: Right spacing: 6 align: Align{y: 0.5}
+        guide_header := Small{width: Fill text: "ENFP 狗 · 生活探索视角"}
+        Choice{width: 98 height: 28 text: "换个视角" on_click: || other_guide()}
+    }
     page := View{width: Fill height: Fill flow: Down on_render: || {
-        if screen == 0 {
-            pane0 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-            Heading{text: "先和一座城市约会。"}
-            Body{text: "做 AI 应用与产品，下一站想过什么样的日子？回答五个生活场景，认识一座城，再一起挑剔它。"}
-            View{width: Fill height: 160 flow: Right spacing: 8
-                Image{width: Fill height: 160 fit: ImageFit.Smallest src: http_resource("{{assets}}/assets/guide-cat.png")}
-                Image{width: Fill height: 160 fit: ImageFit.Smallest src: http_resource("{{assets}}/assets/guide-dog.png")}
-            }
-            Small{text: "选一位红娘：同一份城市资料，不同的取舍权重；用户 MBTI 不参与评分。"}
-            Choice{text: selected_label("INTP 猫：先看职业建设", guide == "cat") on_click: || choose_guide("cat")}
-            Choice{text: selected_label("ENFP 狗：先看生活探索", guide == "dog") on_click: || choose_guide("dog")}
-            Primary{text: "从想过的日子开始 →" on_click: || {reviewing_edit = false; go(1)}}
-            Small{text: "约 2 分钟 · 五个场景，一次只聊一个 · 八城探索版\n本机保存，可随时清除。结果是探索建议，不是幸福或录取概率。"}
-        }}
+        if screen == 20 {
+            pane20 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
+                if city_index(current_card_id) >= 0 {
+                    let city = city_rows[city_index(current_card_id)]
+                    Small{text: browse_caption()}
+                    Heading{text: city[1]}
+                    if city[18] != "" { Svg{width: Fill height: 160 animating: false draw_svg.svg: http_resource("{{assets}}/" + city[18]) draw_svg.preserve_viewbox: true draw_svg.preserve_aspect: true} }
+                    Body{text: city[16]}
+                    RoundedView{width: Fill height: Fit flow: Down spacing: 4 padding: 12 draw_bg.color: paper draw_bg.border_radius: 12
+                        Small{text: "先想一想"}
+                        Body{text: city[17]}
+                    }
+                    View{width: Fill height: Fit flow: Right spacing: 8
+                        Choice{height: 32 text: "细节与来源" on_click: || open_detail(current_card_id)}
+                        if liked_ids.len() > 0 { Choice{height: 32 text: "已留 " + liked_ids.len() + " 座" on_click: || go(21)} }
+                    }
+                }
+            }}
+        }
+        if screen == 21 {
+            pane21 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
+                if liked_ids.len() == 2 { Heading{text: "留下的两种生活"} }
+                else { Heading{text: "留下的城市"} }
+                if liked_ids.len() < 2 { Small{text: "再留一座，就能放在一起看。"} }
+                for id in liked_ids {
+                    let city = city_rows[city_index(id)]
+                    RoundedView{width: Fill height: Fit flow: Down spacing: 7 padding: 14 draw_bg.color: paper draw_bg.border_radius: 14
+                        Body{text: city[1]}
+                        Body{text: city[16]}
+                        Small{text: "代价 · " + city[17]}
+                        if comparison_dimension >= -6 && comparison_dimension <= -2 { Small{text: comparison_fact(city)} }
+                        View{width: Fill height: Fit flow: Right spacing: 8
+                            Choice{height: 30 text: "了解" + city[1] on_click: || open_detail(id)}
+                            Choice{height: 30 text: "移除" + city[1] on_click: || remove_like(id)}
+                        }
+                    }
+                }
+                if liked_ids.len() == 2 {
+                    Small{text: "先看哪一种日常更吸引你。"}
+                    if comparison_dimension <= -2 { Small{text: comparison_response()} }
+                    else { Choice{text: "我还拿不准" on_click: || comparison_question()} }
+                }
+            }}
+        }
+        if screen == 22 {
+            pane22 := ScrollYView{width: Fill height: Fill flow: Down spacing: 14 on_render: || {
+                Heading{text: "这一轮看完了。"}
+                if ranked.len() == 0 { Body{text: "当前没有符合已知底线的城市。已排除的城市不会偷偷回来。"} }
+                else { Body{text: "路过不等于拒绝。想再看一遍，随时可以。"} }
+                if liked_ids.len() > 0 { Primary{text: "看看留下的 " + liked_ids.len() + " 座" on_click: || go(21)} }
+                Small{text: "八城只是一个开始；住房、通勤和岗位仍要具体核验。"}
+            }}
+        }
+        if screen == 23 {
+            pane23 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
+                if comparison_dimension >= 0 {
+                    Heading{text: joy_dimensions[comparison_dimension][2]}
+                    for option in joy_dimensions[comparison_dimension][4] {
+                        Choice{text: option[1] on_click: || answer_comparison(option[0])}
+                    }
+                    Choice{text: "先不回答" on_click: || {comparison_dimension = -7; go(21)}}
+                }
+                else {
+                    Heading{text: "现在还不适合多问。"}
+                    Body{text: "这两座城在你未填写的偏好上，缺少能比较的不同证据。再多答一道题，也不能补齐事实。"}
+                    Small{text: "可以去细节里核对住房、日常路线和岗位，也可以继续逛。"}
+                }
+            }}
         }
         if screen == 1 {
             pane1 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
                 Small{text: "先认识你的 AI 方向"}
                 Heading{text: "你想怎样参与 AI 应用？"}
-                Body{text: "选一个现在最接近的方向。接下来，聊聊工作之外也想拥有的日子。"}
+                Body{text: "只补充现在想说的部分，其余可以继续留白。"}
                 for role in joy_roles { Choice{text: selected_label(role[1], ai_role == role[0]) on_click: || {choose_ai_role(role[0]); continue_role()}} }
                 Small{text: "这只帮助整理你的期待，不代表任何城市已有适合你的职位。"}
                 Choice{text: "暂时说不准" on_click: || {choose_ai_role(""); continue_role()}}
-                if reviewing_edit { Choice{text: "保留原回答，回到画像" on_click: || review_done()} }
-                else { Choice{text: "← 返回首页" on_click: || go(0)} }
+                if reviewing_edit { Choice{text: "取消，回到刚才" on_click: || review_done()} }
+                else { Choice{text: "回到刚才" on_click: || return_from_profile()} }
             }}
         }
         if screen == 9 || screen == 10 || screen == 11 || screen == 12 || screen == 13 {
             pane9 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
                 let d = screen - 9
-                Small{text: "想过的日子 · " + (d + 1) + " / 5"}
+                Small{text: "补充一项偏好 · 可不回答"}
                 Heading{text: joy_dimensions[d][2]}
                 Small{text: joy_dimensions[d][3]}
                 for option in joy_dimensions[d][4] {
@@ -730,10 +982,9 @@ SolidView{width: Fill height: Fill flow: Down padding: 18 spacing: 10 draw_bg.co
                         Small{text: option[2]}
                     }
                 }
-                Choice{text: "暂时说不准，留待确认" on_click: || answer_scene("")}
-                if reviewing_edit { Choice{text: "保留原回答，回到画像" on_click: || review_done()} }
-                else if screen == 9 { Choice{text: "← 上一步：AI 方向" on_click: || go(1)} }
-                else { Choice{text: "← 上一个场景" on_click: || go(screen - 1)} }
+                Choice{text: "这一项暂不确定" on_click: || answer_scene("")}
+                if reviewing_edit { Choice{text: "取消，回到刚才" on_click: || review_done()} }
+                else { Choice{text: "回到刚才" on_click: || return_from_profile()} }
             }}
         }
         if screen == 2 {
@@ -746,10 +997,10 @@ SolidView{width: Fill height: Fill flow: Down padding: 18 spacing: 10 draw_bg.co
                 }
                 Choice{text: selected_label("天气是不能妥协的底线", hard_climate) on_click: || {hard_climate = !hard_climate; save_local(); refresh()}}
                 Small{text: "气候会进入比较；目前是人工分档，严格底线仍需可靠资料核验。"}
-                Primary{text: "先核对我的生活画像 →" on_click: || review_done()}
+                Primary{text: "保存，回到刚才" on_click: || review_done()}
                 Choice{text: "补充预算、住房与通勤（可选）" on_click: || go(3)}
-                if reviewing_edit { Choice{text: "← 回到画像" on_click: || review_done()} }
-                else { Choice{text: "← 上一个场景" on_click: || go(13)} }
+                if reviewing_edit { Choice{text: "取消，回到刚才" on_click: || review_done()} }
+                else { Choice{text: "回到刚才" on_click: || return_from_profile()} }
             }}
         }
         if screen == 3 {
@@ -776,14 +1027,14 @@ SolidView{width: Fill height: Fill flow: Down padding: 18 spacing: 10 draw_bg.co
                 Choice{text: selected_label("单程 30 分钟", max_commute == 30) on_click: || choose_commute(30)}
                 Choice{text: selected_label("单程 45 分钟", max_commute == 45) on_click: || choose_commute(45)}
                 Choice{text: selected_label("通勤待确认", max_commute == 0) on_click: || choose_commute(0)}
-                Primary{text: "记下这些，核对生活画像 →" on_click: || review_done()}
+                Primary{text: "保存，回到刚才" on_click: || review_done()}
                 Choice{text: "← 返回气候感受" on_click: || go(2)}
             }}
         }
         if screen == 8 {
             pane8 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-                Heading{text: "这是你想过的日子吗？"}
-                Small{text: "每一条都来自你刚才的选择。点修改，可以直接重答那一题；不确定的部分留白。"}
+                Heading{text: "资料，随时补。"}
+                Small{text: "只补一项也可以。收藏与路过不会被用来猜你的性格。"}
                 Body{text: "AI 方向：" + ai_role_label()}
                 Choice{text: "修改 AI 方向" on_click: || edit_review(1)}
                 for d in 5 {
@@ -804,161 +1055,55 @@ SolidView{width: Fill height: Fill flow: Down padding: 18 spacing: 10 draw_bg.co
                 Body{text: guide_name()}
                 Small{text: "猫先看职业期待，狗先看生活探索。两位红娘使用相同资料；这不是人格测评或幸福预测。"}
                 Choice{text: "换另一位红娘看同一份资料" on_click: || other_guide()}
-                Primary{text: "画像准确，先认识一座城 →" on_click: || {reviewing_edit = false; answer_priority(priority)}}
+                Primary{text: "回到刚才" on_click: || return_from_profile()}
             }}
-        }
-        if screen == 4 {
-            pane4 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-            Small{text: "第一问 · 会改变推荐的那一件事"}
-            Heading{text: "毕业第一站，你更想先照顾哪一边？"}
-            Body{text: guide_line("我不从你的星座猜。职业与生活冲突时，你更愿意把分量放在哪边？", "好，行李差不多了！要是工作机会和喜欢的生活打架，我们先帮哪一边？")}
-            Small{text: "这条偏好保留作谈资。新版由猫／狗视角与五维场景共同排序，切换视角可比较取舍。"}
-            Primary{text: "职业机会优先" on_click: || answer_priority(0)}
-            Primary{text: "两边都要照顾" on_click: || answer_priority(1)}
-            Primary{text: "喜欢的生活优先" on_click: || answer_priority(2)}
-            Choice{text: "← 修改资料" on_click: || go(3)}
-        }}
-        }
-        if screen == 5 {
-            pane5 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-            Small{text: "第一轮 · 先认识一座城"}
-            if ranked.len() == 0 {
-                Heading{text: "这次先不硬凑答案。"}
-                Body{text: "目前没有满足已知条件的候选，请修改资料后再试。"}
-                Primary{text: "修改资料" on_click: || edit_profile()}
-            }
-            if ranked.len() > 0 {
-                let city = city_rows[ranked[0][0]]
-                Heading{text: city[1] + "，先见一面。"}
-                Small{text: tie_note()}
-                Body{text: city[2]}
-                RoundedView{width: Fill height: Fit flow: Down spacing: 8 padding: 14 draw_bg.color: paper draw_bg.border_radius: 12
-                    Small{text: "一段可能的生活 · 创作想象"}
-                    Body{text: city[5]}
-                }
-                Body{text: reasons_for(city)}
-                Small{text: "先听一个条件：" + city[11]}
-                Body{text: "第一反应是什么？"}
-                Choice{text: "想调整日常恢复方式" on_click: || joy_feedback(1)}
-                Choice{text: "想调整新鲜感与活动" on_click: || joy_feedback(0)}
-                Choice{text: "想调整关系与相处" on_click: || joy_feedback(2)}
-                Choice{text: "想调整职业成长方式" on_click: || joy_feedback(3)}
-                Choice{text: "想调整探索与安定" on_click: || joy_feedback(4)}
-                Choice{text: "有点心动，想再了解" on_click: || give_feedback("like")}
-                Choice{text: "担心生活成本" on_click: || give_feedback("cost")}
-                Choice{text: "气候可能不适合我" on_click: || give_feedback("climate")}
-                Choice{text: "想再对准职业方向" on_click: || give_feedback("career")}
-                Choice{text: "怕生活太忙太挤" on_click: || give_feedback("too-busy")}
-                Choice{text: "这座城我明确不考虑" on_click: || give_feedback("not-this-city")}
-                Choice{text: "说不上来，再聊一句" on_click: || give_feedback("unsure")}
-                Small{text: "其余反馈只引出追问；只有“明确不考虑”会排除这座城。"}
-            }
-        }}
-        }
-        if screen == 6 {
-            pane6 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-            Small{text: "第二问 · 只追问影响判断的地方"}
-            if feedback_id.search("joy:") == 0 {
-                Heading{text: joy_dimensions[joy_feedback_dimension][2]}
-                Small{text: joy_dimensions[joy_feedback_dimension][3]}
-                for option in joy_dimensions[joy_feedback_dimension][4] { Choice{text: option[1] on_click: || final_joy(option[0])} }
-                Choice{text: "保留原回答" on_click: || finish_round()}
-            }
-            else if feedback_id == "cost" {
-                Heading{text: "你想守住的月租上限是多少？"}
-                Body{text: "我先记下边界。目前没有可比较的租金数据，不能据此宣称哪座城市租得起。"}
-                Choice{text: "1500 元" on_click: || final_budget(1500)}
-                Choice{text: "2500 元" on_click: || final_budget(2500)}
-                Choice{text: "4000 元" on_click: || final_budget(4000)}
-                Choice{text: "5000 元" on_click: || final_budget(5000)}
-                Choice{text: "仍不确定，先保留待查" on_click: || final_budget(0)}
-            }
-            else if feedback_id == "climate" {
-                Heading{text: "让你难受的，具体是哪一种？"}
-                Body{text: "明确避开哪种天气，才会进入下一次比较。"}
-                for i in climate_names.len() {
-                    Choice{text: selected_label(climate_names[i], has_value(climate_avoids, i + 9)) on_click: || choose_climate(i + 9)}
-                }
-                Choice{text: selected_label("这是不能妥协的底线", hard_climate) on_click: || {hard_climate = !hard_climate; refresh()}}
-                Small{text: "当前气候为人工分档，严格底线仍待可靠资料核验。"}
-                Primary{text: "按这些回答再介绍一次" on_click: || finish_round()}
-            }
-            else {
-                Heading{text: joy_dimensions[joy_feedback_dimension][2]}
-                Small{text: "根据刚才的反馈，复核一个最可能影响判断的场景。原回答会被你的新选择替换。"}
-                for option in joy_dimensions[joy_feedback_dimension][4] {
-                    Choice{text: option[1] on_click: || final_joy(option[0])}
-                }
-                Choice{text: "保留原回答" on_click: || finish_round()}
-            }
-        }}
         }
         if screen == 7 {
             pane7 := ScrollYView{width: Fill height: Fill flow: Down spacing: 12 on_render: || {
-            Small{text: "第二轮 · 给你一个可以反驳的结论"}
-            if ranked.len() == 0 {
-                Heading{text: "这次没有可介绍的城市。"}
-                Body{text: "少一个答案，也不替你放松已经明确的条件。"}
-            }
-            if ranked.len() > 0 {
-                let city = city_rows[ranked[0][0]]
-                Heading{text: "先去了解 " + city[1] + "。"}
-                Small{text: tie_note()}
-                Body{text: city[2]}
-                RoundedView{width: Fill height: Fit flow: Down spacing: 8 padding: 14 draw_bg.color: paper draw_bg.border_radius: 12
-                    Small{text: "与你的选择相连"}
-                    Body{text: reasons_for(city)}
-                    Small{text: "愿意了解，也要愿意看见代价"}
-                    Body{text: city[11]}
-                }
-                Body{text: change_text}
-                Choice{text: "换另一位红娘看同一份资料" on_click: || other_guide()}
-                Choice{text: "调整五维场景" on_click: || edit_profile()}
-                Small{text: "Agent 帮你追加天气条件或明确排除当前城；五维场景用上面的按钮调整。"}
-                RoundedView{width: Fill height: Fit flow: Down spacing: 10 padding: 14 draw_bg.color: paper draw_bg.border_radius: 12
-                    Body{text: "再说一句，让推荐更懂你的取舍"}
-                    Small{text: "例如：我想尽量避开潮湿天气。Agent 可建议追加天气条件或明确排除当前城；五维场景请用上方按钮修改。"}
-                    agent_feedback_input := Field{text: agent_feedback empty_text: "我想调整的是…" on_change: |text| change_agent_feedback(text)}
-                    Small{text: "反馈文本原样发送给宿主模型，同时发送匹配偏好和候选依据（可能含租金上限）。不自动附带档案中的昵称、院校、年龄或人格字段。请勿在这句话中填写个人隐私。"}
-                    if !agent_busy { Primary{text: "让 Agent 提出修改" on_click: || request_agent()} }
-                    if agent_busy { Choice{text: "取消等待" on_click: || cancel_agent()} }
-                    Small{text: agent_text}
-                    if agent_proposal.len() == 8 {
-                        Body{text: "请你确认这次修改"}
-                        Body{text: proposal_changes(agent_proposal)}
-                        Small{text: "Agent 的理解（请核对）：" + agent_proposal[7]}
-                        Small{text: "未知项目仍不加分；已拒绝城市和原有气候底线不会恢复或放宽。"}
-                        Primary{text: "确认修改并重新匹配" on_click: || apply_agent_proposal()}
-                        Choice{text: "不改，保留当前结果" on_click: || reject_agent_proposal()}
+                if city_index(detail_city_id) >= 0 {
+                    let city = city_rows[city_index(detail_city_id)]
+                    Heading{text: city[1] + " · 再了解一点"}
+                    Body{text: city[16]}
+                    Small{text: "代价 · " + city[17]}
+                    if !has_preferences() { Small{text: "当前为生活探索顺序，还没有个性化偏好依据。"} }
+                    Choice{text: "查看 / 收起公开依据" on_click: || toggle_sources()}
+                    if show_sources { Small{text: city[7]} }
+                    Small{text: unknowns_for(city)}
+                    Choice{text: "用一句话请 Agent 帮忙" on_click: || {show_agent = !show_agent; invalidate_proposal(); refresh()}}
+                    if show_agent {
+                        RoundedView{width: Fill height: Fit flow: Down spacing: 8 padding: 12 draw_bg.color: paper draw_bg.border_radius: 12
+                            Body{text: "只针对眼前的 " + city[1]}
+                            Small{text: "可追加气候避开项，或明确排除这座城。应用先展示提案，你确认才执行。"}
+                            agent_feedback_input := Field{text: agent_feedback empty_text: "我想调整的是…" on_change: |text| change_agent_feedback(text)}
+                            Small{text: "这句话和匹配偏好将发给宿主模型。不附带档案身份；请勿填写隐私或密钥。"}
+                            if !agent_busy { Primary{text: "让 Agent 提出修改" on_click: || request_agent()} }
+                            if agent_busy { Choice{text: "取消等待" on_click: || cancel_agent()} }
+                            Small{text: agent_text}
+                            if agent_proposal.len() == 8 {
+                                Body{text: "请你确认这次修改"}
+                                Body{text: proposal_changes(agent_proposal)}
+                                Small{text: "Agent 的理解：" + agent_proposal[7]}
+                                Primary{text: "确认修改并重新匹配" on_click: || apply_agent_proposal()}
+                                Choice{text: "不改，保留当前结果" on_click: || reject_agent_proposal()}
+                            }
+                        }
                     }
                 }
-                if ranked.len() > 1 {
-                    let backup = city_rows[ranked[1][0]]
-                    RoundedView{width: Fill height: Fit flow: Down spacing: 8 padding: 14 draw_bg.color: #xe0ebe3 draw_bg.border_radius: 12
-                        Label{width: Fill text: "备选 · " + backup[1] draw_text.color: green draw_text.text_style: theme.font_bold{font_size: 18}}
-                        Body{text: backup[2]}
-                        Small{text: backup[11]}
-                    }
-                }
-                Body{text: "用普通日子验证这座城"}
-                Small{text: "这三步来自你的场景选择，是可修改的试跑建议；它们不增加城市分数。"}
-                Body{text: trial_plan_text()}
-                Body{text: "出发前，还要确认"}
-                Small{text: unknowns_for(city)}
-                Choice{text: "查看 / 收起公开依据" on_click: || toggle_sources()}
-                if show_sources {
-                    Small{text: "等级为公开资料基础上的人工分档，非统计测量。核验：2026-10-03。下列为来源域名与路径，应用不会联网读取。"}
-                    Small{text: city[7]}
-                }
-            }
-            Primary{text: "修改资料，重新认识城市" on_click: || edit_profile()}
-            Choice{text: "清除本机资料与进度" on_click: || reset_all()}
-        }}
+            }}
         }
     }}
     status := Small{text: ""}
-    View{width: Fill height: Fit flow: Right spacing: 8 align: Align{y: 0.5}
-        Small{width: Fill text: "Joy v0.3 · 八城探索\n人格标签不参与评分"}
-        Choice{width: 80 height: 28 text: "清除资料" on_click: || reset_all()}
-    }
+    actions := View{width: Fill height: Fit flow: Down spacing: 6 on_render: || {
+        if screen == 20 {
+            View{width: Fill height: 48 flow: Right spacing: 10
+                Primary{width: Fill text: "留着看看 ♡" on_click: || keep_card()}
+                Choice{width: Fill height: 46 text: "下一座 →" on_click: || next_card()}
+            }
+        }
+        if screen == 21 { Primary{text: "继续逛 →" on_click: || continue_browsing()} }
+        if screen == 22 { Primary{text: "再逛一轮 →" on_click: || restart_browsing()} }
+        if screen == 23 { Choice{text: "回到两座城" on_click: || go(21)} }
+        if screen == 7 { Choice{text: "← 回到刚才" on_click: || close_detail()} }
+        if screen == 8 { Choice{text: "清除本机资料与收藏" on_click: || reset_all()} }
+    }}
 }

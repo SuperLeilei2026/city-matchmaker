@@ -1,54 +1,64 @@
 # 城市红娘 OctoScript 包
 
-更新：2026-10-03。应用 ID：`leilei-city-matchmaker`，版本：**0.3.0**。当前公开状态见 [publication.md](publication.md)。
+更新：2026-10-05。应用 ID：`leilei-city-matchmaker`，版本 **0.4.0**。公开状态见 [publication.md](publication.md)。
 
-## 已实现
+## 新版怎么玩
 
-AI 方向 → 五个逐页生活场景 → 气候与可选现实条件 → 逐项核对画像 → 首城 → 心动／代价反馈 → 关键问题 → 重新比较与三条试城计划。ENFP 狗优先生活，INTP 猫优先职业期待；共享城市事实、权重配置与底线。原生是当前交付入口，Web 为算法对照与设计辅助，原生不含 PNG 分享。
+打开即一张城市卡，点“留着看看”或“下一座”。留下第一座继续逛，留下第二座直接比较；拿不准时主动补一题。没有必填问卷，资料与来源按需打开。下一座不代表拒绝，收藏不改变五维或权重。
 
-生成器从 `data/joy-config.json` 和 `data/cities.json` 生成八城数据、问题、权重、来源及行动文案。修改 `tools/main.template.splash` 后重新生成，不要只改产物。
+八幅 SVG 是生活想象，不是实景或可达性证明。每城一条吸引力、一条代价，完整来源放在详情。ENFP 狗侧重生活，INTP 猫侧重职业期待，共享事实与底线。
 
-存档升级为 39 字段，末尾保存画像编辑状态，兼容原 29／30／38 字段格式。新五维缺省为未知，保留原拒绝记录，不按 MBTI 或旧兴趣补答案。首次体验不收集学校、星座和欣赏对象；这些旧字段仅保留迁移兼容。逐题中途退出后会恢复当时那一题，画像可直接修改单项。
+原生是本版主入口。Web 暂保留 v0.3 交互，不含本次极简改动；原生仍无 PNG 分享。
 
-## 应用 Agent 与边界
+## 生成与存档
 
-结果页自由反馈 → 宿主 `octos.session.open`／`octos.turn.start` → 受控提案 → 用户确认 → 执行重排、保存与读回核验。
+`tools/build_bundle.py` 从 `data/cities.json`、`data/joy-config.json` 和 `tools/main.template.splash` 生成 `bundle/main.splash` 并复制素材。不要只改生成产物。
 
-协议仍为 `CM1|revision|city_id|priority|focus|avoid|exclude|reason`。新版提示词要求旧 priority／focus 为 keep，主动操作限于追加气候避开项或按明确拒绝排除当前候选；**五维答案与介绍人通过应用按钮修改**。兼容旧字段不代表旧字段能改变新的 Joy 权重。
+原生存档为46字段 `city-matchmaker-v3`，前39项位置保留，末尾记录当前卡、收藏、已浏览、资料/详情返回位置与比较追问状态。兼容29/30/38/39字段旧档，迁移后保留本人选择和明确拒绝，进入新浏览入口，不按旧标签补五维答案。
 
-不能恢复已拒绝城市、放宽气候底线、修改预算、伪造城市数据或直接指定分数。过期、非法、多行、陌生城市、不同协议、重复确认不执行；45 秒超时或取消保留资料。自由反馈与待确认提案只在应用内存中；宿主可能保存会话历史，见 [隐私说明](privacy.md)。
-
-用户已报告宿主连接完成；本应用的真实模型返回、确认、执行与恢复全链路仍没有验收证据。card-host 的不可用路径和注入响应不能替代真实模型。
+资料编辑完成后返回进入前的浏览或比较页；退出重启保留进度。重看一轮只清本轮浏览记录，不撤销收藏、画像或明确拒绝。
 
 ## 运行
 
-需独立准备 OctoSense / Makepad 工具，精确基底见 [runtime-lock.md](runtime-lock.md)。已验证 Apple silicon macOS；生成与测试用 Python 3.9+。
+需准备官方 `card-host` 和 `hub`，已测平台为 Apple silicon macOS；工具基底见 [runtime-lock.md](runtime-lock.md)。
 
 ```sh
-export OCTO_CARD_HOST="/path/to/card-host"
-export OCTO_HUB="/path/to/hub"
+OCTO_CARD_HOST=/path/to/card-host \
+OCTO_HUB=/path/to/hub \
+./tools/run-native.sh
+```
+
+本地浏览和比较无需 API Key、Node.js 或 Web 服务器。修改源码后的构建/检查：
+
+```sh
 python3 tools/build_bundle.py
-"$OCTO_HUB" stamp bundle
-"$OCTO_HUB" check bundle --allow-unsigned
-"$OCTO_CARD_HOST" --bundle bundle --app-data .local-state/card-host --allow-unsigned --size 460x820
+/path/to/hub stamp bundle
+/path/to/hub check bundle --allow-unsigned
 ```
 
-card-host 不提供模型服务，完整调用需 OctoSense Shell。Shell 启动脚本为 `tools/start-shell.sh`。每次改包都要重新 stamp，正式签名包改动后也需重新签名。私钥与个人状态不进入仓库。
+每次修改包都需重新 stamp/check；公开签名包修改后也要重签。启动器默认使用独立 `.local-state/native` 保存进度，可通过 `CITY_NATIVE_STATE` 指定其他本机目录。私钥、个人状态和模型密钥不进入仓库。
 
-## 最终验证
+## 应用 Agent
 
-- **Joy 生产界面 12 项通过**：默认狗、AI 方向先行、五题逐页、中途重启恢复原题、画像单项编辑重启后仍返回画像、画像单项修改直接返回、首次推荐、定向反馈修订、另一视角保留答案、现实条件待核验、区间重叠不声称唯一最优、全流程可保留未知。
-- **存档 4 项通过**：39 字段往返（含编辑上下文）与 29／30／38 旧档迁移。
-- **原生与 JS 对照 7 组通过**：猫、狗、空资料、未知、软／硬气候、明确拒绝；排序、分数、覆盖、区间与试城计划一致。f32／f64 数值容差为 0.0001。
-- **Agent 5 项生产路径、21 项临时响应注入检查通过**：确认、放弃、格式／版本保护、底线、保存读回与恢复。没有调用外部 provider。
+城市详情中按需打开 Agent，发送反馈→宿主会话→结构化提案→本人确认→执行、保存与读回核验。
+
+协议 `CM1|revision|city_id|priority|focus|avoid|exclude|reason` 绑定当前查看的城市与资料版本，而不是自动绑定排名第一。旧 priority/focus 要求 keep；有效动作主要是新增气候避开项或按明确拒绝排除当前城市。五维与介绍人由本人按钮修改。
+
+切页、换城、修改资料、取消、超时或过期响应不能误改数据。模型不能恢复已拒绝城市、放宽底线、改预算或城市事实。自由反馈和待确认提案只在应用内存；宿主可能保留会话，见 [隐私](privacy.md)。
+
+`card-host` 不提供模型服务。完整 Shell 启动器为 `tools/start-shell.sh`，保留正常首次授权。用户报告宿主已连接，但本应用真实模型返回、确认、执行与恢复仍待验收；失败处理和注入测试不能替代真实调用。
+
+## 验证
 
 ```sh
-OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_joy_smoke.py
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_discovery_smoke.py
 OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_agent_smoke.py
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_discovery_contract.py
+node --test tests/*.test.mjs
 ```
 
-报告：[Joy](../qa/native-joy-check.json)、[Agent](../qa/native-agent-check.json)。生产 main SHA-256 与两报告一致；测试注入只发生在临时包。截图使用合成资料。
+当前原生报告：[极简流程](../qa/native-discovery-check.json)、[Agent 保护](../qa/native-agent-check.json)、[存档与共享规则对照](../qa/native-discovery-contract.json)。报告记录生产源码 SHA-256，截图均为合成资料。合同比对在临时包中注入函数调用并抑制 UI 刷新，独立的 UI 检查使用真实生产包；两者不能互相替代。共享规则及浏览状态测试需 Node.js 22+，应用运行本身不需要。
 
-最终 **v0.3.0 `hub check --allow-unsigned` PASSED**，仅 publisher-signature unsigned warning。Bundle BLAKE3：`02a12009284a3db7bc031b6ea93e419aba86bc458c8a7e142dbf3037dbd7b63d`。
+v0.3 的 `native_joy_smoke.py`、`qa/native-joy-check.json` 和 `docs/demo-native.mp4` 是历史五题流程资料；应在对应 Git 标签复现，不作为 v0.4 验收。
 
-本地预检不代表 App Hub 人工批准或比赛合格。本轮提交产品仓库，未公开上架；实体手机、其他平台与现实推荐效果仍待验证。
+这些检查证明程序与保护流程能运行，不证明推荐准确率或用户满意，也不代表手机、其他平台、真实模型或 App Hub 上架已验证。当前公开发布与版本指纹以 [发布状态](publication.md) 为准。

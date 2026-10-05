@@ -25,11 +25,13 @@
 
 [赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md#当前使用方式)写明现阶段按公开源码和可运行作品评审，无需等待 Hub 上架；官方 Flow 自身只决定技术路径，不决定比赛规则。App Hub 的发布者签名、提交与人工审核属于独立发布流程。当前 unsigned 本地预检通过不等于上架，也不应被写成初赛源码不能提交。
 
-## 本轮落实与剩余优先级
+## v0.3 历史落实记录
+
+下表记录当时的 v0.3，不是 v0.4 生产源码的验收。当前浏览、收藏和比较流程见 [原生说明](octosense.md) 与 [极简流程报告](../qa/native-discovery-check.json)；旧报告不能跨版本继承。
 
 | 优先级 | 当前状态与下一步 |
 | --- | --- |
-| 已完成：最终原生证据 | 五题逐页、单题编辑重启修复已通过12项界面、4项存档／迁移、7组对照；Agent 5+21检查通过。真实截图已更新，最终gate仅unsigned警告。[Joy 报告](../qa/native-joy-check.json)与[Agent 报告](../qa/native-agent-check.json)均匹配生产源码哈希。 |
+| 当时完成的原生证据 | v0.3 五题逐页、单题编辑重启修复通过12项界面、4项存档／迁移、7组对照；当时 Agent 5+21检查通过。当时包检查仅unsigned警告。报告与截图可在 [v0.3 固定提交](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)追溯，不代表当前main哈希。 |
 | P0：固定源码交付 | 已完成：原生 v0.3、报告与影片已推送，远端核对为 [`f4566a5`](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)。旧版本标签保留，不移动；当前版本状态见 publication.md。 |
 | P1：真实 Agent 深化 | 原生约2分31秒实录已完成，见[演示与报告](demo.md)，无注入并展示真实服务不可用保护。用户报告宿主已连接，但本应用真实模型返回、确认执行与恢复仍待验；CM1有效操作为气候约束／排除，五维手选。Web录像只作辅助。 |
 | 独立后续：App Hub | 尚未公开上架；若进行公开分发，再按官方签名与审核流程推进，不把它与本轮源码交付混为一项。 |

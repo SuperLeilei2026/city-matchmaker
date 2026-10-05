@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320">
+<rect x="0" y="0" width="720" height="320" rx="0" fill="#FAF5E9" stroke="none" stroke-width="0"/>
+<path d="M31 132Q331 105 692 139L691 227Q312 200 35 245Z" fill="#C7DDE0" stroke="none" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M35 154Q277 131 678 159M68 189H141M313 174H397M493 203H593" fill="none" stroke="#557F98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M58 130Q124 111 202 120Q259 106 315 118Q370 109 447 126Q540 112 658 135" fill="#E9DFCC" stroke="none" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26 258Q266 198 702 230L705 301H23Z" fill="#E9DFCC" stroke="none" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 258Q258 199 700 230M21 281Q285 223 703 252" fill="none" stroke="#292D2C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M467 175Q551 174 654 186M480 176V217M564 179V219M648 186V227" fill="none" stroke="#292D2C" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="202.4" cy="244" r="32.4" fill="none" stroke="#292D2C" stroke-width="3.36"/>
+<circle cx="299.6" cy="244" r="32.4" fill="none" stroke="#292D2C" stroke-width="3.36"/>
+<path d="M202.4 244L234.8 193.6L261.2 244L202.4 244M234.8 193.6L285.2 193.6L261.2 244M285.2 193.6L299.6 244" fill="none" stroke="#557F98" stroke-width="3.5999999999999996" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M285.2 193.6L279.2 178L296 173.2M224 191.2L242 191.2" fill="none" stroke="#292D2C" stroke-width="3.5999999999999996" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="261.2" cy="244" r="4.8" fill="#557F98" stroke="#292D2C" stroke-width="1.7999999999999998"/>
+<circle cx="260" cy="136" r="10.8" fill="#FAF5E9" stroke="#292D2C" stroke-width="2.88"/>
+<path d="M249.2 134.8Q249.2 119.2 264.8 124L273.2 132.4Z" fill="#292D2C" stroke="#292D2C" stroke-width="1.92" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M250.4 150.4L227.6 175.6L244.4 186.4L264.8 158.8Z" fill="#DE8157" stroke="#292D2C" stroke-width="3.12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M262.4 157.6L276.8 175.6L292.4 175.6" fill="none" stroke="#292D2C" stroke-width="4.32" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M228.8 175.6L215.6 198.4L239.6 220L257.6 214L234.8 196L244.4 186.4Z" fill="#292D2C" stroke="#292D2C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M237.2 187.6L263.6 202L260 239.2" fill="none" stroke="#292D2C" stroke-width="8.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M249.2 217.6L264.8 220M256.4 240.4L272 242.8" fill="none" stroke="#FFFDF7" stroke-width="4.32" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="532" cy="196" r="10" fill="#FAF5E9" stroke="#292D2C" stroke-width="2.5"/>
+<path d="M522 191Q528 180 539 188L543 195L528 195Z" fill="#292D2C" stroke="#292D2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M526 209Q508 220 514 240L537 248L551 234L543 212Z" fill="#557F98" stroke="#292D2C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M517 222L501 241L520 245" fill="none" stroke="#292D2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M536 240L565 246L578 269L568 274L551 258L523 254Z" fill="#292D2C" stroke="#292D2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M568 273L585 279" fill="none" stroke="#292D2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M81 244L79 204M80 224L65 214M80 216L93 201" fill="none" stroke="#B9C8AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M91 203Q92 189 97 187Q102 196 91 203Z" fill="#DE8157" stroke="#292D2C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M640 286q-2 -11 -8 -16m8 16q4 -12 10 -14" fill="none" stroke="#B9C8AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M397 67q6 -7 12 0q6 -7 12 0" fill="none" stroke="#557F98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M439 89q6 -7 12 0q6 -7 12 0" fill="none" stroke="#557F98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="611" cy="58" r="16" fill="#DE8157" stroke="none" stroke-width="0"/>
+</svg>
