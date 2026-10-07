@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-07T05:05:54Z",
+  "appId": "leilei-city-matchmaker",
+  "version": "0.4.0",
+  "bundleSourceCommit": "fcc9fe2eaca60474e924da106be0dfd67ac95245",
+  "productionMainSHA256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+  "bundleBLAKE3": "4d438c6610b700f66eb89c50ef7dbf5d8604f7356df8a6423be05ca166b4b015",
+  "hubSourceCommit": "78dfda5f33638e1869c36bceef5713342aae861c",
+  "hubBinarySHA256": "333f47b1602eecbb4fb346f8bd7a30f3f0fd2536fad422b27bd5c10e625157bc",
+  "catalogSourceCommit": "77d8afd4a468b1582201c1d458c49fb2572ed9cb",
+  "catalogSHA256": "bc03502649724e6a603ea5d99e62981a3387a5b07d5e8f1195ea340036b61f2d",
+  "catalogAnchor": "6000284a069ba7cada2925094074e8e0baae07e25d1b7fc31f396c993f363e11",
+  "command": "hub check bundle --allow-unsigned --catalog <App Hub catalog.json> --anchor <official anchor>",
+  "exitCode": 0,
+  "passed": true,
+  "signed": false,
+  "output": "leilei-city-matchmaker 0.4.0 — PASSED\n  [warning] publisher-signature: unsigned: accountability rests on the hub alone\n  grants: capabilities {\"octos.session.open\", \"octos.turn.interrupt\", \"octos.turn.start\", \"storage\"}, hosts {}, storage 16777216 bytes, agent none",
+  "reviewPacketPath": "build/review.json",
+  "reviewPacketSHA256": "0174afd6b7baebaab594e11eb4e8adb85ca0e9c9bafd05b791b50cd9c487c660",
+  "reviewQuestionCount": 7,
+  "currentAppHubHead": "77d8afd4a468b1582201c1d458c49fb2572ed9cb",
+  "currentHeadBinaryRebuilt": false,
+  "limits": [
+    "Unsigned gate success is not a publisher signature, human review, App Hub submission, or publication.",
+    "The bundle source commit predates the uncommitted documentation and demo evidence; a final release commit and tag do not exist yet.",
+    "The hub binary was built from 78dfda5 and passed against the current 77d8afd catalog. App Hub's submission route is unchanged, but this is not a 77d8afd binary build."
+  ]
+}

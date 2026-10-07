@@ -1,18 +1,27 @@
 # 原生宿主版本与真实 Agent 验收准备
 
-核验日期：2026-10-03。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入或本地签名目录当作真实模型成功。
+核验日期：2026-10-07。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入或本地签名目录当作真实模型成功。
+
+## 2026-10-07 当前官方基线
+
+- 官方 Desktop release `0.1.0-beta.1` 已按 release 的 `SHA256SUMS` 校验；DMG SHA-256 为 `0afe8fefe2b3f74b26ee6ff4773f1ffea84d2256f2e0fae8c5304ad4974e6c8a`。已恢复安装到 `~/Applications/OctoSense.app` 并实际启动，`Info.plist` build 为 `20261003.095043`。该官方预发布包是 unsigned/ad-hoc，只能据此声称官方哈希匹配且应用可启动。
+- 2026-10-07 12:20 再核对时，官方 main 为 OctoSense [`eb4202c9106ce399ee8a996bfb06d7ef8f72f9f7`](https://github.com/OctoSense-org/OctoSense/commit/eb4202c9106ce399ee8a996bfb06d7ef8f72f9f7)、App Design Flow [`d618d4eb7e804d27b0906eb4e1df35fb4224314c`](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/commit/d618d4eb7e804d27b0906eb4e1df35fb4224314c)、App Hub [`77d8afd4a468b1582201c1d458c49fb2572ed9cb`](https://github.com/OctoSense-org/OctoSense-App-Hub/commit/77d8afd4a468b1582201c1d458c49fb2572ed9cb)。早间下载的 `4081c30`／`a5a87d3`／`78dfda5` archive 仍是已校验快照，但不再是当前 head；OctoSense 当前 head 尚未本机编译，不能和已安装 release 混为同一构建。
+- 从 App Hub `78dfda5` 构建的 `hub` SHA-256 为 `333f47b1602eecbb4fb346f8bd7a30f3f0fd2536fad422b27bd5c10e625157bc`。它对 v0.4.0 执行 catalog-aware unsigned gate 通过，仅有预期的未签名警告；记录见 [`qa/app-hub-gate-v0.4.json`](../qa/app-hub-gate-v0.4.json)。App Hub 当前 `77d8afd` 的提交流程不变，但在同提交工具重建完成前，这份报告不能称为当前 head 的二进制结果。
+- v0.4 候选演示在真实 `card-host` 中完成浏览、收藏、两城比较、可选追问、来源、资料与 Agent 不可用处理。另在官方 Desktop `0.1.0-beta.1` 完整 Shell 中，以隔离合成资料完成一次 MiniMax-M3 真实返回、确认、保存与重启恢复；输入、提案、前后哈希与截图见 [真实 Agent 全链路报告](../qa/real-agent-e2e-v0.4/README.md)。Kimi 与其他平台仍未验证。
+
+以下 2026-10-03 内容保留为旧 Shell 构建与 v0.2 本地安装的可追溯记录，不能代表当前 v0.4 或最新官方源码。
 
 ## 2026-10-03 的 Shell 准备记录
 
 - 独立 OctoSense Shell 已启动，AI providers 页面可用；新状态目录没有继承故事排练场的 mock provider。
 - 城市红娘 `0.2.0` 已复制到专用测试目录并以临时测试发布者签名。`hub check` 无警告通过，本地 catalog `sequence 1`、`1 entries` 验签通过。
 - 本地包摘要为 `d06e0ebf60adca1b8cf812c32726e1c0445738d8d9f31f453e0d3f163d579a0c`。测试签名没有写回仓库中的 `bundle/`。
-- **用户已报告模型连接完成。** 本应用的真实响应、确认执行与恢复仍待独立验收；不再将等待填写密钥列为阻塞。没有读取或记录用户密钥。
+- **用户已报告模型连接完成。** 2026-10-07 又以独立合成资料完成一次应用级 MiniMax-M3 全链路验收；这不追溯改变旧 v0.2 测试的证据等级，也不代表 Kimi 已通过。公开证据没有记录密钥值。
 - **上面两项包与 catalog 记录仅适用于旧 v0.2.0。** 当前版本的真实 card-host 验收见 [原生说明](octosense.md)；本页历史 catalog 不能证明新版已安装到完整 Shell 或成功调用模型。本地测试发布不是公开 App Hub 审核。
 
-本次重新核对官方 [App Design Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/0e59346e810ed694702b1df48f4283dc8104358c/README.zh-CN.md)：`main.splash` 是正式支持的 script-app 入口；无需改成 Web 或重写为 `page.card`。官方最新源码基底已前进，下表识别的是实际测过的工具，不能据此宣称最新宿主全部兼容。
+本次重新核对官方 [App Design Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/d618d4eb7e804d27b0906eb4e1df35fb4224314c/README.zh-CN.md)：`main.splash` 是正式支持的 script-app 入口；无需改成 Web 或重写为 `page.card`。官方最新源码基底已前进，下表识别的是实际测过的工具，不能据此宣称最新宿主全部兼容。
 
-后续真实调用必须记录 provider/model、应用版本、实际输入、应用收到的有效提案、用户采用后的状态变化；只有连接测试成功还不算应用验收成功。
+真实调用记录必须包含 provider/model、应用版本、实际输入、应用收到的有效提案、用户采用后的状态变化；只有连接测试成功还不算应用验收成功。本轮报告已按这组字段记录，并额外核对确认前不落盘及重启恢复。
 
 ## 已核对的源码版本
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Record real production OctoScript UI in an isolated hidden card-host.
+"""Record the real production v0.4 OctoScript discovery flow.
 
 Only pointer/scroll/text events drive the app. No test harness, state injection,
 provider configuration, production bundle edit, or user-window capture is used.
-Raw PNG frames and isolated app state remain in a temporary directory. Captions
-are placed BELOW the unchanged native image and explicitly name the limitations.
+Raw PNG frames and isolated app state remain in a temporary directory. Chinese
+chapter captions are placed below the unchanged native image and name limits.
 """
 import argparse
 import datetime
@@ -33,7 +33,7 @@ class Recording:
     def __init__(self, port, scratch, out, fps):
         self.driver = Driver(port)
         self.scratch, self.out, self.fps = scratch, out, fps
-        self.frames, self.chapters, self.events, self.errors = [], [], [], []
+        self.frames, self.chapters, self.events, self.ui_operations, self.errors = [], [], [], [], []
         self.stop_event = threading.Event()
         self.start_time = time.monotonic()
         self.thread = threading.Thread(target=self._capture, daemon=True)
@@ -73,6 +73,22 @@ class Recording:
     def event(self, name, **details):
         self.events.append({'time': self.elapsed(), 'name': name, **details})
 
+    def click(self, text):
+        self.driver.click(text)
+        self.ui_operations.append({'time': self.elapsed(), 'kind': 'pointerClick', 'target': text})
+
+    def scroll(self, dy):
+        self.driver.scroll(dy)
+        self.ui_operations.append({'time': self.elapsed(), 'kind': 'scroll', 'deltaY': dy})
+
+    def top(self):
+        self.driver.top()
+        self.ui_operations.append({'time': self.elapsed(), 'kind': 'scrollToTop'})
+
+    def type(self, value):
+        self.driver.type(value)
+        self.ui_operations.append({'time': self.elapsed(), 'kind': 'textInput', 'characterCount': len(value)})
+
     def shot(self, name):
         self.driver.shot(self.out / name)
 
@@ -88,17 +104,6 @@ class Recording:
             raise RuntimeError('No native frames captured')
         self.frames[0]['time'] = 0
         return self.duration
-
-
-def reveal_label(driver, text):
-    for _ in range(32):
-        matches = [item for item in driver.snap() if item.get('ty') == 'Label'
-                   and text in item.get('t', '') and item['r'][1] >= 80
-                   and item['r'][1] < 610 and item['r'][3] > 0]
-        if matches:
-            return
-        driver.scroll(160)
-    raise AssertionError('Cannot reveal native label: ' + text)
 
 
 def wrapped(text, width=29):
@@ -118,8 +123,9 @@ def encode(recording, args, video):
     data = (scratch / frames[0]['file']).read_bytes()
     width, height = struct.unpack('>II', data[16:24])
     label = scratch / 'caption-label.txt'
-    label.write_text('JOY CITY / OctoScript 原生真实操作 · 合成资料 · 非模型成功演示', encoding='utf8')
-    filters = [f'pad={width}:{height + 200}:0:0:color=0xf7f5ef',
+    label.write_text('城市红娘 v0.4｜OctoScript 原生真实操作｜合成输入｜未冒充模型成功', encoding='utf8')
+    caption_height = 210
+    filters = [f'pad={width}:{height + caption_height}:0:0:color=0xf7f5ef',
                f"drawtext=fontfile='{args.font}':textfile='{label}':fontsize=20:fontcolor=0x65655f:x=26:y={height + 22}"]
     for index, chapter in enumerate(recording.chapters):
         end = recording.chapters[index + 1]['start'] if index + 1 < len(recording.chapters) else recording.duration
@@ -136,13 +142,25 @@ def encode(recording, args, video):
     subprocess.run([args.ffmpeg, '-y', '-hide_banner', '-loglevel', 'warning', '-f', 'concat', '-safe', '0', '-i', str(manifest),
                     '-filter_script:v', str(filter_file), '-r', '25', '-c:v', 'libx264', '-preset', 'medium', '-crf', '25',
                     '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', '-t', str(recording.duration), str(temporary_video)], check=True)
-    subprocess.run([args.ffmpeg, '-v', 'error', '-i', str(temporary_video), '-f', 'null', '-'], check=True)
-    metadata = json.loads(subprocess.check_output([args.ffprobe, '-v', 'error', '-show_entries', 'format=duration', '-of', 'json', str(temporary_video)], text=True))
+    decode = subprocess.run([args.ffmpeg, '-v', 'error', '-i', str(temporary_video), '-f', 'null', '-'], capture_output=True, text=True)
+    if decode.returncode != 0:
+        raise RuntimeError('Full video decode failed: ' + decode.stderr)
+    metadata = json.loads(subprocess.check_output([
+        args.ffprobe, '-v', 'error', '-select_streams', 'v:0',
+        '-show_entries', 'format=duration,size,format_name:stream=codec_name,width,height,pix_fmt,r_frame_rate,avg_frame_rate,nb_frames',
+        '-of', 'json', str(temporary_video)
+    ], text=True))
     video.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(temporary_video, video)
-    return {'width': width, 'nativeHeight': height, 'height': height + 200, 'duration': float(metadata['format']['duration']), 'captureDuration': recording.duration,
+    stream = metadata['streams'][0]
+    duration = float(metadata['format']['duration'])
+    if not 120 <= duration <= 180:
+        raise AssertionError(f'Expected a 2–3 minute demo, got {duration:.3f} seconds')
+    return {'width': width, 'nativeHeight': height, 'height': height + caption_height, 'duration': duration, 'captureDuration': recording.duration,
             'fps': 25, 'capturedFrames': len(frames), 'requestedCaptureFPS': recording.fps, 'bytes': video.stat().st_size,
-            'sha256': sha(video), 'fullDecodePassed': True}
+            'sha256': sha(video), 'codec': stream['codec_name'], 'pixelFormat': stream['pix_fmt'],
+            'encodedFrameRate': stream['avg_frame_rate'], 'encodedFrames': int(stream['nb_frames']),
+            'fullDecodePassed': True, 'fullDecodeErrorOutput': decode.stderr}
 
 
 def main():
@@ -154,8 +172,8 @@ def main():
     parser.add_argument('--ffprobe', default=os.environ.get('FFPROBE', shutil.which('ffprobe') or 'ffprobe'))
     parser.add_argument('--font', default=os.environ.get('DEMO_FONT', '/System/Library/Fonts/Supplemental/Arial Unicode.ttf'))
     parser.add_argument('--fps', type=float, default=5)
-    parser.add_argument('--out', type=Path, default=ROOT / 'qa/native-demo')
-    parser.add_argument('--video', type=Path, default=ROOT / 'docs/demo-native.mp4')
+    parser.add_argument('--out', type=Path, default=ROOT / 'qa/native-demo-v0.4')
+    parser.add_argument('--video', type=Path, default=ROOT / 'docs/demo-native-v0.4.mp4')
     args = parser.parse_args()
     if not 1 <= args.fps <= 12:
         parser.error('--fps must be between 1 and 12')
@@ -163,17 +181,32 @@ def main():
         if not Path(path).is_file():
             parser.error('Missing required file: ' + path)
     args.out.mkdir(parents=True, exist_ok=True)
-    scratch = Path(tempfile.mkdtemp(prefix='city-native-demo-'))
+    scratch = Path(tempfile.mkdtemp(prefix='city-native-demo-v04-'))
     bundle, state = scratch / 'bundle', scratch / 'state'
     shutil.copytree(ROOT / 'bundle', bundle)
     statefile = state / 'leilei-city-matchmaker/match.json'
     source_hash = sha(ROOT / 'bundle/main.splash')
     assert sha(bundle / 'main.splash') == source_hash
-    report = {'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'version': json.loads((bundle / 'manifest.json').read_text())['version'],
+    manifest = json.loads((bundle / 'manifest.json').read_text())
+    assert manifest['version'] == '0.4.0', manifest['version']
+    assert not state.exists(), 'The isolated state directory must be empty before card-host starts'
+    report = {'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'version': manifest['version'],
               'kind': 'real-hidden-card-host-frame-recording', 'productionMainSHA256': source_hash,
               'syntheticInputsOnly': True, 'stateInjected': False, 'sourceInjected': False, 'userWindowOperated': False,
-              'realModelSuccessVerified': False, 'temporaryDirectory': str(scratch), 'port': args.port, 'passed': False}
+              'emptyIsolatedStateAtLaunch': True, 'inputMechanism': 'real pointer, text, and scroll events through the card-host remote UI',
+              'productionBundleCopiedWithoutSourceChanges': True, 'realModelSuccessVerified': False,
+              'agentUnavailableShownAsFailure': False,
+              'temporaryWorkspace': 'isolated system temporary directory; absolute path omitted from the public report',
+              'port': args.port,
+              'gitCommit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+              'runtime': {'cardHost': Path(args.card_host).name, 'cardHostSHA256': sha(Path(args.card_host)),
+                          'hub': Path(args.hub).name, 'hubSHA256': sha(Path(args.hub))},
+              'passed': False}
     holder = {}
+
+    city_data = json.loads((ROOT / 'data/cities.json').read_text())
+    city_names = {city['id']: city['name'] for city in city_data}
+    config = json.loads((ROOT / 'data/joy-config.json').read_text())
 
     def saved():
         return json.loads(statefile.read_text())
@@ -182,80 +215,121 @@ def main():
         recording = Recording(args.port, scratch, args.out, args.fps)
         holder['recording'] = recording
         try:
-            recording.chapter('从真实原生应用开始', '独立 card-host 与空白存档；所有操作使用合成资料。')
-            assert any('ENFP 狗' in line for line in driver.labels())
-            recording.shot('01-welcome.png')
-            recording.at(5); driver.click('从想过的日子开始 →')
-            recording.chapter('先确认 AI 方向', '方向用于整理期待，不承诺任何城市已有合适职位。')
-            assert '你想怎样参与 AI 应用？' in driver.labels()
-            recording.at(11); driver.click('○ AI 应用与产品')
-            stages = [(18, '○ 经常换一种新玩法', '新鲜感'), (25, '○ 到水边、树下走走', '恢复精力'),
-                      (32, '○ 不断遇到新朋友', '关系'), (39, '○ 把自己的想法做出来', '职业期待'),
-                      (46, '○ 先试一段，再决定', '不确定性')]
-            for index, (at, text, dimension) in enumerate(stages, 1):
-                assert f'想过的日子 · {index} / 5' in driver.labels()
-                recording.chapter(f'生活场景 {index} / 5：{dimension}', '一次只选一个真实期待；可跳过，不从人格标签猜答案。')
-                if index == 2: recording.shot('02-scene-recovery.png')
-                recording.at(at); driver.click(text)
-            assert saved()[30:35] == ['new', 'nature', 'new', 'build', 'explore']
-            recording.event('five_scenes_answered_through_ui')
-            recording.chapter('天气偏好与现实条件', '明确底线会保留；预算、住房和通勤仍需现实核验。')
-            recording.at(51); driver.click('○ 炎热')
-            recording.at(54); driver.click('补充预算、住房与通勤（可选）')
-            recording.at(57); driver.click('○ 4000')
-            recording.at(59); driver.click('○ 独立整租')
-            recording.at(61); driver.click('○ 单程 45 分钟')
-            recording.at(64); driver.click('记下这些，核对生活画像 →'); driver.top()
-            assert '这是你想过的日子吗？' in driver.labels()
-            recording.chapter('先核对画像，再认识城市', '每句话都来自明确选择；点修改，只重答对应场景。')
-            recording.shot('03-portrait.png')
-            recording.at(70); driver.click('修改：新鲜感')
-            recording.at(73); driver.click('○ 熟悉的日常里，偶尔换换'); driver.top()
-            assert saved()[30] == 'mix' and saved()[31:35] == ['nature', 'new', 'build', 'explore']
-            recording.event('single_portrait_scene_revised_without_erasing_other_answers')
-            recording.at(79); driver.click('画像准确，先认识一座城 →'); driver.top()
-            assert any('先见一面' in line for line in driver.labels())
-            recording.chapter('第一轮：先介绍一座探索候选', '看具体理由，也看代价；证据区间重叠，不宣称唯一最佳。')
-            recording.event('first_city', cityId=saved()[25])
-            recording.shot('04-first-city.png')
-            recording.at(87); driver.scroll(360)
-            recording.at(92); driver.click('想调整日常恢复方式'); driver.top()
-            recording.chapter('反馈后，只追问一个相关场景', '合成用户重新确认恢复方式，其他四维保持原样。')
-            recording.at(98); driver.click('安安静静待一会儿'); driver.top()
-            assert saved()[31] == 'quiet' and saved()[30] == 'mix'
-            assert any('先去了解 ' in line for line in driver.labels())
-            recording.event('feedback_refinement_changes_explicit_preference')
-            recording.chapter('第二轮：解释变化，也承认未知', '安静需具体街区证据；确认偏好并不保证一定换城。')
-            recording.shot('05-second-city.png')
-            recording.at(106)
-            previous_joy = saved()[30:35]
-            driver.click('换另一位红娘看同一份资料'); driver.top()
-            assert saved()[2] == 'cat' and saved()[30:35] == previous_joy
-            recording.chapter('换一位介绍人，看同一份资料', '小猫侧重职业、小狗侧重生活；答案、事实与底线保留。')
-            recording.event('guide_switch_preserves_answers')
-            recording.at(115); reveal_label(driver, '用普通日子验证这座城')
-            recording.chapter('把偏好变成三条体验行动', '尝试节奏、关系验证、普通一天；不靠未知资料暗中加分。')
-            recording.shot('06-trial-plan.png')
-            recording.at(122); driver.click('查看 / 收起公开依据')
-            recording.chapter('公开依据与尚未确认的条件', '八城仅 47/136 个 Joy 信号可探索比较，仍有大量未知。')
-            driver.scroll(180); recording.shot('07-evidence.png')
-            recording.event('sources_opened_in_real_ui')
-            recording.at(131); driver.top(); driver.click('我想调整的是…')
-            driver.type('我想尽量避开潮湿天气。')
+            recording.chapter('打开就看城市', '独立 card-host、空白存档；先看一种日常，不先填问卷。')
+            labels = driver.labels()
+            assert any('先看看你喜欢的日常' in line for line in labels), labels
+            opening_name = next(name for name in city_names.values() if name in labels)
+            assert not statefile.exists(), 'Opening the app must not require an injected save file'
+            recording.event('opened_on_city_card_without_questionnaire', cityName=opening_name)
+            recording.shot('01-opening-city.png')
+
+            recording.at(8); recording.click('下一座 →')
+            first_candidate = saved()[39]
+            assert saved()[24] == [] and saved()[30:35] == [''] * 5 and saved()[41]
+            recording.chapter('“下一座”只是继续浏览', '路过不会拒绝城市，也不会暗中补写五维偏好。')
+            recording.event('next_preserved_blank_profile', cityId=first_candidate)
+
+            recording.at(17); recording.click('留着看看 ♡')
+            first_saved = saved()
+            assert first_saved[1] == 20 and first_saved[40] == [first_candidate]
+            assert first_saved[24] == [] and first_saved[30:35] == [''] * 5
+            recording.chapter('留下第一座', '收藏只表示值得继续了解；应用自动带到下一张城市卡。')
+            recording.event('first_city_saved', cityId=first_candidate, cityName=city_names[first_candidate])
+            recording.shot('02-first-saved-next-card.png')
+
+            recording.at(26); recording.click('已留 1 座')
+            assert saved()[1] == 21 and saved()[40] == [first_candidate]
+            recording.chapter('先看一眼已经留下的城市', '还差一座时，不硬给结论；可以随时继续逛。')
+            recording.shot('03-one-city-shortlist.png')
+
+            recording.at(34); recording.click('继续逛 →')
+            assert saved()[1] == 20 and saved()[40] == [first_candidate]
+            recording.chapter('继续浏览', '回到刚才那张卡，收藏、路过记录和空白偏好都保留。')
+            recording.event('continued_browsing_after_first_save')
+
+            recording.at(43); recording.click('下一座 →')
+            second_candidate = saved()[39]
+            assert second_candidate != first_candidate
+            recording.chapter('再看一种日常', '先比较吸引力与代价；“下一座”仍不等于拒绝。')
+
+            recording.at(51); recording.click('留着看看 ♡')
+            comparison = saved()
+            assert comparison[1] == 21 and comparison[40] == [first_candidate, second_candidate]
+            assert comparison[30:35] == [''] * 5
+            recording.chapter('留下第二座，直接比较', '先并排看自己留下的两种生活，不替你宣布唯一赢家。')
+            recording.event('second_city_saved_and_comparison_opened', cityId=second_candidate,
+                            cityName=city_names[second_candidate], pair=comparison[40])
+            recording.shot('04-two-city-comparison.png')
+
+            recording.at(64); recording.click('我还拿不准')
+            question_state = saved()
+            dimension = question_state[45]
+            assert 0 <= dimension < 5
+            dimension_config = config['dimensions'][dimension]
+            answer = dimension_config['options'][0]
+            recording.chapter('拿不准时，才补一问', '问题来自两城已有的可比较差异；这一题可以跳过。')
+            recording.event('optional_comparison_question_opened', dimensionId=dimension_config['id'], question=dimension_config['question'])
+            recording.shot('05-optional-question.png')
+
+            recording.at(73); recording.click(answer['label'])
+            answered = saved()
+            assert answered[1] == 21 and answered[40] == [first_candidate, second_candidate]
+            assert answered[30 + dimension] == answer['id'] and answered[45] == -2 - dimension
+            recording.chapter('回答只补一项明确偏好', '两座收藏保持原样；界面说明现有证据能否拉开差异。')
+            recording.event('optional_question_answered', dimensionId=dimension_config['id'], answerId=answer['id'])
+            recording.scroll(260)
+            assert any('你选了' in line for line in driver.labels()), driver.labels()
+            recording.shot('06-comparison-response.png')
+
+            first_name = city_names[first_candidate]
+            recording.at(83); recording.top(); recording.click('了解' + first_name)
+            assert saved()[1] == 7 and saved()[43] == first_candidate and saved()[44] == 21
+            recording.chapter('按需打开城市细节', '详情仍同时呈现吸引力、代价和没有证据的条件。')
+            recording.event('opened_detail_for_saved_city', cityId=first_candidate)
+
+            recording.at(91); recording.click('查看 / 收起公开依据')
+            recording.scroll(140)
+            recording.chapter('来源与未知项一起展示', '公开来源支持的是线索，不是喜欢概率、岗位承诺或通勤证明。')
+            recording.event('sources_opened_in_real_ui', cityId=first_candidate)
+            recording.shot('07-sources-and-unknowns.png')
+
+            recording.at(103); recording.click('用一句话请 Agent 帮忙')
+            recording.at(107); recording.click('我想调整的是…')
+            recording.type('请帮我避开潮湿天气。')
             before_request = statefile.read_bytes()
-            driver.click('让 Agent 提出修改'); driver.scroll(120)
+            recording.at(112); recording.click('让 Agent 提出修改')
+            recording.scroll(120)
             labels = driver.labels()
             assert any('应用 Agent 当前不可用' in line for line in labels), labels
             assert statefile.read_bytes() == before_request
-            recording.chapter('真实宿主限制，也如实展示', 'card-host 未提供应用 Agent 服务；失败没有修改档案。')
-            recording.event('agent_unavailable_preserves_saved_state')
+            recording.chapter('Agent 不可用，就明确失败', 'card-host 没有模型服务；没有伪造回复，也没有修改存档。')
+            recording.event('agent_unavailable_preserves_saved_state', cityId=first_candidate)
+            report['agentUnavailableShownAsFailure'] = True
             recording.shot('08-agent-unavailable.png')
-            recording.at(143); driver.top()
-            recording.chapter('原生主流程完成，真实模型仍待验收', '这是生产 OctoScript 的真实操作，不是 Web 视频或注入响应。')
-            recording.shot('09-final.png')
-            recording.at(151)
-            report['finalSyntheticProfile'] = {'guide': saved()[2], 'aiRole': saved()[35], 'joy': saved()[30:35],
-                                               'rentBudget': saved()[17], 'housingType': saved()[36], 'maxCommuteMinutes': saved()[37]}
+
+            recording.at(125); recording.click('← 回到刚才')
+            assert saved()[1] == 21 and saved()[40] == [first_candidate, second_candidate]
+            recording.at(127); recording.click('资料')
+            profile = saved()
+            assert profile[1] == 8 and sum(bool(value) for value in profile[30:35]) == 1
+            recording.chapter('资料是按需入口', '只记录刚才亲自回答的一项；其余继续显示“未确认，不代你猜”。')
+            recording.event('profile_opened_on_demand', confirmedDimension=dimension_config['id'])
+            recording.shot('09-profile-on-demand.png')
+
+            recording.at(140); recording.scroll(260)
+            recording.chapter('收藏没有变成人格推断', '五维仍有四项留白；资料、收藏与城市事实各自有清楚边界。')
+            assert sum(bool(value) for value in saved()[30:35]) == 1
+
+            recording.at(149); recording.click('回到刚才')
+            recording.top()
+            assert saved()[1] == 21 and saved()[40] == [first_candidate, second_candidate]
+            recording.chapter('v0.4 原生主线完成', '真实 UI 完成浏览、收藏、比较、追问、来源、资料和失败处理。')
+            recording.shot('10-final-comparison.png')
+            recording.at(158)
+            final_state = saved()
+            report['finalSyntheticState'] = {'screen': final_state[1], 'guide': final_state[2], 'joy': final_state[30:35],
+                                             'likedCityIds': final_state[40], 'browsedCityIds': final_state[41],
+                                             'comparisonDimensionState': final_state[45]}
             report['uiFlowPassed'] = True
         finally:
             recording.finish()
@@ -273,7 +347,12 @@ def main():
     finally:
         if 'recording' in holder:
             recording = holder['recording']
-            report['chapters'], report['events'], report['captureErrors'] = recording.chapters, recording.events, recording.errors
+            report['chapters'], report['events'] = recording.chapters, recording.events
+            report['uiOperations'], report['captureErrors'] = recording.ui_operations, recording.errors
+            report['uiOperationCounts'] = {
+                kind: sum(1 for operation in recording.ui_operations if operation['kind'] == kind)
+                for kind in sorted({operation['kind'] for operation in recording.ui_operations})
+            }
             gaps = [b['time'] - a['time'] for a, b in zip(recording.frames, recording.frames[1:])]
             report['maxFrameGapSeconds'] = max(gaps) if gaps else None
             (scratch / 'capture-index.json').write_text(json.dumps(recording.frames, indent=2))

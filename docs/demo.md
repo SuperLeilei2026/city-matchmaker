@@ -1,39 +1,58 @@
-# Joy City v0.3 · 历史原生演示
+# Joy City v0.4 · 原生真实演示
 
-**版本提示（2026-10-05）：本页影片与截图记录 v0.3 问卷流程，不能代表 v0.4“看城市、留两座”的新交互。** 新版请按 [原生运行说明](octosense.md)体验，并核对 [产品设计](product-design.md)与本次原生截图。旧影片保留用于追溯初赛已提交材料；其哈希只与下述固定提交一致。
+本页对应当前 **v0.4.0** 原生流程：**打开看城市 → 留下第一座 → 继续浏览 → 留下第二座 → 两城比较 → 按需追问、看来源与资料**。历史 v0.3 五题演示仍保留，但不再代表当前产品。
 
-[观看原生 MP4](demo-native.mp4) · [原生录制报告](../qa/native-demo/recording-report.json) · [初赛清单](submission-checklist.md)
+[观看 v0.4 原生 MP4](demo-native-v0.4.mp4) · [v0.4 录制报告](../qa/native-demo-v0.4/recording-report.json) · [原生运行说明](octosense.md) · [产品设计](product-design.md)
 
-**主交付是 `bundle/main.splash` 的 OctoScript 应用。** 本片使用 v0.3 生产源码，在独立隐藏 card-host 窗口中实际操作并连续采帧，使用合成资料；没有源码注入、状态注入，也没有操作用户已有窗口。录像报告中的程序 SHA-256 对应 v0.3，不是当前 v0.4。
+## 这段视频是什么
 
-原生影片约 **2分31秒，920×1840，H.264／25fps编码，4,147,584字节**。原生画面为920×1640，底部添加说明字幕；窗口约每秒采集5帧，未用静态概念图替代交互。录制断言、完整视频解码与 [Chromium 实际播放](../qa/native-demo/playback-validation.json)均通过；[成片画面检查](../qa/native-demo/visual-check.json)核对22／83／136秒，确认场景、首城及不可用提示可读，字幕没有遮挡应用。
+视频来自当前 production `bundle/main.splash`，SHA-256 为 `8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca`。录制脚本复制当前 bundle 到临时目录，由真实 `card-host` 启动；启动前的隔离存档为空。整段操作只通过真实指针点击、文本输入与滚动完成，没有注入源码、存档或 Agent 响应，也没有操作用户原有窗口。
 
-本片与对应原生源码已公开于固定提交 [`f4566a5`](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)；公开仓库已核对包含该提交。当前版本与后续文档说明见 [发布状态](publication.md)。
+成片长 **158.0 秒（2分38秒）**，分辨率 **920×1850**，H.264／25fps，共 3950 帧、2,745,673 字节。视频 SHA-256：
+
+```text
+b97999d8dc656131864f8bd0b1e13b0ffad3db7938e02e328e47875b3fb5067a
+```
+
+编码后已用 ffmpeg 从头到尾完整解码，返回零错误；另抽查 4、56、115、132、153 秒，确认原生画面、中文章节字幕、Agent 不可用提示和最终两城比较均可读。录制结束后 production `main.splash` 哈希未变，旧 v0.3 视频也未被覆盖。
 
 ## 本片能核对的行为
 
-1. 从空白存档选择 AI 方向，逐页回答五个生活场景，再填写合成预算4000、独居与45分钟通勤条件。
-2. 先核对画像，单独修改一个场景后返回画像，其余答案保留；确认后首次介绍成都。
-3. 反馈并确认恢复方式为安静，第二轮重新介绍上海；这是本次合成资料的结果，应用不保证改一个答案必定换城。
-4. 切换猫狗观察角度，保留原答案与底线；显示三条试城计划，并打开真实来源界面。
-5. 实际请求应用 Agent，card-host 返回服务不可用；应用提示限制，存档保持不变。
+| 时间 | 真实操作与结果 |
+| --- | --- |
+| 0–17 秒 | 空白存档直接打开北京城市卡；“下一座”只继续浏览，没有拒绝城市或补写五维。 |
+| 17–51 秒 | 留下成都，打开单城清单后点“继续逛”；路过广州，再留下杭州。第二次收藏直接进入成都／杭州比较。 |
+| 51–83 秒 | 两城先展示吸引力与代价；点“我还拿不准”后，只补一项恢复精力偏好，收藏保持不变。 |
+| 83–103 秒 | 打开成都详情和公开依据；来源、代价、岗位／住房／通勤等未知项同时出现。 |
+| 103–125 秒 | 输入“请帮我避开潮湿天气。”并真实请求应用 Agent。`card-host` 明确返回服务不可用，请求前后存档字节一致。 |
+| 125–158 秒 | 按需打开资料页；只有刚才明确回答的恢复精力一项被记录，其余四维继续显示未确认。最后回到两城比较。 |
 
-最后一步是**真实失败处理证据，不是真实模型成功证据**。本应用在完整 Shell 中的模型返回、用户确认、执行与恢复仍待验收。另有原生12项界面、4项存档／迁移、7组对照，以及5项Agent生产路径和21项临时响应检查；后者的模拟响应没有进入这部影片。
+本片中的北京、成都与杭州来自这次空白存档下 production bundle 的真实浏览顺序，没有固定城市或结果注入。城市顺序和人工整理线索不是推荐准确率、岗位概率或幸福概率。
 
-![五题逐页：恢复方式](../qa/native-demo/02-scene-recovery.png)
+![打开即看城市](../qa/native-demo-v0.4/01-opening-city.png)
 
-![先核对可编辑画像](../qa/native-demo/03-portrait.png)
+![留下两座后比较](../qa/native-demo-v0.4/04-two-city-comparison.png)
 
-![真实 Agent 不可用状态](../qa/native-demo/08-agent-unavailable.png)
+![真实 Agent 不可用状态](../qa/native-demo-v0.4/08-agent-unavailable.png)
 
-## 辅助 Web 录像
+![资料按需打开](../qa/native-demo-v0.4/09-profile-on-demand.png)
 
-[Web MP4](demo-web.mp4)仅辅助说明交互与规则。该片151秒、1440×1000、H.264，展示合成用户首轮上海、明确拒绝后南京／深圳／北京，以及PNG下载和刷新恢复；这些不是原生影片的操作结果。原生当前没有PNG导出。
+## Agent 证据边界
 
-Web 的[录制报告](../qa/demo-web/recording-report.json)和[播放核验](../qa/demo-video-validation.json)记录完整解码、Chromium播放和源码哈希。旧v0.2视频保留于旧Git标签，当前路径对应v0.3。
+`card-host` 本身没有模型服务，因此本片展示的是**真实失败处理证据**：应用清楚提示 Agent 不可用，继续使用本地规则，并保持存档不变。它不是模型成功演示，录制报告将 `realModelSuccessVerified` 记为 `false`。完整 OctoSense Shell 中另有一次 MiniMax-M3 返回、确认、执行、保存与恢复的独立验收，见[真实 Agent 全链路报告](../qa/real-agent-e2e-v0.4/README.md)；该证据不追溯写入本片。
+
+## 历史 v0.3 演示
+
+[v0.3 原生 MP4](demo-native.mp4) · [v0.3 录制报告](../qa/native-demo/recording-report.json) · [v0.3 分镜说明](demo-script.md)
+
+旧片约 2分31秒，展示先答五个生活场景、核对画像、两轮推荐、切换视角与来源。它保留用于追溯历史提交材料，不能作为 v0.4“先看城市、留两座”流程的运行证据。辅助 [Web MP4](demo-web.mp4) 同样仍是 v0.3 研究界面，不代表当前原生主入口。
 
 ## 复现
 
-原生运行与工具版本见 [octosense.md](octosense.md)、[runtime-lock.md](runtime-lock.md)。原生录制脚本为 `tools/record-native-demo.py`，使用独立临时状态目录，不读取用户存档；精确参数、阶段时间点及录像校验见原生报告。
+在仓库根目录运行：
 
-辅助 Web 可先执行 `node serve.mjs`，再在具备Playwright、Chromium、ffmpeg和中文字体的环境运行 `qa/record-demo.mjs`、`qa/validate-demo.mjs`。录制依赖不是原生应用运行依赖。本地Web服务器不提供docs文件；观看请直接打开MP4，发布后也可从仓库下载。
+```sh
+python3 tools/record-native-demo.py
+```
+
+脚本默认输出 `docs/demo-native-v0.4.mp4` 与 `qa/native-demo-v0.4/recording-report.json`，并保留旧 v0.3 文件。若工具不在默认位置，可通过 `OCTO_CARD_HOST`、`OCTO_HUB`、`FFMPEG`、`FFPROBE` 和 `DEMO_FONT` 指定。脚本会在临时目录复制、stamp、check 当前 bundle，再使用独立空白状态录制；不会修改 production 源码或数据。

@@ -46,7 +46,7 @@ python3 tools/build_bundle.py
 
 切页、换城、修改资料、取消、超时或过期响应不能误改数据。模型不能恢复已拒绝城市、放宽底线、改预算或城市事实。自由反馈和待确认提案只在应用内存；宿主可能保留会话，见 [隐私](privacy.md)。
 
-`card-host` 不提供模型服务。完整 Shell 启动器为 `tools/start-shell.sh`，保留正常首次授权。用户报告宿主已连接，但本应用真实模型返回、确认、执行与恢复仍待验收；失败处理和注入测试不能替代真实调用。
+`card-host` 不提供模型服务。完整 Shell 启动器为 `tools/start-shell.sh`，保留正常首次授权。2026-10-07 已在官方 Desktop `0.1.0-beta.1` 中，以隔离合成资料跑通一次 MiniMax-M3 返回、CM1 提案、本人确认、保存回读与重启恢复，见[真实 Agent 全链路报告](../qa/real-agent-e2e-v0.4/README.md)。失败处理和注入测试仍不能替代真实调用；Kimi 与其他平台未验证。
 
 ## 验证
 
@@ -61,4 +61,4 @@ node --test tests/*.test.mjs
 
 v0.3 的 `native_joy_smoke.py`、`qa/native-joy-check.json` 和 `docs/demo-native.mp4` 是历史五题流程资料；应在对应 Git 标签复现，不作为 v0.4 验收。
 
-这些检查证明程序与保护流程能运行，不证明推荐准确率或用户满意，也不代表手机、其他平台、真实模型或 App Hub 上架已验证。当前公开发布与版本指纹以 [发布状态](publication.md) 为准。
+这些检查与一次 MiniMax-M3 全链路证明程序、保护流程及该次宿主调用能运行，不证明推荐准确率或用户满意，也不代表手机、其他平台、其他模型或 App Hub 上架已验证。当前公开发布与版本指纹以 [发布状态](publication.md) 为准。

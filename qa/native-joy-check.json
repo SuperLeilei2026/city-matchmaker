@@ -49,5 +49,5 @@
   "trial_plan_matches_shared_config": true,
   "number_tolerance": 0.0001,
   "number_note": "OctoScript f32 versus JavaScript f64; same weights/evidence/range formulas, float-only tolerance",
-  "evidence_directory": "/var/folders/5_/qx8p5th144s5l5b2fswg2w5c0000gn/T/city-native-joy-5ofwu851"
+  "evidence_directory": "isolated system temporary directory; absolute path omitted from the public report"
 }

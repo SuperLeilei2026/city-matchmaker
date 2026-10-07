@@ -34,7 +34,7 @@ OCTO_HUB=/path/to/hub \
 
 脚本先校验 `bundle/`，再打开真正的原生窗口；本地撮合无需 API Key 或 Node.js。平台工具安装见 [官方 QUICKSTART](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/docs/QUICKSTART.md)，已测工具版本和平台见 [runtime-lock.md](docs/runtime-lock.md)。
 
-`card-host` 是官方参考宿主，适合开发、试玩和原生验收，不提供模型服务。完整 OctoSense Shell 中安装与应用 Agent 的真实模型调用另行验证，不能用前者代替。应用模型权限由宿主处理，密钥不进入本项目。
+`card-host` 是官方参考宿主，适合开发、试玩和原生验收，不提供模型服务。2026-10-07 已在官方 OctoSense Desktop 完整 Shell 中，以隔离合成资料跑通一次 MiniMax-M3 提案、确认、保存与重启恢复；[证据与边界](qa/real-agent-e2e-v0.4/README.md)单独记录，不能用 `card-host` 或响应注入代替。应用模型权限由宿主处理，密钥不进入本项目。
 
 原生说明：[运行与验证](docs/octosense.md) · [需求与权限](BRIEF.md) · [原生截图](bundle/screenshots) · [初赛材料](docs/submission-checklist.md)。
 
@@ -55,7 +55,7 @@ OCTO_HUB=/path/to/hub \
 
 原生包实现城市浏览、两城收藏与比较、可选追问、可编辑画像、猫狗双视角、来源、试城计划、本地存档与旧版迁移。日常 SVG 是生活想象，不是实景照片或路线承诺。`main.splash` 是官方支持的 Makepad Script / Splash 入口；`page.card` 是另一条 L0 卡片路线，不是本项目的入口。
 
-应用 Agent 使用宿主 `octos.*` 服务提出受控修改，再由用户确认执行。当前 CM1 有效操作主要是新增气候避开项与明确拒绝城市；五维答案由本人按钮确认。提案不能改写城市数据、恢复已拒绝城市或撤销天气底线。真实模型完整成功链路仍待验收；临时响应注入测试只证明执行保护机制。
+应用 Agent 使用宿主 `octos.*` 服务提出受控修改，再由用户确认执行。当前 CM1 有效操作主要是新增气候避开项与明确拒绝城市；五维答案由本人按钮确认。提案不能改写城市数据、恢复已拒绝城市或撤销天气底线。一次隔离的 MiniMax-M3 完整成功链路已通过；Kimi、移动端、模型切换与更多故障场景仍未验证。临时响应注入测试只证明执行保护机制。
 
 本轮初赛以公开源码和可运行作品为据，[官方说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)明确无需等待 Hub 上架。**本项目未公开上架 App Hub**；本地检查通过不等于主办方审核通过。
 
@@ -68,11 +68,11 @@ OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_dis
 OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub python3 tools/native_agent_smoke.py
 ```
 
-v0.4 原生真实操作脚本为 `tools/native_discovery_smoke.py`，Agent 执行保护检查为 `tools/native_agent_smoke.py`。测试检查真实窗口、存档与迁移、失败状态、明确排除和编辑返回；公开截图均用合成资料。已经验证的是 Apple silicon macOS，未据此声称手机或其他平台已验证。旧 `native_joy_smoke.py` 与影片对应 v0.3 历史流程。
+v0.4 原生真实操作检查为 `tools/native_discovery_smoke.py`，Agent 执行保护检查为 `tools/native_agent_smoke.py`。测试检查真实窗口、存档与迁移、失败状态、明确排除和编辑返回；公开截图均用合成资料。已经验证的是 Apple silicon macOS，未据此声称手机或其他平台已验证。当前 2 分 38 秒原生演示由 `tools/record-native-demo.py` 驱动真实 UI 完成，明确显示 `card-host` 中 Agent 不可用的失败状态；它不是模型成功证据。旧 `native_joy_smoke.py` 与 v0.3 影片只保留作历史追溯。
 
 共享规则的补充测试为 `node --test tests/*.test.mjs`；原生与 JavaScript 对照测试需安装 Node.js 22+，应用本身的运行不需要。
 
-[原生极简流程验收报告](qa/native-discovery-check.json) · [Agent 协议验收报告](qa/native-agent-check.json) · [历史演示及范围](docs/demo.md)
+[原生极简流程验收报告](qa/native-discovery-check.json) · [Agent 协议保护报告](qa/native-agent-check.json) · [完整 Shell 真实 Agent 报告](qa/real-agent-e2e-v0.4/README.md) · [v0.4 演示与证据边界](docs/demo.md) · [v0.4 MP4](docs/demo-native-v0.4.mp4)
 
 这些验证证明流程能运行，不证明推荐准确率、传播效果或真实用户满意度。下一步需要目标用户实际体验，检验画像是否贴切、理由是否有用，以及第二轮是否更符合偏好。
 

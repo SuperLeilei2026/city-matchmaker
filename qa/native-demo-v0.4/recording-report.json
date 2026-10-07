@@ -1,0 +1,350 @@
+{
+  "recordedAt": "2026-10-06T16:48:37.288977+00:00",
+  "version": "0.4.0",
+  "kind": "real-hidden-card-host-frame-recording",
+  "productionMainSHA256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+  "syntheticInputsOnly": true,
+  "stateInjected": false,
+  "sourceInjected": false,
+  "userWindowOperated": false,
+  "emptyIsolatedStateAtLaunch": true,
+  "inputMechanism": "real pointer, text, and scroll events through the card-host remote UI",
+  "productionBundleCopiedWithoutSourceChanges": true,
+  "realModelSuccessVerified": false,
+  "agentUnavailableShownAsFailure": true,
+  "temporaryWorkspace": "isolated system temporary directory; absolute path omitted from the public report",
+  "port": 18167,
+  "gitCommit": "fcc9fe2eaca60474e924da106be0dfd67ac95245",
+  "runtime": {
+    "cardHost": "card-host",
+    "cardHostSHA256": "eda78da3921d1e8350558b47b1da3c4f9d4bded97b660997a94c0d929ceaab3e",
+    "hub": "hub",
+    "hubSHA256": "1ee0ec00bbac7acb361f95b152b5a9b5ae27f54f0dbebab8a227ec8f895ec1a1"
+  },
+  "passed": true,
+  "finalSyntheticState": {
+    "screen": 21,
+    "guide": "dog",
+    "joy": [
+      "",
+      "nature",
+      "",
+      "",
+      ""
+    ],
+    "likedCityIds": [
+      "chengdu",
+      "hangzhou"
+    ],
+    "browsedCityIds": [
+      "beijing",
+      "chengdu",
+      "guangzhou",
+      "hangzhou"
+    ],
+    "comparisonDimensionState": -3
+  },
+  "uiFlowPassed": true,
+  "video": {
+    "width": 920,
+    "nativeHeight": 1640,
+    "height": 1850,
+    "duration": 158.0,
+    "captureDuration": 158.003205,
+    "fps": 25,
+    "capturedFrames": 790,
+    "requestedCaptureFPS": 5,
+    "bytes": 2745673,
+    "sha256": "b97999d8dc656131864f8bd0b1e13b0ffad3db7938e02e328e47875b3fb5067a",
+    "codec": "h264",
+    "pixelFormat": "yuv420p",
+    "encodedFrameRate": "25/1",
+    "encodedFrames": 3950,
+    "fullDecodePassed": true,
+    "fullDecodeErrorOutput": ""
+  },
+  "productionMainStillCurrent": true,
+  "productionBundleModifiedByRecording": false,
+  "chapters": [
+    {
+      "start": 0.0009821670000000893,
+      "title": "打开就看城市",
+      "detail": "独立 card-host、空白存档；先看一种日常，不先填问卷。"
+    },
+    {
+      "start": 8.177022874999999,
+      "title": "“下一座”只是继续浏览",
+      "detail": "路过不会拒绝城市，也不会暗中补写五维偏好。"
+    },
+    {
+      "start": 17.1685115,
+      "title": "留下第一座",
+      "detail": "收藏只表示值得继续了解；应用自动带到下一张城市卡。"
+    },
+    {
+      "start": 26.169865375,
+      "title": "先看一眼已经留下的城市",
+      "detail": "还差一座时，不硬给结论；可以随时继续逛。"
+    },
+    {
+      "start": 34.176775207999995,
+      "title": "继续浏览",
+      "detail": "回到刚才那张卡，收藏、路过记录和空白偏好都保留。"
+    },
+    {
+      "start": 43.178092291999995,
+      "title": "再看一种日常",
+      "detail": "先比较吸引力与代价；“下一座”仍不等于拒绝。"
+    },
+    {
+      "start": 51.162428833,
+      "title": "留下第二座，直接比较",
+      "detail": "先并排看自己留下的两种生活，不替你宣布唯一赢家。"
+    },
+    {
+      "start": 64.176579167,
+      "title": "拿不准时，才补一问",
+      "detail": "问题来自两城已有的可比较差异；这一题可以跳过。"
+    },
+    {
+      "start": 73.172353083,
+      "title": "回答只补一项明确偏好",
+      "detail": "两座收藏保持原样；界面说明现有证据能否拉开差异。"
+    },
+    {
+      "start": 83.325655625,
+      "title": "按需打开城市细节",
+      "detail": "详情仍同时呈现吸引力、代价和没有证据的条件。"
+    },
+    {
+      "start": 91.315370542,
+      "title": "来源与未知项一起展示",
+      "detail": "公开来源支持的是线索，不是喜欢概率、岗位承诺或通勤证明。"
+    },
+    {
+      "start": 112.47381299999999,
+      "title": "Agent 不可用，就明确失败",
+      "detail": "card-host 没有模型服务；没有伪造回复，也没有修改存档。"
+    },
+    {
+      "start": 127.172143208,
+      "title": "资料是按需入口",
+      "detail": "只记录刚才亲自回答的一项；其余继续显示“未确认，不代你猜”。"
+    },
+    {
+      "start": 140.155279792,
+      "title": "收藏没有变成人格推断",
+      "detail": "五维仍有四项留白；资料、收藏与城市事实各自有清楚边界。"
+    },
+    {
+      "start": 149.755857833,
+      "title": "v0.4 原生主线完成",
+      "detail": "真实 UI 完成浏览、收藏、比较、追问、来源、资料和失败处理。"
+    }
+  ],
+  "events": [
+    {
+      "time": 0.0057192500000000646,
+      "name": "opened_on_city_card_without_questionnaire",
+      "cityName": "北京"
+    },
+    {
+      "time": 8.177099083,
+      "name": "next_preserved_blank_profile",
+      "cityId": "chengdu"
+    },
+    {
+      "time": 17.16855825,
+      "name": "first_city_saved",
+      "cityId": "chengdu",
+      "cityName": "成都"
+    },
+    {
+      "time": 34.176823917,
+      "name": "continued_browsing_after_first_save"
+    },
+    {
+      "time": 51.1625705,
+      "name": "second_city_saved_and_comparison_opened",
+      "cityId": "hangzhou",
+      "cityName": "杭州",
+      "pair": [
+        "chengdu",
+        "hangzhou"
+      ]
+    },
+    {
+      "time": 64.176653333,
+      "name": "optional_comparison_question_opened",
+      "dimensionId": "recovery",
+      "question": "累了一周，你最想怎样把自己恢复过来？"
+    },
+    {
+      "time": 73.172385875,
+      "name": "optional_question_answered",
+      "dimensionId": "recovery",
+      "answerId": "nature"
+    },
+    {
+      "time": 83.325683292,
+      "name": "opened_detail_for_saved_city",
+      "cityId": "chengdu"
+    },
+    {
+      "time": 91.31540125,
+      "name": "sources_opened_in_real_ui",
+      "cityId": "chengdu"
+    },
+    {
+      "time": 112.473835542,
+      "name": "agent_unavailable_preserves_saved_state",
+      "cityId": "chengdu"
+    },
+    {
+      "time": 127.172173458,
+      "name": "profile_opened_on_demand",
+      "confirmedDimension": "recovery"
+    }
+  ],
+  "uiOperations": [
+    {
+      "time": 8.176116083,
+      "kind": "pointerClick",
+      "target": "下一座 →"
+    },
+    {
+      "time": 17.168022083,
+      "kind": "pointerClick",
+      "target": "留着看看 ♡"
+    },
+    {
+      "time": 26.169407500000002,
+      "kind": "pointerClick",
+      "target": "已留 1 座"
+    },
+    {
+      "time": 34.176183208,
+      "kind": "pointerClick",
+      "target": "继续逛 →"
+    },
+    {
+      "time": 43.177586874999996,
+      "kind": "pointerClick",
+      "target": "下一座 →"
+    },
+    {
+      "time": 51.161942792,
+      "kind": "pointerClick",
+      "target": "留着看看 ♡"
+    },
+    {
+      "time": 64.176144833,
+      "kind": "pointerClick",
+      "target": "我还拿不准"
+    },
+    {
+      "time": 73.172028958,
+      "kind": "pointerClick",
+      "target": "到水边、树下走走"
+    },
+    {
+      "time": 73.324457458,
+      "kind": "scroll",
+      "deltaY": 260
+    },
+    {
+      "time": 83.16178195799999,
+      "kind": "scrollToTop"
+    },
+    {
+      "time": 83.324189417,
+      "kind": "pointerClick",
+      "target": "了解成都"
+    },
+    {
+      "time": 91.16358629199999,
+      "kind": "pointerClick",
+      "target": "查看 / 收起公开依据"
+    },
+    {
+      "time": 91.315365458,
+      "kind": "scroll",
+      "deltaY": 140
+    },
+    {
+      "time": 103.328907417,
+      "kind": "pointerClick",
+      "target": "用一句话请 Agent 帮忙"
+    },
+    {
+      "time": 107.313539083,
+      "kind": "pointerClick",
+      "target": "我想调整的是…"
+    },
+    {
+      "time": 107.4718635,
+      "kind": "textInput",
+      "characterCount": 10
+    },
+    {
+      "time": 112.32189125,
+      "kind": "pointerClick",
+      "target": "让 Agent 提出修改"
+    },
+    {
+      "time": 112.471872917,
+      "kind": "scroll",
+      "deltaY": 120
+    },
+    {
+      "time": 125.17189775,
+      "kind": "pointerClick",
+      "target": "← 回到刚才"
+    },
+    {
+      "time": 127.17188762500001,
+      "kind": "pointerClick",
+      "target": "资料"
+    },
+    {
+      "time": 140.155270458,
+      "kind": "scroll",
+      "deltaY": 260
+    },
+    {
+      "time": 149.612471208,
+      "kind": "pointerClick",
+      "target": "回到刚才"
+    },
+    {
+      "time": 149.755512542,
+      "kind": "scrollToTop"
+    }
+  ],
+  "captureErrors": [],
+  "uiOperationCounts": {
+    "pointerClick": 16,
+    "scroll": 4,
+    "scrollToTop": 2,
+    "textInput": 1
+  },
+  "visualSpotCheck": {
+    "reviewedAt": "2026-10-06T16:53:19Z",
+    "timestampsSeconds": [
+      4,
+      56,
+      115,
+      132,
+      153
+    ],
+    "passed": true,
+    "checks": [
+      "native UI remains fully visible above the caption area",
+      "Chinese chapter captions are readable",
+      "two-city comparison is readable",
+      "Agent unavailable state is explicit and not presented as a model success",
+      "on-demand profile shows unconfirmed dimensions without guessing"
+    ]
+  },
+  "maxFrameGapSeconds": 0.23913137499999992
+}

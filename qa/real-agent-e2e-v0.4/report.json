@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-07",
+  "result": "passed",
+  "scope": "Official OctoSense Desktop full Shell; isolated synthetic app data; one real provider turn",
+  "desktop": {
+    "version": "0.1.0-beta.1",
+    "build": "20261003.095043",
+    "kernelVersion": "octos 2.0.3-rc.13",
+    "kernelRevision": "056173e",
+    "platform": "Apple silicon macOS"
+  },
+  "bundle": {
+    "id": "leilei-city-matchmaker",
+    "version": "0.4.0",
+    "mainSha256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+    "capabilities": [
+      "storage",
+      "octos.session.open",
+      "octos.turn.start",
+      "octos.turn.interrupt"
+    ],
+    "installedFrom": "local signed test catalog",
+    "publicAppHubSubmission": false
+  },
+  "provider": {
+    "family": "MiniMax China",
+    "model": "MiniMax-M3",
+    "realModelResponseObserved": true,
+    "credentialValueDisplayed": false,
+    "credentialValueRecordedInArtifacts": false
+  },
+  "syntheticInput": {
+    "text": "我很怕潮湿，也明确不考虑北京。",
+    "realUserProfileUsed": false
+  },
+  "proposal": {
+    "protocol": "CM1",
+    "addClimateAvoid": [
+      "humidity"
+    ],
+    "excludeCurrentCity": "beijing",
+    "modelSummary": "用户明确不考虑北京，并担心潮湿气候，追加湿度避开项并排除当前候选。",
+    "stateChangedBeforeConfirmation": false
+  },
+  "stateEvidence": {
+    "beforeConfirmation": {
+      "sha256": "b8a0525aa96bd057ff0b22ba4f16b8bddfe91f910b9908e88ee21d8cf8c93e85",
+      "revision": 0,
+      "climateAvoids": [],
+      "excludedCityIds": [],
+      "currentCityId": "beijing"
+    },
+    "afterConfirmation": {
+      "sha256": "1ff615f69c0f4c741113093ae70a0da651f273cbc10837e65c3f2eb3b6dfeb8e",
+      "revision": 1,
+      "climateAvoids": [
+        "humidity"
+      ],
+      "excludedCityIds": [
+        "beijing"
+      ],
+      "currentCityId": "chengdu",
+      "saveReadbackVerified": true
+    },
+    "afterShellRestartBeforeNewNavigation": {
+      "sha256": "1ff615f69c0f4c741113093ae70a0da651f273cbc10837e65c3f2eb3b6dfeb8e",
+      "sameAsAfterConfirmation": true,
+      "currentCityId": "chengdu"
+    },
+    "profileViewAfterRestart": {
+      "displayedClimateAvoid": "潮湿",
+      "note": "Opening the profile changes the saved screen field; domain fields remain revision 1, humidity avoided, Beijing excluded, and Chengdu current."
+    }
+  },
+  "checks": [
+    {
+      "name": "bundle installed and opened inside full Shell",
+      "passed": true
+    },
+    {
+      "name": "first-use Agent consent surfaced",
+      "passed": true
+    },
+    {
+      "name": "real MiniMax-M3 turn returned",
+      "passed": true
+    },
+    {
+      "name": "CM1 response parsed as a reviewable proposal",
+      "passed": true
+    },
+    {
+      "name": "proposal did not mutate saved state before confirmation",
+      "passed": true
+    },
+    {
+      "name": "confirmation applied only allowed fields and re-ranked",
+      "passed": true
+    },
+    {
+      "name": "save-readback status verified revision and fields",
+      "passed": true
+    },
+    {
+      "name": "Shell restart restored state",
+      "passed": true
+    }
+  ],
+  "privacyAndIsolation": {
+    "isolatedSyntheticAppData": true,
+    "realUserCityProfileReadOrModified": false,
+    "modelRequestSentToConfiguredProvider": true,
+    "modelRequestContainedSyntheticTextOnly": true,
+    "messagesSentToPeople": false,
+    "publicPublishingPerformed": false,
+    "secretValuesIncluded": false
+  },
+  "limitations": [
+    "One synthetic MiniMax-M3 turn on the macOS release was exercised.",
+    "Kimi, mobile platforms, provider failover, recommendation accuracy, and user satisfaction were not tested.",
+    "The app was installed from a local signed test catalog; this is not public App Hub review or publication."
+  ],
+  "screenshots": [
+    {
+      "file": "01-real-model-proposal.png",
+      "sha256": "911677beba4c6ef4ab6cef46e4342670aed1a907243b67ec45f8b8f0bbfdecb6"
+    },
+    {
+      "file": "02-confirmed-reorder.png",
+      "sha256": "baab123911ba9dec9cc5020486090f59a7b990c58791407b23750ea2017a8fcf"
+    },
+    {
+      "file": "03-restart-persistence.png",
+      "sha256": "febfc56c76d8759857ac06f428ecf3ed7831cb62a41e0dfec09e3f4ddf0595aa"
+    }
+  ]
+}
