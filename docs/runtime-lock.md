@@ -1,6 +1,12 @@
 # 原生宿主版本与真实 Agent 验收准备
 
-核验日期：2026-10-07。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入或本地签名目录当作真实模型成功。
+核验日期：2026-10-09。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入、本地测试目录或 GitHub Release 当作模型成功或 App Hub 审核。
+
+## 2026-10-09 GitHub 发布路线
+
+- 官方 App Flow 已更名并前进到 [`a90e7c620b31c75d6e71664f666430a6a10dc8dd`](https://github.com/OctoSense-org/OctoSense-App-Flow/commit/a90e7c620b31c75d6e71664f666430a6a10dc8dd)；App Hub 当前 head 为 [`97431789cce1847c493df87bb6b9c4b720d81f01`](https://github.com/OctoSense-org/OctoSense-App-Hub/commit/97431789cce1847c493df87bb6b9c4b720d81f01)。当前[提交规范](https://github.com/OctoSense-org/OctoSense-App-Hub/blob/97431789cce1847c493df87bb6b9c4b720d81f01/docs/SUBMITTING.md)已将新应用默认路线改为 GitHub publisher provenance；不要求开发者私钥。
+- 仓库已按官方 `tools/octo publish-github` 输出加入 `.github/workflows/publish-app.yml`，固定经 App Flow 审阅的 App Hub 工具提交 `655114c4943cd2490daaefa2173e7b5aaa20669f`；并以 `.gitattributes` 的 `bundle/** -text` 防止跨平台换行改变 bundle 字节。Tag 推送后，工作流才会构建工具、检查源码、生成 GitHub attestation 与 `app.bundle.pack.json`。工作流成功仍不是 Hub 审核或上架。
+- 下述 2026-10-07 的 `78dfda5` unsigned gate 是开发期历史证据，不是 GitHub release pack 验证。最终证据必须下载 Release pack，并用当前 `hub publisher-unpack`／`publisher-verify` 复核。
 
 ## 2026-10-07 当前官方基线
 

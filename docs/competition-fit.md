@@ -6,7 +6,7 @@
 
 初赛主交付是 `bundle/` 中的 OctoScript 应用，入口 `bundle/main.splash`。真实原生截图、运行说明与验收报告为主要证据；Web 仅作辅助研究。
 
-技术路径依据官方 [App Flow](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/README.zh-CN.md#设计流程) 的 script-app。该入口由 Makepad Script/Splash 运行，与 `page.card` 的 L0 路径不同。源码初赛和 App Hub 签名上架分开；此前核对的 [赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)允许按公开源码和可运行作品评审。本次迭代不宣称重新核验了赛程或评审结果。
+技术路径依据官方 [App Flow](https://github.com/OctoSense-org/OctoSense-App-Flow/blob/a90e7c620b31c75d6e71664f666430a6a10dc8dd/README.zh-CN.md) 的 script-app。该入口由 Makepad Script/Splash 运行，与 `page.card` 的 L0 路径不同。源码比赛提交与 App Hub 上架分开；固定版[赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/0db87b582438f0f01534435b8537e8c89bcd303d/docs/app-hub-submission.md)允许按公开源码和可运行作品评审。本次迭代不把仓库登记写成晋级或评审结果。
 
 ## 产品定位
 

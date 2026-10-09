@@ -36,7 +36,7 @@ python3 tools/build_bundle.py
 /path/to/hub check bundle --allow-unsigned
 ```
 
-每次修改包都需重新 stamp/check；公开签名包修改后也要重签。启动器默认使用独立 `.local-state/native` 保存进度，可通过 `CITY_NATIVE_STATE` 指定其他本机目录。私钥、个人状态和模型密钥不进入仓库。
+每次修改开发包都需重新 stamp/check。最终发布由仓库中的 GitHub provenance 工作流在固定 Tag 上生成 attested release pack；不要把生成后的封存 manifest 覆盖回开发源码。启动器默认使用独立 `.local-state/native` 保存进度，可通过 `CITY_NATIVE_STATE` 指定其他本机目录。个人状态和模型密钥不进入仓库。
 
 ## 应用 Agent
 

@@ -8,7 +8,7 @@
 
 先看看城市里的一种生活。喜欢就留下，翻过也没关系。留下两座以后，再一起看看各自的吸引力与代价；拿不准时，只补一个有用的问题。
 
-本项目的参赛作品是 **OctoSense 原生脚本应用**：`bundle/main.splash`，采用官方 [script-app 流程](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/flows/script-app/FLOW.md)。无需用浏览器承载界面，也无需编写或编译本应用的 Rust 代码。
+本项目的参赛作品是 **OctoSense 原生脚本应用**：`bundle/main.splash`，采用官方 [script-app 流程](https://github.com/OctoSense-org/OctoSense-App-Flow/blob/a90e7c620b31c75d6e71664f666430a6a10dc8dd/flows/script-app/FLOW.md)。无需用浏览器承载界面，也无需编写或编译本应用的 Rust 代码。
 
 当前版本 **v0.4.0**，聚焦 AI 应用、产品、设计与落地。它帮助你找到值得了解和试住的城市，不预测幸福概率，也不保证就业结果。公开仓库与版本标签状态见 [publication.md](docs/publication.md)。
 
@@ -32,7 +32,7 @@ OCTO_HUB=/path/to/hub \
 ./tools/run-native.sh
 ```
 
-脚本先校验 `bundle/`，再打开真正的原生窗口；本地撮合无需 API Key 或 Node.js。平台工具安装见 [官方 QUICKSTART](https://github.com/OctoSense-org/OctoScript-App-Design-Flow/blob/main/docs/QUICKSTART.md)，已测工具版本和平台见 [runtime-lock.md](docs/runtime-lock.md)。
+脚本先校验 `bundle/`，再打开真正的原生窗口；本地撮合无需 API Key 或 Node.js。平台工具安装见 [官方 QUICKSTART](https://github.com/OctoSense-org/OctoSense-App-Flow/blob/a90e7c620b31c75d6e71664f666430a6a10dc8dd/docs/QUICKSTART.md)，已测工具版本和平台见 [runtime-lock.md](docs/runtime-lock.md)。
 
 `card-host` 是官方参考宿主，适合开发、试玩和原生验收，不提供模型服务。2026-10-07 已在官方 OctoSense Desktop 完整 Shell 中，以隔离合成资料跑通一次 MiniMax-M3 提案、确认、保存与重启恢复；[证据与边界](qa/real-agent-e2e-v0.4/README.md)单独记录，不能用 `card-host` 或响应注入代替。应用模型权限由宿主处理，密钥不进入本项目。
 
@@ -57,7 +57,7 @@ OCTO_HUB=/path/to/hub \
 
 应用 Agent 使用宿主 `octos.*` 服务提出受控修改，再由用户确认执行。当前 CM1 有效操作主要是新增气候避开项与明确拒绝城市；五维答案由本人按钮确认。提案不能改写城市数据、恢复已拒绝城市或撤销天气底线。一次隔离的 MiniMax-M3 完整成功链路已通过；Kimi、移动端、模型切换与更多故障场景仍未验证。临时响应注入测试只证明执行保护机制。
 
-本轮初赛以公开源码和可运行作品为据，[官方说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/main/docs/app-hub-submission.md)明确无需等待 Hub 上架。**本项目未公开上架 App Hub**；本地检查通过不等于主办方审核通过。
+本轮初赛以公开源码和可运行作品为据，[官方说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/0db87b582438f0f01534435b8537e8c89bcd303d/docs/app-hub-submission.md)明确无需等待 Hub 上架。**本项目尚未获 App Hub 审核上架**；开发包检查、GitHub Release 与提交 Issue 都不等于维护者批准。v0.4 使用官方 GitHub provenance 工作流生成发布证明，不使用开发者私钥。
 
 ## 验证与演示
 
