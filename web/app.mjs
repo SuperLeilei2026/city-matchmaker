@@ -1,108 +1,797 @@
-import { rankCities, normalizeProfile, buildPortrait, JOY_CONFIG, buildTrialPlan } from '/core/matcher.mjs';
-import { getNextQuestion, applyAnswer, applyFeedback } from '/core/questions.mjs';
+import { rankDepartureCities, summarizeDepartureProfile, DEPARTURE_OPTIONS, RENT_BENCHMARKS } from '/core/departure.mjs';
+import { buildDuelRounds, analyzeAssumption, buildVerificationTasks, localDecisionQuestion, normalizeVote } from '/core/duel.mjs';
+import { EXPERIENCE_STAGES, freshExperienceState, migrateExperienceState, resetDecisionState } from '/core/experience-state.mjs';
 
-const KEY='city-matchmaker-v1',BACKUP=KEY+'-backup';
-const freshProfile=()=>normalizeProfile({guide:'dog',nickname:'',school:'',major:'',mbti:'',stage:'graduating',industry:'tech'});
-const freshState=()=>({version:2,route:'profile',page:0,round:1,profile:freshProfile(),firstCityId:null,firstProfile:null,selectedCityId:null,answerLog:[],feedbackReason:null,feedbackPicking:null});
-let state=freshState(),cities=[],storageAvailable=true,toastTimer,shareURL=null,dialogOpener=null;
-const main=document.getElementById('main');
-const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeURL=s=>{try{const u=new URL(s);return ['https:','http:'].includes(u.protocol)?u.href:'#';}catch{return '#';}};
-const dimensionNames=Object.fromEntries(JOY_CONFIG.dimensions.map(d=>[d.id,d.label]));
-const climateNames={heat:'持续炎热',cold:'冬天太冷',humidity:'潮湿闷热'};
-const feedNames={heart:'这里让我心动',unbearable:'有一点我受不了',unsure:'还没感觉','not-this-city':'这座不考虑'};
-const guideName=()=>JOY_CONFIG.guides[state.profile.guide].label;
-const dog=(cat,dog)=>state.profile.guide==='dog'?dog:cat;
-function readState(){try{const raw=localStorage.getItem(KEY),s=JSON.parse(raw||'null');if(!s?.profile||![1,2].includes(s.version))return;
- const p=normalizeProfile(s.profile);for(const k of ['nickname','school','major','mbti','currentCity','homeCity'])p[k]=typeof p[k]==='string'?p[k].slice(0,80):'';
- if(s.version===1){state={...freshState(),profile:p};try{localStorage.setItem(BACKUP,raw);}catch{storageAvailable=false;}return;}
- state={...freshState(),...s,profile:p,route:['profile','portrait','first','question','result'].includes(s.route)?s.route:'profile',page:Number.isInteger(s.page)?Math.min(6,Math.max(0,s.page)):0,answerLog:Array.isArray(s.answerLog)?s.answerLog:[],feedbackPicking:null};
- }catch{storageAvailable=false;}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{storageAvailable=false;}}
-function toast(text){const el=document.getElementById('toast');el.textContent=text;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,3800);}
-function invalidate(){state.firstCityId=null;state.firstProfile=null;state.selectedCityId=null;state.round=1;state.answerLog=[];state.feedbackReason=null;state.feedbackPicking=null;}
-function updateField(key,value){state.profile[key]=value;if(!['nickname','school','major','mbti','stage'].includes(key))invalidate();save();}
-const input=(key,label,placeholder='',type='text')=>`<label class="field"><span>${label}<span class="optional">选填</span></span><input type="${type}" data-field="${key}" value="${escape(state.profile[key])}" ${type==='number'?'min="1" max="100000"':'maxlength="60"'} placeholder="${escape(placeholder)}" autocomplete="off"></label>`;
-function chips(key,items,multiple=false){return `<div class="chips" role="group" aria-label="${escape(key)}">${Object.entries(items).map(([id,label])=>`<button class="select-chip" data-action="${multiple?'multi':'choose'}" data-field="${key}" data-value="${escape(id)}" aria-pressed="${multiple?state.profile[key].includes(id):String(state.profile[key])===id}">${escape(label)}</button>`).join('')}</div>`;}
-function guidePane(){const route=state.route;const titles={profile:'找一座，<br>让你愿意<br><em>留下的城市。</em>',portrait:'城市还没定，<br><em>想过的日子<br>先清楚一点。</em>',first:'这座城市，<br><em>你想认识吗？</em>',question:'心动也好，<br>犹豫也好，<br><em>都很有用。</em>',result:'下一站，<br><em>有点期待。</em>'};return `<aside class="guide-pane"><div class="eyebrow">JOY CITY / 毕业第一站</div><h1>${titles[route]}</h1><p class="intro">给想做 AI 产品的你。<br>从一周怎么过，找到想去的城。</p><div class="guide-chooser" role="group" aria-label="选择推荐视角"><button class="guide-choice" data-action="guide" data-value="dog" aria-pressed="${state.profile.guide==='dog'}">ENFP 小狗<small>生活心动</small></button><button class="guide-choice" data-action="guide" data-value="cat" aria-pressed="${state.profile.guide==='cat'}">INTP 小猫<small>职业发展</small></button></div><div class="guide-portrait asset-ready"><img src="/assets/guide-${state.profile.guide}.png" alt="${dog('拿着车票的黑白德文猫','拿着车票的活泼线条小狗')}" width="320" height="320"></div><div class="guide-note"><span class="note-sign">“</span><div>${dog('我先看你想怎样做 AI，再把生活的代价摆出来。','我先看看，什么样的普通一天会让你开心。')}</div></div><div class="guide-name">${guideName()} / 你的城市介绍人</div><div class="waypoints">${['选日常','看画像','认识城市','收好车票'].map((x,i)=>`<span class="${(route==='profile'?0:route==='portrait'?1:route==='result'?3:2)===i?'is-current':''}"><i>${i+1}</i>${x}</span>`).join('')}</div></aside>`;}
-function folder(content){return `<section class="file-folder" aria-label="城市匹配"><div class="folder-tabs"><span class="active">${({profile:'一份生活意向',portrait:'我理解的你',first:'第一次介绍',question:'再确认一件事',result:'你的城市车票'})[state.route]}</span><span>JOY CITY</span></div><div class="form-sheet">${content}</div></section>`;}
-function choices(items,action,selected,dimension=''){return `<div class="choice-list scene-choices">${items.map((o,i)=>`<button class="choice-card" data-action="${action}" data-value="${o.id}" data-dimension="${dimension}" aria-pressed="${selected===o.id}"><span class="option-number">0${i+1}</span><span class="option-copy"><b>${escape(o.label)}</b>${o.description?`<span>${escape(o.description)}</span>`:''}</span><span class="option-mark" aria-hidden="true">${selected===o.id?'✓':'↗'}</span></button>`).join('')}</div>`;}
-function profilePage(){const p=state.profile,page=state.page,d=JOY_CONFIG.dimensions[page-1];let body='';
- if(page===0)body=`<div class="welcome-label">给 AI 行业新人的城市介绍所</div><h2>先说说，你想做什么。</h2><p class="sheet-intro">接下来选 5 个生活场景，再看看哪座城市值得认识。没有标准答案，也不用填满。</p>${choices(JOY_CONFIG.aiRoles,'role',p.aiRole)}<details class="optional-details"><summary>愿意的话，再介绍一下自己<span>选填</span></summary><div class="details-inner">${input('nickname','怎么称呼你','一个昵称就好')}<div class="fields-two">${input('school','毕业／在读院校','不影响城市排序')}${input('major','所学专业','不影响城市排序')}</div>${input('mbti','你的 MBTI','不知道也没关系')}<p class="fine-print">这些只用于介绍自己。我们不会按学校、年龄或人格标签给你分配城市。</p></div></details>`;
- else if(d)body=`<div class="scene-caption"><span>SCENE 0${page}</span><span>${escape(d.label)}</span></div><h2>${escape(d.question)}</h2><p class="sheet-intro">${escape(d.why)}</p>${choices(d.options,'scene',p.joy[d.id],d.id)}<div class="selected-echo" aria-live="polite">${p.joy[d.id]?`记下了：${escape(d.options.find(o=>o.id===p.joy[d.id]).portrait)}。`:'按你现在的生活来选，之后可以改。'}</div>`;
- else body=`<div class="scene-caption"><span>ONE LAST THING</span><span>天气与现实条件</span></div><h2>有些天气，会影响一整天。</h2><p class="sheet-intro">你想尽量避开哪些？可以多选，也可以都不选。</p>${chips('climateAvoids',climateNames,true)}${p.climateAvoids.length?`<div class="climate-limit"><span>对你来说，这是…</span>${chips('hardClimate',{'false':'尽量避开','true':'明确不能接受'})}</div>`:''}<details class="optional-details"><summary>已经想好房租和通勤了？<span>选填</span></summary><div class="details-inner"><div class="fields-two">${input('rentBudget','每月房租上限 / 元','如：4000','number')}${input('maxCommuteMinutes','单程通勤上限 / 分钟','如：30','number')}</div><div class="field"><span>居住方式</span>${chips('housingType',{'unknown':'还没定','primary-shared':'合租主卧','alone':'整租独住','either':'都可以'})}</div>${input('homeCity','重要的人所在城市','仅记录，还需核验实际往返')}<p class="fine-print">记录为待核验条件。现有城市资料不能保证具体房源和通勤满足要求。</p></div></details>`;
- return folder(`<div class="sheet-meta"><span>${page===0?'START WITH YOU':`LIFE FILE / 0${page}`}</span><span class="stamp">只记你确认的</span></div><div class="scene-progress" aria-label="第 ${page+1} 步，共 7 步">${Array.from({length:7},(_,i)=>`<i class="${i<=page?'done':''}"></i>`).join('')}</div>${body}<div class="form-actions"><button class="quiet-button" data-action="${page?'previous-profile':'preview-portrait'}">${page?'上一个':'直接看看画像'}</button><button class="primary" data-action="next-profile">${page===6?'看看我的生活画像':'继续'} <span aria-hidden="true">→</span></button></div><div class="step-footer"><span>${page+1} / 7 · 随时可以修改</span><span>${storageAvailable?'仅在本机保存':'暂时无法保存进度'}</span></div>`);}
-function portraitPage(){const p=buildPortrait(state.profile);return folder(`<div class="sheet-meta"><span>YOUR LIFE, IN WORDS</span><span class="stamp">请你过目</span></div><h2>${state.profile.nickname?escape(state.profile.nickname)+'，':''}这是你想过的日子吗？</h2><p class="sheet-intro">每一句都来自你的选择。哪里不对，点开就能改。</p><div class="portrait-lines">${JOY_CONFIG.dimensions.map((d,i)=>{const line=p.lines.find(x=>x.dimension===d.id);return `<button data-action="edit-dimension" data-value="${i+1}"><span>${d.label}</span><b>${escape(line?.text||'还没想好，先留空')}</b><i aria-hidden="true">↗</i></button>`;}).join('')}</div>${state.profile.climateAvoids.length?`<p class="portrait-climate">${state.profile.hardClimate?'明确不能接受':'希望尽量避开'}：${state.profile.climateAvoids.map(k=>climateNames[k]).join('、')} <button class="quiet-button" data-action="edit-dimension" data-value="6">修改</button></p>`:''}<div class="portrait-footnote">${escape(p.caveat)}</div><button class="primary full" data-action="confirm-portrait">${p.items.length?'是的，介绍一座城市给我':'先认识城市，再想想自己'} <span aria-hidden="true">→</span></button><button class="quiet-button" data-action="edit-dimension" data-value="0">补充 AI 方向与背景</button>`);}
-function currentQuestion(){return getNextQuestion(state.profile,rankCities(state.profile,cities),2);}
-function questionPage(){const q=currentQuestion();return folder(`<div class="sheet-meta"><span>A LITTLE CLOSER / 第二轮</span><span class="stamp">根据刚才的反馈</span></div><div class="question-count">${escape(feedNames[state.feedbackReason]||'再比较一下')}</div><h2>${escape(q.title)}</h2><p class="sheet-intro">${escape(q.why)}</p>${choices(q.options,'answer',null)}<div class="form-actions"><button class="quiet-button" data-action="back-first">回去看看城市</button><button class="quiet-button" data-action="skip-question">先保留现在的想法 →</button></div>`);}
-function rankingNotice(r){if(!r.ranked.length)return '';const top=r.ranked[0];if(top.score===0)return `<div class="result-limit">目前还不足以替你排先后。先认识一座，再用你的反应缩小范围。</div>`;return r.ambiguous?`<p class="ranking-note">还有相近候选。这里是先了解的顺序，不是幸福概率。</p>`:'';}
-function relevantReasons(result){return [...(result.reasons||[])].sort((a,b)=>(result.components.find(x=>x.key===b.key)?.weight||0)-(result.components.find(x=>x.key===a.key)?.weight||0)).slice(0,3);}
-function ticket(r,final=false){const c=r.city,reasons=relevantReasons(r),portrait=c.joyPortrait;const preferred=new Set(reasons.map(x=>x.dimension));const gaps=JOY_CONFIG.dimensions.filter(d=>state.profile.joy[d.id]&&!preferred.has(d.id)&&!r.reasons.some(x=>x.dimension===d.id)).map(d=>d.label);
- return `<article class="city-ticket" aria-label="${escape(c.name)}城市车票"><div class="ticket-head"><div class="ticket-kicker"><span>${final?'YOUR JOY CITY / 候选目的地':'MEET THE CITY / 第一次介绍'}</span><span>${dog('职业发展视角','生活心动视角')}</span></div><div class="city-display"><div><h3>${escape(c.name)}</h3><div class="english">${escape(c.english)}</div></div><div class="ticket-number">${String(cities.findIndex(x=>x.id===c.id)+1).padStart(2,'0')}</div></div><p class="city-tagline">${escape(portrait?.invitation||c.tagline)}</p></div><div class="ticket-body"><div class="ticket-section-title">你可能会喜欢的部分 <small>公开资料上的整理判断</small></div>${reasons.length?reasons.map((r,i)=>`<div class="reason-row"><span class="reason-index">0${i+1}</span><div><span class="reason-preference">${escape(dimensionNames[r.dimension]||'天气偏好')}</span><p>${escape((r.key?.startsWith('climate:')?c.featureEvidence?.[r.key.slice(8)]?.note:c.joySignals?.[r.key]?.note)||r.text)}</p></div></div>`).join(''):`<p class="sheet-intro">你的偏好已记下，但现有资料还不足以支持匹配。可以先看城市资料，再补一项你在意的事。</p>`}<div class="tradeoff"><b>喜欢它，也得接受这一面</b>${escape(portrait?.frictions?.[0]||r.tradeoffs?.[0]||'喜欢的资源是否在日常可达范围，还得看工作地和住处。')}</div>${gaps.length?`<p class="gap-note">${gaps.join('、')}还无法按城市判断，暂时没有用于拉开差距。</p>`:''}<details class="evidence-details"><summary>哪些条件还需要确认</summary><ul>${(r.unknowns||[]).map(x=>`<li>${escape(x)}</li>`).join('')}</ul></details><button class="evidence-toggle" data-action="evidence" data-value="${escape(c.id)}">翻到背面，看看依据 ↗</button></div></article>`;}
-function emptyPage(r){return folder(`<div class="sheet-meta">NO RUSH / 不用硬选</div><h2>这轮先不硬凑一座城市。</h2><p class="sheet-intro">保留你已经说清楚的底线。可以改偏好，也可以重新考虑之前排除的城市。</p>${r.excluded.map(x=>`<div class="excluded-row"><span>${escape(x.city.name)} · 已排除</span><button class="quiet-button" data-action="restore-city" data-value="${x.city.id}">重新考虑</button></div>`).join('')}<button class="primary full" data-action="edit-profile">回到生活画像</button>`);}
-function firstPage(){const ranking=rankCities(state.profile,cities),r=ranking.ranked.find(x=>x.city.id===state.firstCityId)||ranking.ranked[0];if(!r)return emptyPage(ranking);state.firstCityId=r.city.id;if(!state.firstProfile)state.firstProfile=structuredClone(state.profile);save();return folder(`<div class="sheet-meta"><span>FIRST DATE / 城市初见</span><span class="stamp">先听听你的反应</span></div><h2>我想介绍你认识${escape(r.city.name)}。</h2>${rankingNotice(ranking)}${ticket(r)}<div class="field-title">想象在这里过一周，你的反应是？</div><div class="feedback-grid">${Object.entries(feedNames).map(([id,label])=>`<button class="${id==='heart'?'feedback-like':''}" data-action="feedback" data-value="${id}" data-city="${r.city.id}">${label} <span aria-hidden="true">${id==='heart'?'♡':'↗'}</span></button>`).join('')}</div>${state.feedbackPicking?`<div class="feedback-followup" tabindex="-1"><b>${state.feedbackPicking==='heart'?'让你心动的是哪一部分？':'你最在意的是哪一部分？'}</b><div class="chips">${[...JOY_CONFIG.dimensions,{id:'climate',label:'天气'}].map(d=>`<button class="select-chip" data-action="feedback-dimension" data-value="${d.id}" data-city="${r.city.id}">${d.label}</button>`).join('')}</div></div>`:'<p class="fine-print">反馈后只再确认一件事，看看推荐会怎样变化。</p>'}`);}
-function changeExplanation(top){if(!state.firstProfile)return '按你现在确认的偏好，先了解这里。';const before={...state.firstProfile,guide:state.profile.guide};const changed=JOY_CONFIG.dimensions.filter(d=>before.joy?.[d.id]!==state.profile.joy[d.id]).map(d=>d.label);const prev=cities.find(c=>c.id===state.firstCityId);const rejected=state.profile.excludedCityIds.includes(state.firstCityId);return `${rejected&&prev?`你明确不考虑${prev.name}，已把它移出。`:changed.length?`你重新确认了${changed.join('、')}。`:'你保留了原来的生活偏好。'}${prev?.id===top.city.id?`这轮仍先看${top.city.name}，现有依据没有把它换下去。`:`这轮先了解${top.city.name}。`}`;}
-function resultPage(){const ranking=rankCities(state.profile,cities);if(!ranking.ranked.length)return emptyPage(ranking);const top=ranking.ranked[0],r=ranking.ranked.find(x=>x.city.id===state.selectedCityId)||top;state.selectedCityId=r.city.id;save();const other=rankCities({...state.profile,guide:state.profile.guide==='dog'?'cat':'dog'},cities).ranked[0];return folder(`<div class="sheet-meta"><span>YOUR NEXT CHAPTER / 两轮之后</span><span class="stamp">留一点期待</span></div><h2>下一站，可以先去了解。</h2><div class="revision-note">${escape(changeExplanation(top))}</div>${rankingNotice(ranking)}${ticket(r,true)}<div class="field-title">另外两种可能，也放在这里</div><div class="shortlist">${ranking.ranked.slice(0,3).map((x,i)=>`<button data-action="select-city" data-value="${x.city.id}" aria-pressed="${r.city.id===x.city.id}"><span><b>${escape(x.city.name)}</b><small>${escape(x.city.joyPortrait?.invitation||x.city.tagline)}</small></span><span class="candidate-index">0${i+1}</span></button>`).join('')}</div><div class="other-lens"><span>${dog('如果把生活放在前面','如果把职业放在前面')}，${other?.city.id===top.city.id?'仍会先看':'会先看'}${escape(other?.city.name||'现有候选')}。</span><button class="quiet-button" data-action="guide" data-value="${state.profile.guide==='dog'?'cat':'dog'}">听听${dog('小狗','小猫')}怎么说 →</button></div><div class="share-actions"><button class="primary" data-action="share-card">收好我的城市车票 ↗</button><button class="secondary" data-action="copy-result">复制城市摘要</button></div><p class="privacy-note">只分享城市与生活关键词，个人资料留在本机。</p><div class="trial-plan"><div class="field-title">怎么知道，你会不会真的喜欢？</div>${buildTrialPlan(state.profile).map(x=>`<div><b>${escape(x.title)}</b><p>${escape(x.text)}</p></div>`).join('')}</div><div class="form-actions"><button class="quiet-button" data-action="edit-profile">再改改我的生活画像</button><button class="quiet-button" data-action="method">查看撮合规则</button></div>${ranking.excluded.length?`<details class="evidence-details"><summary>已经排除的城市</summary>${ranking.excluded.map(x=>`<div class="excluded-row"><span>${escape(x.city.name)}</span><button class="quiet-button" data-action="restore-city" data-value="${x.city.id}">重新考虑</button></div>`).join('')}</details>`:''}`);}
-function render({focus=false}={}){document.body.classList.toggle('guide-dog',state.profile.guide==='dog');document.body.dataset.route=state.route;main.innerHTML=`<div class="workbench">${guidePane()}${({profile:profilePage,portrait:portraitPage,first:firstPage,question:questionPage,result:resultPage})[state.route]()}</div>`;if(focus){const h=main.querySelector('.form-sheet h2');h?.setAttribute('tabindex','-1');h?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});}}
-function dialog(title,html){if(document.activeElement?.matches('button,a,input,select'))dialogOpener=document.activeElement;document.getElementById('dialog-title').textContent=title;document.getElementById('dialog-content').innerHTML=html;const d=document.getElementById('detail-dialog');if(!d.open)d.showModal();}
-function sourceHTML(c){return `<div class="source-card"><h3>${escape(c.name)}</h3><p>${escape(c.joyPortrait?.invitation||c.tagline)}</p>${c.sources.map(s=>`<p><a href="${escape(safeURL(s.url))}" target="_blank" rel="noopener noreferrer">${escape(s.title)}</a><br><small>${s.published?'发布：'+escape(s.published)+' · ':''}核对：${escape(s.checked)}</small></p>`).join('')}</div>`;}
-function showEvidence(id){const c=cities.find(x=>x.id===id);if(!c)return;const r=rankCities(state.profile,cities).ranked.find(x=>x.city.id===id);dialog(c.name+' · 车票背面',`<p>城市特点是公开资料上的整理判断。资源存在，不等于你每天都能用到，更不代表你一定喜欢。</p>${(r?.reasons||[]).map(x=>`<div class="source-card"><h3>${escape(dimensionNames[x.dimension]||'天气')}</h3><p>${escape(x.text)}</p><small>${escape(x.caveat||'整理判断，仍需亲自验证')}</small>${(x.sourceIds||[]).map(id=>c.sources.find(s=>s.id===id)).filter(Boolean).map(s=>`<p><a href="${escape(safeURL(s.url))}" target="_blank" rel="noopener noreferrer">${escape(s.title)}</a></p>`).join('')}</div>`).join('')}${sourceHTML(c)}`);}
-function showMethod(){dialog('这份城市介绍怎么来的',`<div class="method-flow"><div><strong>01 先写下你想过的日子</strong>5 个场景形成可修改的生活画像，每句话都来自明确选择。空白不会被猜成性格。</div><div><strong>02 同一份资料，两种侧重</strong>小狗优先看生活，小猫优先看 AI 职业期待；天气底线、明确拒绝和城市事实始终相同。</div><div><strong>03 反馈后，确认一个关键选择</strong>心动或不能接受的维度会触发追问。修改后的选择重新参与排序；保持原想法时，推荐也可能不变。</div><div><strong>04 把依据和空白一起交给你</strong>有来源的线索才用于比较。未知项不补成平均值。证据少会影响排序，我们会提示相近候选，避免把顺序冒充概率。</div></div><h3>两位介绍人的分量怎么分</h3><table class="weight-table"><thead><tr><th>维度</th><th>小狗</th><th>小猫</th></tr></thead><tbody>${JOY_CONFIG.dimensions.map(d=>`<tr><td>${d.label}</td><td>${JOY_CONFIG.weights.dog[d.id]*100}%</td><td>${JOY_CONFIG.weights.cat[d.id]*100}%</td></tr>`).join('')}</tbody></table><p>选了天气避开项后，天气占 20%，上述分量按比例缩至 80%。这是可审查的初版产品规则，尚未经过用户结果验证。</p><p>现有 ${cities.length} 城资料支持探索。关系质量、工作稳定性、个人可承受的变化、实际房源与通勤仍不能靠城市整体资料判断。AI 方向用于界定服务范围，暂时没有按具体岗位做就业概率匹配。</p><p>MBTI、年龄、学校和星座不参与排序。网页版使用透明规则，未调用大模型；原生参赛版的 Agent 接入状态单独记录。</p>`);}
-function showPrivacy(){dialog('你的资料留在哪里',`<p>资料只保存在这台设备的浏览器中，用于恢复进度。这个网页版没有把资料发送给远端模型。</p><p>分享卡和复制摘要只包含城市、公开城市介绍和所选生活关键词，不包含姓名、院校、年龄、预算、重要的人位置或自由文本。</p><p>升级时保留旧资料备份；清除会连同备份一起删除。</p><button class="secondary" data-action="confirm-reset">清除本机资料</button>`);}
-function wrapCanvas(ctx,text,x,y,maxWidth,lineHeight){let line='';for(const char of text){if(ctx.measureText(line+char).width>maxWidth&&line){ctx.fillText(line,x,y);line=char;y+=lineHeight;}else line+=char;}if(line)ctx.fillText(line,x,y);return y+lineHeight;}
-function rounded(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
-async function createShare(){
-  const ranking=rankCities(state.profile,cities);const r=ranking.ranked.find(x=>x.city.id===state.selectedCityId)||ranking.ranked[0];if(!r)return;
-  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1440;const ctx=canvas.getContext('2d');
-  const accent=state.profile.guide==='dog'?'#c65225':'#2e50c8';ctx.fillStyle='#f7f5ef';ctx.fillRect(0,0,1080,1440);
-  ctx.fillStyle='#fffdf8';rounded(ctx,64,64,952,1312,32);ctx.strokeStyle='#d6d8cd';ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle=accent;ctx.font='600 25px "PingFang SC",sans-serif';ctx.fillText('毕业第一站 / MY JOY CITY',112,136);
-  ctx.fillStyle='#6b706a';ctx.font='24px "PingFang SC",sans-serif';ctx.fillText('我想先去了解的城市',112,238);
-  ctx.fillStyle='#202b29';ctx.font='600 164px "Songti SC",serif';ctx.fillText(r.city.name,104,435);ctx.font='26px sans-serif';ctx.fillStyle='#6b706a';ctx.fillText(r.city.english,114,497);
-  ctx.strokeStyle='#c7c9be';ctx.setLineDash([9,9]);ctx.beginPath();ctx.moveTo(64,555);ctx.lineTo(1016,555);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle=accent;ctx.font='500 34px "PingFang SC",sans-serif';let y=wrapCanvas(ctx,(r.city.joyPortrait?.invitation||r.city.tagline),112,630,835,53);
-  const tags=buildPortrait(state.profile).lines.filter(x=>['novelty','recovery'].includes(x.dimension)).map(x=>x.text);ctx.font='27px "PingFang SC",sans-serif';ctx.fillStyle='#475344';y=wrapCanvas(ctx,tags.length?'想把这些留在生活里：'+tags.join(' · '):'给工作留一个方向，也给生活留一点空间。',112,y+24,795,44);
-  const img=new Image();img.src='/assets/guide-'+state.profile.guide+'.png';await img.decode();ctx.drawImage(img,600,865,360,360);
-  ctx.fillStyle='#202b29';ctx.font='500 37px "PingFang SC",sans-serif';wrapCanvas(ctx,'城市还没定，\n想过的日子清楚了一点。'.replace('\n',''),112,1010,440,60);
-  ctx.font='22px "PingFang SC",sans-serif';ctx.fillStyle='#6b706a';ctx.fillText('一张候选车票，不是一锤定音。',112,1228);ctx.fillText('城市探索版 · 候选建议，不是幸福概率',112,1300);
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('图片生成失败');if(shareURL)URL.revokeObjectURL(shareURL);shareURL=URL.createObjectURL(blob);
-  dialog('收好你的城市车票',`<img class="share-preview-image" src="${shareURL}" alt="${escape(r.city.name)}城市候选分享卡"><a class="primary" style="display:block;text-align:center;text-decoration:none" href="${shareURL}" download="毕业第一站-${escape(r.city.name)}.png">保存城市车票</a><p class="privacy-note">这张卡不含院校、年龄、预算和他人信息。</p>`);
+const STORAGE_KEY = 'graduation-first-stop-v1';
+const STAGE_NAMES = { build: '搭城市', reality: '装现实', shortlist: '留两城', duel: '三幕 PK', passport: '通行证' };
+const STATUS_COPY = {
+  clear: { label: '无已知冲突', symbol: '✓' },
+  conditional: { label: '条件冲突', symbol: '!' },
+  unknown: { label: '红线待核', symbol: '?' }
+};
+const main = document.getElementById('main');
+const dialog = document.getElementById('info-dialog');
+const dialogTitle = document.getElementById('dialog-title');
+const dialogContent = document.getElementById('dialog-content');
+const toastEl = document.getElementById('toast');
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const escape = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[char]));
+const money = (value) => new Intl.NumberFormat('zh-CN').format(value);
+
+let state = freshExperienceState();
+let cities = [];
+let resizeObserver;
+let toastTimer;
+let pointer = null;
+let paintFrame = 0;
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* Experience remains usable. */ }
 }
-async function copyResult(){const r=rankCities(state.profile,cities).ranked.find(x=>x.city.id===state.selectedCityId)||rankCities(state.profile,cities).ranked[0];if(!r)return;const text=`我的 Joy City｜先了解${r.city.name}\n${r.city.joyPortrait?.invitation||r.city.tagline}\n${buildPortrait(state.profile).lines.filter(x=>['novelty','recovery'].includes(x.dimension)).map(x=>x.text).join(' · ')}\n这是一份探索建议，不是幸福概率。`;try{await navigator.clipboard.writeText(text);toast('摘要复制好了。');}catch{dialog('复制城市摘要',`<label class="field"><span>选中文字复制</span><textarea readonly rows="8">${escape(text)}</textarea></label>`);}}
-function move(route){state.route=route;save();render({focus:true});}
-function submitFeedback(city,reason,dimension){state.profile=applyFeedback(state.profile,city,reason,{dimension});state.feedbackReason=reason;state.feedbackPicking=null;state.round=2;move('question');}
-document.addEventListener('input',e=>{const k=e.target.dataset.field;if(k&&e.target.matches('input'))updateField(k,e.target.type==='number'?(Number(e.target.value)>0?Number(e.target.value):null):e.target.value);});
-document.addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action,v=b.dataset.value;
- try{
- if(a==='guide'){state.profile.guide=v==='cat'?'cat':'dog';state.selectedCityId=null;if(state.route==='first'){state.firstCityId=null;state.firstProfile=structuredClone(state.profile);}save();render();return;}
- if(a==='role'){updateField('aiRole',v);render();return;}
- if(a==='scene'){const d=JOY_CONFIG.dimensions.find(x=>x.id===b.dataset.dimension);if(!d?.options.some(x=>x.id===v))return;state.profile.joy[d.id]=v;state.profile.answerSources['joy.'+d.id]={questionId:'profile-'+d.id,optionId:v,value:v};invalidate();save();render();return;}
- if(a==='choose'){updateField(b.dataset.field,b.dataset.field==='hardClimate'?v==='true':v);render();return;}
- if(a==='multi'){const k=b.dataset.field,list=state.profile[k];updateField(k,list.includes(v)?list.filter(x=>x!==v):[...list,v]);render();return;}
- if(a==='next-profile'){if(state.page===6)move('portrait');else{state.page++;save();render({focus:true});}return;}
- if(a==='previous-profile'){state.page=Math.max(0,state.page-1);save();render({focus:true});return;}
- if(a==='preview-portrait'||a==='edit-profile'){move('portrait');return;}
- if(a==='edit-dimension'){state.page=Number(v);move('profile');return;}
- if(a==='confirm-portrait'){invalidate();state.profile.confirmations=[];move('first');return;}
- if(a==='feedback'){if(['heart','unbearable'].includes(v)){state.feedbackPicking=v;render();const f=main.querySelector('.feedback-followup');f?.focus({preventScroll:true});f?.scrollIntoView({block:'nearest',behavior:'smooth'});}else submitFeedback(b.dataset.city,v);return;}
- if(a==='feedback-dimension'){submitFeedback(b.dataset.city,state.feedbackPicking,v);return;}
- if(a==='back-first'){move('first');return;}
- if(a==='answer'){const q=currentQuestion(),o=q.options.find(x=>x.id===v);state.profile=applyAnswer(state.profile,q,v);state.answerLog.push({round:2,id:q.id,label:o.label});state.selectedCityId=null;move('result');return;}
- if(a==='skip-question'){state.selectedCityId=null;move('result');return;}
- if(a==='select-city'){state.selectedCityId=v;save();render();return;}
- if(a==='restore-city'){state.profile.excludedCityIds=state.profile.excludedCityIds.filter(x=>x!==v);state.profile.feedback=state.profile.feedback.filter(x=>!(x.cityId===v&&x.reasonId==='not-this-city'));state.selectedCityId=null;save();render();return;}
- if(a==='method'){showMethod();return;}
- if(a==='data'){dialog('城市资料与来源',`<p>当前覆盖 ${cities.length} 座城市；城市相处说明是资源线索，不是居民人格。初版分档为人工整理，尚未验证喜欢概率。</p>${cities.map(sourceHTML).join('')}`);return;}
- if(a==='evidence'){showEvidence(v);return;}
- if(a==='privacy'){showPrivacy();return;}
- if(a==='confirm-reset'){dialog('清除这台设备上的资料？','<p>填写的资料、选择、拒绝记录和旧版备份都会被清除。</p><button class="primary" data-action="reset">确认清除</button>');return;}
- if(a==='reset'){state=freshState();try{localStorage.removeItem(KEY);localStorage.removeItem(BACKUP);}catch{}document.getElementById('detail-dialog').close();render({focus:true});toast('本机资料已清除。');return;}
- if(a==='close-dialog'){document.getElementById('detail-dialog').close();return;}
- if(a==='share-card'){dialogOpener=b;b.disabled=true;await createShare();b.disabled=false;return;}
- if(a==='copy-result'){await copyResult();return;}
- }catch(error){console.error(error);b.disabled=false;toast('刚才这一步没有完成，资料还在。请再试一次。');}
+
+function profile() {
+  return {
+    careerLife: state.careerLife,
+    socialEnergy: state.socialEnergy,
+    industry: state.industry || 'exploring',
+    industryConfirmed: state.industryConfirmed,
+    careerFocus: state.careerFocus,
+    interests: state.interests,
+    rentBudget: state.rentBudget,
+    climateAvoids: state.climateAvoids,
+    persona: state.persona
+  };
+}
+
+function rankedResult() {
+  const pool = state.candidateMode === 'bring'
+    ? cities.filter((city) => state.candidateCityIds.includes(city.id))
+    : cities;
+  return rankDepartureCities(profile(), pool);
+}
+
+function candidatePool() {
+  const result = rankedResult();
+  return state.candidateMode === 'bring' ? result.ranked : result.ranked.slice(0, 3);
+}
+
+function finalists() {
+  const byId = new Map(candidatePool().map((item) => [item.city.id, item]));
+  return state.finalistIds.map((id) => byId.get(id)).filter(Boolean);
+}
+
+function duelData() {
+  const [left, right] = finalists();
+  return { left, right, rounds: left && right ? buildDuelRounds(left, right, profile()) : [] };
+}
+
+function invalidateDecision(nextStage = state.stage) {
+  state = resetDecisionState(state);
+  state.stage = nextStage;
+}
+
+function toast(message) {
+  toastEl.textContent = message;
+  toastEl.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toastEl.hidden = true; }, 3200);
+}
+
+function progress() {
+  const active = EXPERIENCE_STAGES.indexOf(state.stage);
+  return `<ol class="progress" aria-label="体验进度">${EXPERIENCE_STAGES.map((stage, index) => `<li class="${index <= active ? 'is-done' : ''} ${index === active ? 'is-current' : ''}">
+    <span>0${index + 1}</span><b>${STAGE_NAMES[stage]}</b></li>`).join('')}</ol>`;
+}
+
+function axisCopy() {
+  const summary = summarizeDepartureProfile(profile());
+  const headline = state.careerLife < 34
+    ? (state.socialEnergy > 65 ? '想往前冲，也想在人群里。' : '先让事业站稳，再慢慢安顿。')
+    : state.careerLife > 66
+      ? (state.socialEnergy < 35 ? '把日子过慢一点，也过稳一点。' : '认真下班，好好生活。')
+      : (state.socialEnergy < 35 ? '努力生活，也给自己留白。' : '工作和下班，都想认真对待。');
+  return { ...summary, headline };
+}
+
+function modeReady() {
+  return state.candidateMode === 'discover' || state.candidateCityIds.length >= 2;
+}
+
+function buildPage() {
+  const copy = axisCopy();
+  const cityButtons = cities.map((city) => {
+    const selected = state.candidateCityIds.includes(city.id);
+    return `<button class="city-token ${selected ? 'is-selected' : ''}" data-action="candidate-city" data-value="${escape(city.id)}" aria-pressed="${selected}">
+      <span class="token-signal"></span><b>${escape(city.name)}</b><small>${escape(city.english)}</small>
+    </button>`;
+  }).join('');
+  const selection = state.candidateCityIds.map((id, index) => {
+    const city = cities.find((item) => item.id === id);
+    return city ? `<span><i>0${index + 1}</i>${escape(city.name)}</span>` : '';
+  }).join('');
+  return `<section class="experience build-page" data-page="build">
+    ${progress()}
+    <header class="page-heading hero-heading">
+      <div><span class="eyebrow">GRADUATION CITY LAB / 01</span><h1 tabindex="-1">不是猜命运。<br><em>是把纠结摆上站台。</em></h1></div>
+      <p>先选一种进入方式。你可以带着现实候选来，也可以先搭出想过的日子，让系统给你三个起点。</p>
+    </header>
+    <div class="entry-switch" role="tablist" aria-label="选择进入方式">
+      <button role="tab" aria-selected="${state.candidateMode === 'bring'}" class="entry-card cyan ${state.candidateMode === 'bring' ? 'is-selected' : ''}" data-action="entry-mode" data-value="bring">
+        <small>ROUTE A · 推荐</small><b>我已经在纠结几座城</b><span>带 2–4 座候选来，直接进入筛选。</span>
+      </button>
+      <button role="tab" aria-selected="${state.candidateMode === 'discover'}" class="entry-card magenta ${state.candidateMode === 'discover' ? 'is-selected' : ''}" data-action="entry-mode" data-value="discover">
+        <small>ROUTE B</small><b>我还没有方向</b><span>先调发展与日常，再生成前三站。</span>
+      </button>
+    </div>
+    ${state.candidateMode === 'bring' ? `
+      <div class="candidate-console">
+        <div class="console-head"><div><span class="eyebrow">INPUT YOUR CITIES</span><h2>把你真的会去的城市接上线</h2></div>
+          <p>全国海选很容易制造伪精确。这里先尊重你已有的选择集。</p></div>
+        <div class="city-token-grid">${cityButtons}</div>
+        <div class="selection-track"><b>候选线路</b><div>${selection || '<em>还没有城市接入线路</em>'}</div><small>${state.candidateCityIds.length}/4 · 至少选择 2 座</small></div>
+      </div>
+    ` : `
+      <div class="builder-grid">
+        <div class="world-frame tuner" data-tuner aria-label="生活偏好调节区">
+          <canvas data-city-canvas="builder" role="img" aria-label="根据生活偏好变化的未来城市"></canvas>
+          <span class="axis axis-left">发展优先</span><span class="axis axis-right">生活优先</span>
+          <span class="axis axis-top">安静一点</span><span class="axis axis-bottom">热闹一点</span>
+          <button class="preference-puck" data-puck aria-label="${escape(copy.short)}；可拖动或用方向键调整"><i></i><span>拖我</span></button>
+          <div class="world-stamp"><small>你搭出的日子</small><b data-live-headline>${escape(copy.headline)}</b></div>
+        </div>
+        <aside class="builder-note"><span class="micro-label">先调生活，不贴人格标签</span>
+          <h2 data-live-summary>${escape(copy.short)}</h2>
+          <p>横向调发展与生活的相对权重；纵向只在有资料时比较活动供给，不把“资料少”说成“城市安静”。</p>
+          <div class="mini-scales"><div><span>发展</span><i><b style="width:${100 - state.careerLife}%"></b></i><span>生活</span></div>
+            <div><span>安静</span><i><b style="width:${state.socialEnergy}%"></b></i><span>热闹</span></div></div>
+        </aside>
+      </div>
+    `}
+    <div class="stage-actions"><span>下一步会加入行业、兴趣、预算与气候红线。</span>
+      <button class="primary-action" data-action="to-reality" ${modeReady() ? '' : 'disabled'}>进入现实装配 <b>→</b></button></div>
+  </section>`;
+}
+
+function optionButton(item, kind, selected, extra = '') {
+  return `<button class="choice-chip ${selected ? 'is-selected' : ''}" data-action="${kind}" data-value="${item.id}" aria-pressed="${selected}">
+    ${extra}<span>${escape(item.label)}</span></button>`;
+}
+
+function constraintChip(item) {
+  const status = STATUS_COPY[item.constraints.status] || STATUS_COPY.unknown;
+  return `<span class="constraint-chip is-${item.constraints.status}"><i>${status.symbol}</i>${status.label}</span>`;
+}
+
+function reasonLine(item) {
+  const reason = item.reasons[0];
+  if (!reason) return '现有资料还不足以解释它的位置，先把它当成待验证候选。';
+  return `${reason.label}：${reason.detail}`;
+}
+
+function boardRows(result) {
+  const rows = state.candidateMode === 'bring' ? result.ranked : result.ranked.slice(0, 3);
+  return rows.map((item, index) => `<article class="board-row">
+    <span class="board-rank">0${index + 1}</span>
+    <div class="board-city"><b>${escape(item.city.name)}</b><small>${escape(reasonLine(item))}</small></div>
+    <div class="board-meta">${constraintChip(item)}<small>资料覆盖 ${Math.round(item.coverage * 100)}%</small></div>
+  </article>`).join('');
+}
+
+function missingPrompt() {
+  const missing = [];
+  if (!state.industryConfirmed) missing.push('行业');
+  if (!state.interests.length) missing.push('至少一个兴趣');
+  if (!state.rentBudget) missing.push('月租上限');
+  if (!modeReady()) missing.push('至少两座候选城市');
+  return missing.length ? `还差：${missing.join('、')}` : '条件已装好，可以留下两城';
+}
+
+function realityPage() {
+  const result = rankedResult();
+  const ready = result.ready && modeReady() && candidatePool().length >= 2;
+  const copy = axisCopy();
+  return `<section class="experience reality-page" data-page="reality">
+    ${progress()}
+    <header class="page-heading compact"><div><span class="eyebrow">PACK THE REALITY / 02</span><h1 tabindex="-1">给想象装上，<br><em>现实的重量。</em></h1></div>
+      <p>预算与气候是门槛，不再拿来制造“高分”。资料未知会明确标出，不算通过。</p></header>
+    <div class="reality-layout">
+      <div class="reality-form">
+        <section class="choice-section"><div class="choice-title"><span>01</span><div><h2>第一份工作，从哪类行业出发？</h2><p>宽泛行业只生成候选；具体方向会进入核验任务。</p></div></div>
+          <div class="choice-grid industries">${DEPARTURE_OPTIONS.industries.map((item) => optionButton(item, 'industry', state.industry === item.id, `<i>${escape(item.short.slice(0, 1))}</i>`)).join('')}</div>
+          <label class="text-field"><span>具体到你真的会投的方向 <em>建议填写</em></span>
+            <input data-field="careerFocus" maxlength="40" value="${escape(state.careerFocus)}" placeholder="如：具身智能机器人产品 / AI 应用算法"></label>
+        </section>
+        <section class="choice-section"><div class="choice-title"><span>02</span><div><h2>什么日常值得每周重复？</h2><p>最多选 3 个；“资料少”会转成任务，不会暗中扣分。</p></div></div>
+          <div class="choice-grid interests">${DEPARTURE_OPTIONS.interests.map((item) => optionButton(item, 'interest', state.interests.includes(item.id), `<i>${item.emoji}</i>${item.supported ? '' : '<u>待核</u>'}`)).join('')}</div>
+        </section>
+        <section class="choice-section"><div class="choice-title"><span>03</span><div><h2>每月房租上限是多少？</h2><p>只与 2026 年 1 月同口径城市级套租基准比较，具体房源与通勤另查。</p></div></div>
+          <div class="budget-picks">${[2000, 4000, 6000, 8000].map((value) => `<button class="budget-ticket ${state.rentBudget === value ? 'is-selected' : ''}" data-action="budget" data-value="${value}" aria-pressed="${state.rentBudget === value}"><small>月租上限</small><b>¥${money(value)}</b></button>`).join('')}
+            <label class="custom-budget"><span>自定义</span><span>¥ <input type="number" min="500" max="12000" step="100" inputmode="numeric" data-field="rentBudget" value="${state.rentBudget && ![2000, 4000, 6000, 8000].includes(state.rentBudget) ? state.rentBudget : ''}" placeholder="如 3500"></span></label></div>
+        </section>
+        <section class="choice-section redline-section"><div class="choice-title"><span>04</span><div><h2>身体或生活不能接受的气候</h2><p>这是红线。未知不会被当作安全，已知冲突也不会被平均分掩盖。</p></div></div>
+          <div class="climate-picks">${DEPARTURE_OPTIONS.climates.map((item) => optionButton(item, 'climate', state.climateAvoids.includes(item.id))).join('')}</div>
+        </section>
+        <label class="persona-field"><span>票角签名 · 选填</span><b>MBTI / 星座只改变分享文案，不参与候选顺序</b><input data-field="persona" maxlength="24" value="${escape(state.persona)}" placeholder="如 ENFP / 天秤座"></label>
+      </div>
+      <aside class="departure-board" aria-live="polite">
+        <div class="board-head"><span>LIVE CANDIDATES</span><b>候选控制台</b><small>${state.candidateMode === 'bring' ? '你的现实候选' : '系统生成前三站'}</small></div>
+        <div class="profile-strip"><span>${escape(copy.full)}</span><span>¥${state.rentBudget ? money(state.rentBudget) : '—'}</span></div>
+        <div class="board-list">${boardRows(result) || '<p class="empty-board">先回上一步接入至少两座城市。</p>'}</div>
+        <p class="board-status ${ready ? 'is-ready' : ''}"><i></i>${escape(missingPrompt())}</p>
+        <button class="primary-action signal" data-action="to-shortlist" ${ready ? '' : 'disabled'}>进入两城筛选 <b>→</b></button>
+        <small class="board-caveat">候选顺序是内部线索排序。它不预测幸福、offer、薪资或 WLB。</small>
+      </aside>
+    </div>
+    <button class="under-button" data-action="to-build">← 修改候选入口</button>
+  </section>`;
+}
+
+function shortlistPage() {
+  const pool = candidatePool();
+  const canStart = state.finalistIds.length === 2 && state.assumptionText.trim().length >= 2;
+  const cards = pool.map((item, index) => {
+    const picked = state.finalistIds.includes(item.city.id);
+    return `<article class="shortlist-card ${picked ? 'is-picked' : ''}">
+      <div class="card-line"><span>候选 0${index + 1}</span>${constraintChip(item)}</div>
+      <canvas data-city-canvas="${item.city.id}" data-tone="${picked && state.finalistIds.indexOf(item.city.id) === 1 ? 'magenta' : 'cyan'}" role="img" aria-label="${escape(item.city.name)}赛博车站"></canvas>
+      <div class="shortlist-copy"><h2>${escape(item.city.name)}</h2><small>${escape(item.city.english)}</small>
+        <p>${escape(reasonLine(item))}</p>
+        <div class="coverage"><i style="width:${Math.round(item.coverage * 100)}%"></i></div><span>资料覆盖 ${Math.round(item.coverage * 100)}%</span></div>
+      <button data-action="toggle-finalist" data-value="${item.city.id}" aria-pressed="${picked}">${picked ? '已接入决赛轨道 ✓' : '留在双城轨道'}</button>
+    </article>`;
+  }).join('');
+  const picked = state.finalistIds.map((id, index) => {
+    const city = cities.find((item) => item.id === id);
+    return city ? `<span class="finalist-slot side-${index}"><i>${index === 0 ? 'L' : 'R'}</i><b>${escape(city.name)}</b></span>` : '';
+  }).join('');
+  const [left, right] = finalists();
+  return `<section class="experience shortlist-page" data-page="shortlist">
+    ${progress()}
+    <header class="page-heading compact"><div><span class="eyebrow">SELECT THE FINAL TWO / 03</span><h1 tabindex="-1">系统只负责入围。<br><em>最后两城，由你留下。</em></h1></div>
+      <p>这里不展示总分。先看入围理由、红线和资料覆盖，再亲手把两种生活接上左右轨道。</p></header>
+    <div class="finalist-dock"><div><small>DUEL LINE</small><b>决赛轨道</b></div><div class="dock-slots">${picked || '<span class="empty-slot">等待两座城市接入</span>'}</div><span>${state.finalistIds.length}/2</span></div>
+    <div class="shortlist-grid">${cards}</div>
+    ${state.finalistIds.length === 2 ? `<section class="assumption-gate">
+      <div class="gate-copy"><span class="eyebrow">BEFORE THE DUEL</span><h2>对局前，封存你现在的判断</h2>
+        <p>它不会影响初始排序。三幕结束后，我们再看这句话有多少证据、反例和未知。</p></div>
+      <div class="leaning-picks"><span>此刻更倾向</span>
+        <button data-action="lean" data-value="${left.city.id}" aria-pressed="${state.leaningId === left.city.id}">${escape(left.city.name)}</button>
+        <button data-action="lean" data-value="none" aria-pressed="${state.leaningId === 'none'}">还没有</button>
+        <button data-action="lean" data-value="${right.city.id}" aria-pressed="${state.leaningId === right.city.id}">${escape(right.city.name)}</button>
+      </div>
+      <label class="assumption-field"><span>为什么？写下你现在相信的一句话</span>
+        <textarea data-field="assumptionText" maxlength="120" placeholder="如：我更倾向深圳，因为我觉得那里成本低、机会多。">${escape(state.assumptionText)}</textarea>
+        <small>${state.assumptionText.length}/120 · 这是一条待验证假设，不进入分数。</small></label>
+      <button class="primary-action" data-action="start-duel" ${canStart ? '' : 'disabled'}>开启三幕对局 <b>⚡</b></button>
+    </section>` : ''}
+    <div class="stage-actions"><button class="under-button" data-action="to-reality">← 修改现实条件</button><span>选择变化后，旧对局会被清空。</span></div>
+  </section>`;
+}
+
+function evidencePane(side, evidence) {
+  const known = evidence.status === 'known';
+  const constraint = evidence.constraintStatus ? STATUS_COPY[evidence.constraintStatus] : null;
+  return `<article class="duel-city side-${side}">
+    <div class="duel-city-head"><span>${side === 0 ? 'CYAN PLATFORM / LEFT' : 'MAGENTA PLATFORM / RIGHT'}</span><h2>${escape(evidence.cityName)}</h2>
+      <b class="evidence-state is-${known ? 'known' : 'unknown'}">${constraint ? constraint.label : known ? '有线索' : '资料未知'}</b></div>
+    <div class="scene-window"><canvas data-city-canvas="${evidence.cityId}" data-tone="${side === 0 ? 'cyan' : 'magenta'}"></canvas>
+      <p>${escape(evidence.scene)}</p></div>
+    <div class="evidence-stack"><span>可核验信息</span><p>${escape(evidence.detail)}</p>
+      ${evidence.caveat ? `<aside><b>编辑判断 / 边界</b>${escape(evidence.caveat)}</aside>` : ''}</div>
+  </article>`;
+}
+
+function voteLabel(round, value, left, right) {
+  if (value === 'left') return left.city.name;
+  if (value === 'right') return right.city.name;
+  if (value === 'tie') return '还看不出来';
+  return '未选择';
+}
+
+function duelPage() {
+  const { left, right, rounds } = duelData();
+  if (!left || !right || rounds.length !== 3) {
+    state.stage = 'shortlist';
+    return shortlistPage();
+  }
+  if (state.duelRound < 3) {
+    const round = rounds[state.duelRound];
+    const vote = state.duelVotes[round.id];
+    return `<section class="experience duel-page" data-page="duel">
+      ${progress()}
+      <div class="duel-status"><span>ACT ${String(state.duelRound + 1).padStart(2, '0')} / 03</span>
+        <div>${rounds.map((item, index) => `<i class="${index < state.duelRound ? 'is-done' : index === state.duelRound ? 'is-current' : ''}">${index + 1}</i>`).join('')}</div>
+        <b>${escape(round.title)}</b></div>
+      <header class="duel-heading"><span class="eyebrow">${escape(round.eyebrow)}</span><h1 tabindex="-1">${escape(round.prompt)}</h1><p>比较维度：${escape(round.label)} · ${round.comparisonStatus === 'comparable' ? '两侧均有线索' : round.comparisonStatus === 'partial' ? '只有一侧有线索' : '两侧都待核'}</p></header>
+      <div class="duel-arena">${evidencePane(0, round.left)}<div class="versus"><span>VS</span><i></i></div>${evidencePane(1, round.right)}</div>
+      <div class="unknown-banner"><b>仍然未知</b><p>${escape(round.unknown)}</p></div>
+      <div class="vote-console"><span>这一幕，更想先试哪边？</span><div>
+        <button class="vote-left" data-action="vote" data-value="left" aria-pressed="${vote === 'left'}">← ${escape(left.city.name)}</button>
+        <button class="vote-tie" data-action="vote" data-value="tie" aria-pressed="${vote === 'tie'}">还看不出来</button>
+        <button class="vote-right" data-action="vote" data-value="right" aria-pressed="${vote === 'right'}">${escape(right.city.name)} →</button>
+      </div></div>
+      <div class="stage-actions"><button class="under-button" data-action="duel-back">← ${state.duelRound ? '上一幕' : '重选两城'}</button>
+        <small>三幕选择只记录你的轨迹，不会自动产生赢家。</small></div>
+    </section>`;
+  }
+
+  const analysis = analyzeAssumption(state.assumptionText, left, right, profile());
+  const question = localDecisionQuestion(rounds, state.duelVotes, left, right, profile());
+  return `<section class="experience duel-page verdict-page" data-page="duel">
+    ${progress()}
+    <header class="page-heading compact"><div><span class="eyebrow">DECISION CHECKPOINT / 04</span><h1 tabindex="-1">三幕结束。<br><em>现在不宣布赢家。</em></h1></div>
+      <p>先看你原本相信的判断，经得起多少证据。然后由你明确选择“先验证哪座”。</p></header>
+    <div class="audit-grid">
+      <article class="assumption-audit"><span class="eyebrow">YOUR ORIGINAL BELIEF</span><blockquote>“${escape(analysis.claim)}”</blockquote>
+        <div class="finding-list">${analysis.findings.map((item) => `<div class="finding is-${item.kind}"><b>${escape(item.label)}</b><p>${escape(item.text)}</p></div>`).join('')}</div></article>
+      <article class="trajectory"><span class="eyebrow">THREE ACT TRACE</span><h2>你刚才怎么选</h2>
+        ${rounds.map((round, index) => `<div><span>0${index + 1} · ${escape(round.title)}</span><b>${escape(voteLabel(round, state.duelVotes[round.id], left, right))}</b></div>`).join('')}
+        <small>这里没有多数票获胜规则。平局也可能是最有价值的结果。</small></article>
+    </div>
+    <section class="agent-question"><div class="agent-mark">?</div><div><span>决胜提问官 · 本地规则回退</span><h2>${escape(question.question)}</h2><p>建议核验：${escape(question.task)}</p></div>
+      <button data-action="add-task" aria-pressed="${!!state.addedDecisionTask}">${state.addedDecisionTask ? '已加入清单 ✓' : '加入核验清单'}</button></section>
+    <section class="choose-first"><span class="eyebrow">YOU MAKE THE CALL</span><h2>哪座城，值得你先花现实成本验证？</h2>
+      <div><button class="choose-city side-0" data-action="choose-first" data-value="${left.city.id}"><small>先验证</small><b>${escape(left.city.name)}</b><span>${constraintChip(left)}</span></button>
+        <button class="choose-city side-1" data-action="choose-first" data-value="${right.city.id}"><small>先验证</small><b>${escape(right.city.name)}</b><span>${constraintChip(right)}</span></button></div></section>
+    <div class="stage-actions"><button class="under-button" data-action="duel-back">← 回到第三幕</button><small>这个动作只确定验证顺序，不是永久定居结论。</small></div>
+  </section>`;
+}
+
+function passportPage() {
+  const { left, right, rounds } = duelData();
+  if (!left || !right || !state.firstToVerifyId) {
+    state.stage = 'duel';
+    return duelPage();
+  }
+  const first = state.firstToVerifyId === left.city.id ? left : right;
+  const backup = first === left ? right : left;
+  const analysis = analyzeAssumption(state.assumptionText, left, right, profile());
+  const question = localDecisionQuestion(rounds, state.duelVotes, left, right, profile());
+  const tasks = buildVerificationTasks(rounds, profile());
+  if (state.addedDecisionTask?.task && !tasks.includes(state.addedDecisionTask.task)) tasks.push(state.addedDecisionTask.task);
+  const switchRule = `如果${backup.city.name}在“${question.dimension === 'career' ? '真实岗位' : question.dimension === 'daily' ? '可重复日常' : '住房与通勤'}”上给出更强真实证据，或${first.city.name}触发我的硬红线，我会改选。`;
+  return `<section class="experience passport-page" data-page="passport">
+    ${progress()}
+    <header class="page-heading compact"><div><span class="eyebrow">DUAL-CITY PASSPORT / 05</span><h1 tabindex="-1">带走的不是答案。<br><em>是一条会改变决定的线索。</em></h1></div>
+      <p>先验证城市和备选城市都保留。接下来用真实岗位、房源和日常，把未知逐项换成证据。</p></header>
+    <article class="dual-passport" data-passport-card>
+      <div class="passport-top"><span>毕业第一站 · 双城通行证</span><b>VALID FOR ONE REALITY CHECK</b><small>v0.6 / ${new Date().toLocaleDateString('zh-CN')}</small></div>
+      <div class="passport-cities">
+        <section class="passport-city side-${first === left ? 0 : 1}"><small>FIRST TO VERIFY</small><h2>${escape(first.city.name)}</h2><span>${escape(first.city.english)}</span>
+          <canvas data-city-canvas="${first.city.id}" data-tone="${first === left ? 'cyan' : 'magenta'}"></canvas><div>${constraintChip(first)}<b>先验证</b></div></section>
+        <div class="passport-switch"><span>⇄</span><small>可改签</small></div>
+        <section class="passport-city side-${backup === left ? 0 : 1}"><small>BACKUP CITY</small><h2>${escape(backup.city.name)}</h2><span>${escape(backup.city.english)}</span>
+          <canvas data-city-canvas="${backup.city.id}" data-tone="${backup === left ? 'cyan' : 'magenta'}"></canvas><div>${constraintChip(backup)}<b>备选</b></div></section>
+      </div>
+      <div class="passport-body">
+        <section><span class="passport-label">原本相信</span><blockquote>“${escape(state.assumptionText)}”</blockquote>
+          ${analysis.findings.map((item) => `<p class="passport-finding"><b>${escape(item.label)}</b> ${escape(item.text)}</p>`).join('')}</section>
+        <section><span class="passport-label">三幕轨迹</span>${rounds.map((round, index) => `<div class="passport-vote"><i>0${index + 1}</i><span>${escape(round.title)}</span><b>${escape(voteLabel(round, state.duelVotes[round.id], left, right))}</b></div>`).join('')}</section>
+      </div>
+      <div class="mission-list"><span class="passport-label">REALITY MISSIONS / 三项现实核验</span>
+        <ol>${tasks.map((task) => `<li>${escape(task)}</li>`).join('')}</ol></div>
+      <div class="switch-rule"><span>什么新信息会让我改选</span><p>${escape(switchRule)}</p></div>
+      <footer><span>${state.persona ? `票角签名：${escape(state.persona)} · ` : ''}这是一张验证顺序，不是幸福预测。</span><b>FIRST STOP AFTER GRADUATION</b></footer>
+    </article>
+    <div class="passport-actions"><button class="primary-action" data-action="download-passport">下载双城通行证 <b>↓</b></button>
+      <button class="under-button" data-action="revisit-duel">重做对局</button><button class="under-button" data-action="to-reality">修改现实条件</button></div>
+  </section>`;
+}
+
+function render(focusHeading = false) {
+  const result = rankedResult();
+  if (['shortlist', 'duel', 'passport'].includes(state.stage) && (!result.ready || candidatePool().length < 2)) state.stage = 'reality';
+  const pages = { build: buildPage, reality: realityPage, shortlist: shortlistPage, duel: duelPage, passport: passportPage };
+  main.innerHTML = (pages[state.stage] || buildPage)();
+  document.body.dataset.stage = state.stage;
+  updatePuck();
+  observeCanvases();
+  paintAll();
+  save();
+  if (focusHeading) requestAnimationFrame(() => main.querySelector('h1')?.focus({ preventScroll: false }));
+}
+
+function cityById(id) {
+  return cities.find((city) => city.id === id) || { id: 'unknown', name: '待定', english: 'UNKNOWN' };
+}
+
+function hash(value) {
+  return [...String(value)].reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 17);
+}
+
+function paintCity(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(rect.width * ratio);
+  canvas.height = Math.round(rect.height * ratio);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(canvas.width / 640, 0, 0, canvas.height / 360, 0, 0);
+  const id = canvas.dataset.cityCanvas;
+  const tone = canvas.dataset.tone || 'cyan';
+  const neon = tone === 'magenta' ? '#ff4fd8' : '#37e7ff';
+  const secondary = tone === 'magenta' ? '#37e7ff' : '#ff4fd8';
+  const seed = hash(id);
+  const gradient = ctx.createLinearGradient(0, 0, 0, 360);
+  gradient.addColorStop(0, '#070b1b');
+  gradient.addColorStop(1, '#111b35');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 640, 360);
+  ctx.strokeStyle = 'rgba(55,231,255,.10)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= 640; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 360); ctx.stroke(); }
+  for (let y = 0; y <= 360; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(640, y); ctx.stroke(); }
+  ctx.fillStyle = 'rgba(2,5,14,.82)';
+  ctx.fillRect(0, 268, 640, 92);
+  const count = id === 'builder' ? 10 : 8;
+  for (let i = 0; i < count; i++) {
+    const width = 38 + ((seed + i * 19) % 48);
+    const x = 10 + i * 68 + ((seed >> (i % 8)) % 17);
+    const baseHeight = 65 + ((seed + i * 47) % 125);
+    const axisBoost = id === 'builder' ? Math.round((100 - state.careerLife) * .65) : 0;
+    const height = Math.min(220, baseHeight + axisBoost);
+    ctx.fillStyle = i % 3 === 0 ? '#162342' : '#0e1830';
+    ctx.fillRect(x, 268 - height, width, height);
+    ctx.strokeStyle = i % 2 ? neon : secondary;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, 268 - height, width, height);
+    ctx.fillStyle = i % 2 ? neon : '#ffd84a';
+    const lit = 2 + ((seed + i) % 4);
+    for (let row = 0; row < lit; row++) {
+      ctx.globalAlpha = .42 + row * .08;
+      ctx.fillRect(x + 9, 252 - height + row * 24, 7, 9);
+      if (width > 55) ctx.fillRect(x + 27, 252 - height + row * 24, 7, 9);
+    }
+    ctx.globalAlpha = 1;
+  }
+  ctx.shadowBlur = 16;
+  ctx.shadowColor = neon;
+  ctx.strokeStyle = neon;
+  ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(0, 298); ctx.lineTo(640, 298); ctx.stroke();
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = secondary;
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, 322); ctx.lineTo(640, 322); ctx.stroke();
+  for (let x = 0; x < 640; x += 34) {
+    ctx.fillStyle = '#263a61';
+    ctx.fillRect(x, 294, 21, 33);
+  }
+  if (id !== 'builder') {
+    const city = cityById(id);
+    ctx.fillStyle = 'rgba(5,8,22,.76)';
+    ctx.fillRect(24, 22, 230, 66);
+    ctx.strokeStyle = neon; ctx.strokeRect(24, 22, 230, 66);
+    ctx.fillStyle = neon; ctx.font = '700 25px system-ui'; ctx.fillText(city.name, 43, 55);
+    ctx.fillStyle = '#9fb3d6'; ctx.font = '500 11px system-ui'; ctx.fillText(city.english, 43, 74);
+  }
+}
+
+function paintAll() {
+  document.querySelectorAll('[data-city-canvas]').forEach(paintCity);
+}
+
+function observeCanvases() {
+  resizeObserver?.disconnect();
+  resizeObserver = new ResizeObserver(() => {
+    cancelAnimationFrame(paintFrame);
+    paintFrame = requestAnimationFrame(paintAll);
+  });
+  document.querySelectorAll('[data-city-canvas]').forEach((canvas) => resizeObserver.observe(canvas));
+}
+
+function updatePuck() {
+  const tuner = main.querySelector('[data-tuner]');
+  const puck = main.querySelector('[data-puck]');
+  if (!tuner || !puck) return;
+  const pad = Math.min(54, tuner.clientWidth * .1);
+  puck.style.left = `${pad + state.careerLife / 100 * Math.max(1, tuner.clientWidth - pad * 2)}px`;
+  puck.style.top = `${pad + state.socialEnergy / 100 * Math.max(1, tuner.clientHeight - pad * 2)}px`;
+  const copy = axisCopy();
+  puck.setAttribute('aria-label', `${copy.short}；可拖动或用方向键调整`);
+  main.querySelector('[data-live-headline]')?.replaceChildren(document.createTextNode(copy.headline));
+  main.querySelector('[data-live-summary]')?.replaceChildren(document.createTextNode(copy.short));
+  const bars = main.querySelectorAll('.mini-scales b');
+  if (bars[0]) bars[0].style.width = `${100 - state.careerLife}%`;
+  if (bars[1]) bars[1].style.width = `${state.socialEnergy}%`;
+}
+
+function tuneFromPointer(event) {
+  const tuner = main.querySelector('[data-tuner]');
+  if (!tuner) return;
+  const rect = tuner.getBoundingClientRect();
+  const pad = Math.min(54, tuner.clientWidth * .1);
+  state.careerLife = Math.round(clamp((event.clientX - rect.left - pad) / Math.max(1, tuner.clientWidth - pad * 2), 0, 1) * 100);
+  state.socialEnergy = Math.round(clamp((event.clientY - rect.top - pad) / Math.max(1, tuner.clientHeight - pad * 2), 0, 1) * 100);
+  invalidateDecision('build');
+  updatePuck();
+  cancelAnimationFrame(paintFrame);
+  paintFrame = requestAnimationFrame(paintAll);
+  save();
+}
+
+function changeStage(stage, focus = true) {
+  state.stage = stage;
+  render(focus);
+}
+
+function toggleChoice(list, value, limit = Infinity) {
+  const index = list.indexOf(value);
+  if (index >= 0) list.splice(index, 1);
+  else if (list.length < limit) list.push(value);
+  else { toast(`最多选 ${limit} 个，先去掉一个再换。`); return false; }
+  return true;
+}
+
+function updateReality(mutator) {
+  mutator();
+  invalidateDecision('reality');
+  render();
+}
+
+main.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-action]');
+  if (!button) return;
+  const action = button.dataset.action;
+  const value = button.dataset.value;
+  if (action === 'entry-mode') {
+    state.candidateMode = value === 'discover' ? 'discover' : 'bring';
+    invalidateDecision('build');
+    render();
+  } else if (action === 'candidate-city') {
+    if (toggleChoice(state.candidateCityIds, value, 4)) { invalidateDecision('build'); render(); }
+  } else if (action === 'to-reality') {
+    if (!modeReady()) { toast('先选择 2–4 座现实候选。'); return; }
+    invalidateDecision('reality'); render(true);
+  } else if (action === 'to-build') {
+    changeStage('build');
+  } else if (action === 'industry') {
+    updateReality(() => { state.industry = value; state.industryConfirmed = true; });
+  } else if (action === 'interest') {
+    const copy = [...state.interests];
+    if (toggleChoice(copy, value, 3)) updateReality(() => { state.interests = copy; });
+  } else if (action === 'budget') {
+    updateReality(() => { state.rentBudget = Number(value); });
+  } else if (action === 'climate') {
+    const copy = [...state.climateAvoids];
+    if (toggleChoice(copy, value)) updateReality(() => { state.climateAvoids = copy; });
+  } else if (action === 'to-shortlist') {
+    if (rankedResult().ready && candidatePool().length >= 2) changeStage('shortlist');
+  } else if (action === 'toggle-finalist') {
+    const previous = [...state.finalistIds];
+    if (toggleChoice(previous, value, 2)) {
+      state.finalistIds = previous;
+      state.leaningId = 'none'; state.assumptionText = ''; state.duelRound = 0;
+      state.duelVotes = {}; state.firstToVerifyId = ''; state.addedDecisionTask = null;
+      render();
+    }
+  } else if (action === 'lean') {
+    state.leaningId = state.finalistIds.includes(value) ? value : 'none';
+    render();
+  } else if (action === 'start-duel') {
+    if (state.finalistIds.length !== 2 || state.assumptionText.trim().length < 2) {
+      toast('先留下两座城市，并写下你现在相信的一句话。'); return;
+    }
+    state.duelRound = 0; state.duelVotes = {}; state.firstToVerifyId = ''; state.addedDecisionTask = null;
+    changeStage('duel');
+  } else if (action === 'vote') {
+    const { rounds } = duelData();
+    const round = rounds[state.duelRound];
+    const vote = normalizeVote(value);
+    if (!round || !vote) return;
+    state.duelVotes[round.id] = vote;
+    state.duelRound = Math.min(3, state.duelRound + 1);
+    render(true);
+  } else if (action === 'duel-back') {
+    if (state.duelRound > 0) { state.duelRound -= 1; render(true); }
+    else changeStage('shortlist');
+  } else if (action === 'add-task') {
+    const { left, right, rounds } = duelData();
+    const question = localDecisionQuestion(rounds, state.duelVotes, left, right, profile());
+    state.addedDecisionTask = state.addedDecisionTask ? null : { dimension: question.dimension, task: question.task };
+    render();
+  } else if (action === 'choose-first') {
+    if (!state.finalistIds.includes(value)) return;
+    state.firstToVerifyId = value;
+    changeStage('passport');
+  } else if (action === 'revisit-duel') {
+    state.duelRound = 0; state.duelVotes = {}; state.firstToVerifyId = ''; state.addedDecisionTask = null;
+    changeStage('duel');
+  } else if (action === 'download-passport') {
+    downloadPassport();
+  }
 });
-document.getElementById('detail-dialog').addEventListener('close',()=>{const target=dialogOpener?.isConnected&&!dialogOpener.disabled?dialogOpener:main.querySelector('h2');if(target){if(!target.matches('button,a,input,select'))target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}dialogOpener=null;});
-document.getElementById('detail-dialog').addEventListener('click',e=>{if(e.target===e.currentTarget){const r=e.currentTarget.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.currentTarget.close();}});
-async function start(){readState();try{const response=await fetch('/data/cities.json');if(!response.ok)throw new Error('城市资料暂未准备好');cities=await response.json();if(!Array.isArray(cities)||!cities.length)throw new Error('城市资料格式错误');document.querySelector('.header-edition').textContent=`${cities.length} 座城市 · 找到你的 Joy City`;render();}catch(error){main.innerHTML=`<div class="form-sheet"><h1>城市资料暂时没加载出来。</h1><p>本机资料还在，请稍后刷新。</p><p class="error-note">${escape(error.message)}</p><button class="primary" onclick="location.reload()">重新加载</button></div>`;}}
+
+main.addEventListener('change', (event) => {
+  if (event.target.matches('[data-field="rentBudget"]')) {
+    const value = Number(event.target.value);
+    if (Number.isFinite(value) && value >= 500) updateReality(() => {
+      state.rentBudget = clamp(Math.round(value), 500, 12000);
+    });
+    else { toast('请输入 500–12000 元之间的月租上限。'); event.target.focus(); }
+  }
+});
+
+main.addEventListener('input', (event) => {
+  const field = event.target.dataset.field;
+  if (field === 'persona') {
+    state.persona = event.target.value.trim().slice(0, 24);
+    save();
+  } else if (field === 'careerFocus') {
+    state.careerFocus = event.target.value.trim().slice(0, 40);
+    state = resetDecisionState(state);
+    state.stage = 'reality';
+    save();
+  } else if (field === 'assumptionText') {
+    state.assumptionText = event.target.value.slice(0, 120);
+    event.target.parentElement.querySelector('small').textContent = `${state.assumptionText.length}/120 · 这是一条待验证假设，不进入分数。`;
+    const startButton = main.querySelector('[data-action="start-duel"]');
+    if (startButton) startButton.disabled = state.assumptionText.trim().length < 2;
+    save();
+  }
+});
+
+main.addEventListener('keydown', (event) => {
+  const puck = event.target.closest('[data-puck]');
+  if (!puck) return;
+  const delta = { ArrowLeft: [-5, 0], ArrowRight: [5, 0], ArrowUp: [0, -5], ArrowDown: [0, 5] }[event.key];
+  if (!delta) return;
+  event.preventDefault();
+  state.careerLife = clamp(state.careerLife + delta[0], 0, 100);
+  state.socialEnergy = clamp(state.socialEnergy + delta[1], 0, 100);
+  invalidateDecision('build');
+  updatePuck(); paintAll(); save();
+});
+
+main.addEventListener('pointerdown', (event) => {
+  const tuner = event.target.closest('[data-tuner]');
+  if (!tuner || (event.pointerType === 'mouse' && event.button !== 0)) return;
+  pointer = { id: event.pointerId };
+  tuner.setPointerCapture(event.pointerId);
+  tuneFromPointer(event);
+});
+main.addEventListener('pointermove', (event) => {
+  if (!pointer || pointer.id !== event.pointerId) return;
+  event.preventDefault();
+  tuneFromPointer(event);
+});
+main.addEventListener('pointerup', (event) => { if (pointer?.id === event.pointerId) pointer = null; });
+main.addEventListener('pointercancel', () => { pointer = null; });
+
+function openDialog(type) {
+  if (type === 'method') {
+    dialogTitle.textContent = '决策怎么来的';
+    dialogContent.innerHTML = `<div class="method-steps">
+      <div><b>1 · 你定义选择集</b><p>已有候选就直接带来；没有方向才使用内部排序生成前三站。</p></div>
+      <div><b>2 · 红线先于偏好</b><p>预算与气候显示为无已知冲突、条件冲突或未知，不参与相合分制造优势。</p></div>
+      <div><b>3 · 你亲手留下两城</b><p>系统不自动拿总分替你决定。三幕只并排呈现生活草稿、事实、判断和未知。</p></div>
+      <div><b>4 · 最后生成核验顺序</b><p>决胜提问官只找最可能改变决定的问题，不替你选城。</p></div>
+    </div>`;
+  } else if (type === 'data') {
+    dialogTitle.textContent = '资料与口径';
+    dialogContent.innerHTML = `<p>行业、自然、演出与气候使用城市公开资料和明确标注的编辑分档。阅读、游泳、健身、WLB、具体薪资和录取机会仍保持未知。</p>
+      <div class="source-box"><b>${escape(RENT_BENCHMARKS.source.title)}</b><small>观测期 ${escape(RENT_BENCHMARKS.source.observed)} · 核对 ${escape(RENT_BENCHMARKS.source.checked)}</small>
+        <a href="${escape(RENT_BENCHMARKS.source.url)}" target="_blank" rel="noreferrer">查看报告 ↗</a><a href="${escape(RENT_BENCHMARKS.source.methodologyUrl)}" target="_blank" rel="noreferrer">查看方法 ↗</a></div>
+      <p class="dialog-caveat">${escape(RENT_BENCHMARKS.note)}</p>`;
+  } else {
+    dialogTitle.textContent = '本机记录';
+    dialogContent.innerHTML = `<p>候选城市、现实条件、原始倾向、三幕选择和核验清单只保存在当前浏览器的 localStorage 中。Web 版没有调用模型，也不会发送这些内容。</p>
+      <button class="danger-button" data-action="clear-local">清除本机记录并重新开始</button>`;
+  }
+  dialog.showModal();
+}
+
+document.addEventListener('click', (event) => {
+  const opener = event.target.closest('[data-dialog]');
+  if (opener) openDialog(opener.dataset.dialog);
+  if (event.target.closest('[data-action="close-dialog"]')) dialog.close();
+  if (event.target.closest('[data-action="clear-local"]')) {
+    localStorage.removeItem(STORAGE_KEY);
+    state = freshExperienceState();
+    dialog.close();
+    render(true);
+    toast('本机记录已清除。');
+  }
+});
+dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 4) {
+  const chars = [...String(text)];
+  let line = '';
+  let lineNo = 0;
+  for (let i = 0; i < chars.length; i++) {
+    const test = line + chars[i];
+    if (ctx.measureText(test).width > maxWidth && line) {
+      ctx.fillText(line, x, y + lineNo * lineHeight);
+      line = chars[i];
+      lineNo++;
+      if (lineNo >= maxLines) return y + lineNo * lineHeight;
+    } else line = test;
+  }
+  if (lineNo < maxLines) ctx.fillText(line, x, y + lineNo * lineHeight);
+  return y + (lineNo + 1) * lineHeight;
+}
+
+function downloadPassport() {
+  const { left, right, rounds } = duelData();
+  if (!left || !right || !state.firstToVerifyId) return;
+  const first = state.firstToVerifyId === left.city.id ? left : right;
+  const backup = first === left ? right : left;
+  const analysis = analyzeAssumption(state.assumptionText, left, right, profile());
+  const tasks = buildVerificationTasks(rounds, profile());
+  if (state.addedDecisionTask?.task && !tasks.includes(state.addedDecisionTask.task)) tasks.push(state.addedDecisionTask.task);
+  const canvas = document.createElement('canvas');
+  canvas.width = 1400; canvas.height = 1800;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#050816'; ctx.fillRect(0, 0, 1400, 1800);
+  ctx.strokeStyle = '#263a61'; ctx.lineWidth = 2;
+  for (let x = 40; x < 1400; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1800); ctx.stroke(); }
+  for (let y = 40; y < 1800; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1400, y); ctx.stroke(); }
+  ctx.strokeStyle = '#37e7ff'; ctx.lineWidth = 3; ctx.strokeRect(55, 55, 1290, 1690);
+  ctx.fillStyle = '#9fb3d6'; ctx.font = '600 26px system-ui'; ctx.fillText('GRADUATION CITY LAB · 双城通行证', 90, 115);
+  ctx.fillStyle = '#ffd84a'; ctx.font = '800 56px system-ui'; ctx.fillText('先验证', 90, 220);
+  ctx.fillStyle = '#37e7ff'; ctx.font = '800 128px serif'; ctx.fillText(first.city.name, 90, 360);
+  ctx.fillStyle = '#ff4fd8'; ctx.font = '800 48px system-ui'; ctx.fillText(`备选 / ${backup.city.name}`, 780, 336);
+  ctx.fillStyle = '#c6d4ee'; ctx.font = '400 28px system-ui';
+  wrapText(ctx, `原本相信：“${state.assumptionText}”`, 90, 460, 1220, 46, 3);
+  let y = 610;
+  ctx.fillStyle = '#ffd84a'; ctx.font = '700 25px system-ui'; ctx.fillText('证据审计', 90, y);
+  y += 55;
+  ctx.fillStyle = '#c6d4ee'; ctx.font = '400 24px system-ui';
+  for (const finding of analysis.findings.slice(0, 3)) {
+    y = wrapText(ctx, `${finding.label}：${finding.text}`, 90, y, 1220, 38, 3) + 22;
+  }
+  y += 20;
+  ctx.fillStyle = '#ffd84a'; ctx.font = '700 25px system-ui'; ctx.fillText('三幕轨迹', 90, y);
+  y += 50;
+  ctx.font = '500 24px system-ui';
+  rounds.forEach((round, index) => {
+    ctx.fillStyle = index % 2 ? '#ff4fd8' : '#37e7ff';
+    ctx.fillText(`0${index + 1}  ${round.title}`, 90, y);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(voteLabel(round, state.duelVotes[round.id], left, right), 500, y);
+    y += 48;
+  });
+  y += 30;
+  ctx.fillStyle = '#ffd84a'; ctx.font = '700 25px system-ui'; ctx.fillText('REALITY MISSIONS / 现实核验', 90, y);
+  y += 56;
+  ctx.fillStyle = '#c6d4ee'; ctx.font = '400 24px system-ui';
+  tasks.slice(0, 4).forEach((task, index) => {
+    ctx.fillStyle = index % 2 ? '#ff4fd8' : '#37e7ff';
+    ctx.fillText(`0${index + 1}`, 90, y);
+    ctx.fillStyle = '#c6d4ee';
+    y = wrapText(ctx, task, 155, y, 1150, 38, 3) + 22;
+  });
+  ctx.fillStyle = '#8ea2c8'; ctx.font = '400 21px system-ui';
+  ctx.fillText('这是验证顺序，不是幸福、录取或人生预测。', 90, 1685);
+  ctx.fillStyle = '#37e7ff'; ctx.font = '700 20px system-ui'; ctx.fillText('FIRST STOP AFTER GRADUATION · v0.6', 865, 1685);
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `毕业第一站-${first.city.name}vs${backup.city.name}-双城通行证.png`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('双城通行证已生成。');
+  }, 'image/png');
+}
+
+async function start() {
+  try {
+    const response = await fetch('/data/cities.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    cities = await response.json();
+    if (!Array.isArray(cities) || cities.length < 3) throw new Error('城市资料不完整');
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { saved = null; }
+    state = migrateExperienceState(saved, cities.map((city) => city.id));
+    render();
+  } catch (error) {
+    main.innerHTML = `<section class="load-error"><h1>站台暂时没开。</h1><p>${escape(error.message)}</p><button class="primary-action" onclick="location.reload()">重新加载</button></section>`;
+  }
+}
+
 start();

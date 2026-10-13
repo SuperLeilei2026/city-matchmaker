@@ -1,0 +1,23 @@
+{
+  "state_sha256": "6e99d9529e9890e56dd3aa0bbc7fb7c5dc45ba02d5856a709ae3b6b6b1f8d81c",
+  "revision": 2,
+  "finalists": [
+    "shenzhen",
+    "hangzhou"
+  ],
+  "votes": [
+    "tie",
+    "tie",
+    "tie"
+  ],
+  "round": 3,
+  "first_to_verify": "",
+  "decision_task": "",
+  "agent_question": "",
+  "agent_task": "",
+  "career_focus": "具身智能行业",
+  "assumption": "我更倾向深圳，因为深圳成本低、具身智能机会更多。",
+  "climate_redline_ids": [
+    11
+  ]
+}

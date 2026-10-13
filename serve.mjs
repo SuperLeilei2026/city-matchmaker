@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('.', import.meta.url));
 const publicFiles = new Set([
   '/web/index.html', '/web/styles.css', '/web/app.mjs',
-  '/core/matcher.mjs', '/core/questions.mjs', '/core/profile.mjs', '/core/joy.mjs', '/core/joy-questions.mjs', '/data/joy-config.json', '/data/cities.json',
+  '/core/matcher.mjs', '/core/questions.mjs', '/core/profile.mjs', '/core/joy.mjs', '/core/joy-questions.mjs',
+  '/core/departure.mjs', '/core/duel.mjs', '/core/experience-state.mjs',
+  '/data/joy-config.json', '/data/cities.json', '/data/rent-benchmarks.json',
   '/assets/guide-cat.png', '/assets/guide-dog.png', '/assets/mascots-concept-v1.png'
 ]);
 const types = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.mjs':'text/javascript; charset=utf-8', '.json':'application/json; charset=utf-8', '.png':'image/png' };

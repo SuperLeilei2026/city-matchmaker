@@ -1,21 +1,70 @@
-# 初赛源码与后续迭代核对
+# v0.6 提交核对单
 
-更新：2026-10-07。初赛主交付是 `bundle/main.splash` 的 OctoScript 应用；Web 为辅助材料。v0.3 源码与实录此前已公开，v0.4 是之后的极简体验迭代。本次更新不冒称在 10 月 4 日 23:59 前完成，也不推断赛务是否采用后续提交。10 月 6 日 20:00 是官方计划的晋级公布时间，不是提交截止。
+更新：2026-10-14。当前对象是最终候选。Tag、Release、App Hub Issue 与人工审核状态必须逐项记录，不能互相替代。
 
-| 条目 | 材料与边界 |
+## 已完成材料
+
+| 条目 | 状态与材料 |
 | --- | --- |
-| 初赛仓库登记 | [MOST暴躁队回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)，成员 Leinstein；本轮不重复发送或更改报名。 |
-| 需求与人群 | [产品设计](product-design.md)、[场景定位](competition-fit.md)：AI 产品人群的城市生活探索，不预测幸福或职业成功。 |
-| 原生源码与运行 | `bundle/main.splash`、manifest、listing、素材；[运行说明](octosense.md)与[工具基底](runtime-lock.md)。无需 Web 服务器或模型账户即可浏览、收藏、比较。 |
-| v0.4 交互证据 | [极简流程报告](../qa/native-discovery-check.json)和[原生截图](../bundle/screenshots)。核对当前 main 哈希，不沿用旧五题报告。 |
-| 迁移与空状态 | 浏览轮次终点、至多两城收藏、资料返回、重启与旧格式迁移由本版原生脚本检查。翻页不排除，收藏不推断五维。 |
-| Agent 保护与真实调用 | [Agent 保护报告](../qa/native-agent-check.json)包含服务不可用与临时响应测试；[完整 Shell 报告](../qa/real-agent-e2e-v0.4/README.md)另行记录一次真实 MiniMax-M3 提案、确认、保存与重启恢复。 |
-| 包检查与发布证明 | [历史开发 gate](../qa/app-hub-gate-v0.4.json)按 App Hub `78dfda5` 构建工具通过，仅 unsigned warning。最终 v0.4 采用 `.github/workflows/publish-app.yml`：固定 App Hub `655114c`，由 GitHub 对 Tag 字节生成证明与 release pack；不使用开发者私钥。工作流成功、Tag、Release 或 Issue 都不等于人工审核通过。 |
-| 固定版本 | 当前版本见 [publication.md](publication.md)；旧 v0.3 初赛提交保留，不移动历史标签。 |
-| 演示影片 | [v0.4 原生影片](demo-native-v0.4.mp4)长 2 分 38 秒，完整解码及关键帧抽查通过；[录制报告](../qa/native-demo-v0.4/recording-report.json)记录真实 UI 操作与 Agent 不可用边界。v0.3 影片只保留为历史材料。 |
-| 数据与隐私 | 8城、32来源、47条人工整理信号、89条未知；[来源](data-sources.md)、[隐私](privacy.md)。公开截图与测试使用合成资料。 |
-| 作者与许可证 | MOST暴躁队 / Leinstein；发布者 Leilei；Apache-2.0，素材声明见 NOTICE。 |
+| 产品表达 | [产品设计](product-design.md)：双入口、两城、三幕、假设审计和双城通行证 |
+| 原生源码 | `bundle/main.splash`、manifest、listing、素材；由 `tools/build_bundle.py` 生成 |
+| Web 体验 | `web/`、`core/departure.mjs`、`core/duel.mjs`、`core/experience-state.mjs` |
+| 数据边界 | [数据说明](data-sources.md)与2026-01同口径租金基准 |
+| 原生主流程 | [12项报告](../qa/native-departure-check.json)和[五张截图](../qa/native-departure-v0.6) |
+| Agent 保护 | [报告](../qa/native-agent-check.json)：2项生产回退、38项临时协议检查；注入不当作模型成功 |
+| 真实模型 | [完整 Shell 全链路](../qa/real-agent-e2e-v0.6/README.md)：一次 MiniMax-M3、首次同意、确认边界、重启恢复 |
+| 隐私与权限 | [隐私说明](privacy.md)、[OctoSense 说明](octosense.md) |
+| 开源 | Apache-2.0、NOTICE、公开来源链接 |
 
-仍未完成且独立记录：Kimi 与模型切换/故障转移、实体手机与其他平台验证、GitHub release pack 复核及 App Hub 人工审核。本地参考宿主或一次 MiniMax-M3 验收均不代表已上架，未上架也不能直接推导源码没有提交。
+## 冻结候选前必须通过
 
-官方固定版[赛程](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/0db87b582438f0f01534435b8537e8c89bcd303d/docs/competition-schedule.md)与[作品提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/0db87b582438f0f01534435b8537e8c89bcd303d/docs/app-hub-submission.md)记载了源码、可运行作品和材料要求，源码提交无需等待 Hub 上架。当前未找到 MOST暴躁队公开晋级证据；10 月 9 日冻结与 10 月 12 日材料只在官方确认晋级后适用。当前公开状态与边界见[源码与发布状态](publication.md)。
+```sh
+python3 tools/build_bundle.py
+npm test
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub \
+  python3 tools/native_departure_smoke.py
+OCTO_CARD_HOST=/path/to/card-host OCTO_HUB=/path/to/hub \
+  python3 tools/native_agent_smoke.py
+/path/to/hub stamp bundle
+/path/to/hub check bundle --allow-unsigned
+git diff --check
+```
+
+还要核对：
+
+- `package.json`、`bundle/manifest.json`、`bundle/listing.json` 均为0.6.0；
+- listing 的五张截图来自最后一次真实宿主运行；
+- `bundle/main.splash` 与模板/数据重新生成结果一致；
+- 报告中的生产 SHA-256 与最终文件一致；
+- manifest BLAKE3 与最终包内容一致；
+- 文档没有把合成档案称为真实用户结论；
+- Web 与原生都不展示总相合指数；
+- 修改现实条件会清空旧对局，修改签名不会；
+- Agent 任务未确认前不进入核验清单；
+- MiniMax-M3 的一次完整 Shell 成功与 Kimi、移动端、故障切换的未验证边界分别写清。
+
+## 外部提交前仍需
+
+- 小陈、小雷真实试玩记录；
+- Kimi 与更多输入的成功/失败回退证据；
+- 最终60–90秒演示影片；
+- 冻结 commit 和不可移动 Tag；
+- GitHub provenance release pack；
+- App Hub Issue、CI 与人工审核结果。
+
+## 答辩可说
+
+- “我们不预测最适合的城市，而是找出最可能改变决定的那条信息。”
+- “预算和健康红线先显示冲突或未知，不被总分平均掉。”
+- “三幕选择只记录思考轨迹，最后一城必须由用户自己选。”
+- “Agent 只提出一个关键问题；应用验证响应，用户确认后才保存任务。”
+- “小陈、小雷目前是回归档案，下一步才是本人试玩。”
+
+## 不能说
+
+- “系统算出了最适合或最幸福的城市”；
+- “4000元一定能住深圳”或“成都天然 WLB”；
+- “未知资料等于没有问题”；
+- “注入测试证明 MiniMax/Kimi 已接通”；
+- “本地 check 等于 App Hub 上架”；
+- “响应式页面等于手机真机验收”。

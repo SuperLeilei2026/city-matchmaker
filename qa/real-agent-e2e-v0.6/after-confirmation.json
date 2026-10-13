@@ -1,0 +1,17 @@
+{
+  "state_sha256": "fc3dbd20f948103680c8706083588a0cb262d4c1ec291436b102d00474c25564",
+  "screen": 35,
+  "finalists": [
+    "shenzhen",
+    "hangzhou"
+  ],
+  "votes": [
+    "tie",
+    "tie",
+    "tie"
+  ],
+  "round": 3,
+  "first_to_verify": "shenzhen",
+  "decision_task": "两城各联系一位现居住满半年的租户，请他们描述4到10月室内湿度、是否长期开除湿、以及通勤时段室外闷热的真实感受。",
+  "proposal_dimension": "daily"
+}

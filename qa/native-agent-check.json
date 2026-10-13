@@ -1,25 +1,17 @@
 {
-  "date": "2026-10-05",
-  "bundle_version": "0.4.0",
-  "production_main_sha256": "8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca",
+  "date": "2026-10-14",
+  "bundle_version": "0.6.0",
+  "production_main_sha256": "91eb0086601f34e7eed5512ce604fd0c0f5485db1f30d7d277ba147413498375",
   "synthetic_inputs_only": true,
   "real_model_verified": false,
   "test_method": "Real hidden Makepad card-host. Production unavailable path plus explicit response injection in a temporary bundle copy only. No external provider call.",
   "production_checks": [
     {
-      "name": "detail_agent_targets_the_displayed_nonleading_city",
+      "name": "decision_agent_unavailable_falls_back_without_ranking_or_choice",
       "passed": true
     },
     {
-      "name": "empty_feedback_rejected_without_state_change",
-      "passed": true
-    },
-    {
-      "name": "free_feedback_not_saved_before_confirmation",
-      "passed": true
-    },
-    {
-      "name": "real_cardhost_unavailable_preserves_state",
+      "name": "decision_task_saves_only_after_explicit_confirmation",
       "passed": true
     }
   ],
@@ -110,6 +102,66 @@
     },
     {
       "name": "changing_detail_city_invalidates_confirmation",
+      "passed": true
+    },
+    {
+      "name": "decision_agent_receives_climate_labels_not_internal_ids",
+      "passed": true
+    },
+    {
+      "name": "valid_dq1_question_and_task_accepted",
+      "passed": true
+    },
+    {
+      "name": "dq1_requires_explicit_task_and_city_confirmation",
+      "passed": true
+    },
+    {
+      "name": "dq1_never_changes_ranking_or_finalists",
+      "passed": true
+    },
+    {
+      "name": "confirmed_dq1_task_saved_without_city_choice",
+      "passed": true
+    },
+    {
+      "name": "realistic_cjk_dq1_within_120_characters_accepted",
+      "passed": true
+    },
+    {
+      "name": "internal_agent_field_names_are_cleaned_before_display",
+      "passed": true
+    },
+    {
+      "name": "unsupported_dq2_falls_back_without_decision",
+      "passed": true
+    },
+    {
+      "name": "extra_dq1_fields_rejected",
+      "passed": true
+    },
+    {
+      "name": "stale_dq1_revision_rejected",
+      "passed": true
+    },
+    {
+      "name": "foreign_dq1_city_rejected",
+      "passed": true
+    },
+    {
+      "name": "unknown_dq1_dimension_rejected",
+      "passed": true
+    },
+    {
+      "name": "multiline_dq1_rejected",
+      "passed": true
+    },
+    {
+      "name": "oversized_dq1_question_rejected",
+      "passed": true
+    },
+    {
+      "name": "stale_dq1_request_ignored",
       "passed": true
     },
     {

@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-14",
+  "bundle_version": "0.6.0",
+  "production_main_sha256": "91eb0086601f34e7eed5512ce604fd0c0f5485db1f30d7d277ba147413498375",
+  "bundle_blake3": "ccbbcc66831bccddc446891b122093c9ddbd89a8ba2bc6ad9aad9f19eff9b03c",
+  "signed_catalog": {
+    "kind": "local_release_rehearsal",
+    "sequence": 4,
+    "entries": 2,
+    "anchor_sha256": "0b49487de12d2201b654e3e3b83b17b81d3932238bba0e0d2bfeb33090659ada",
+    "signature_verified": true,
+    "fresh_install_verified": true,
+    "public_app_hub_submission": false
+  },
+  "runtime": {
+    "host": "OctoSense Shell on macOS",
+    "provider": "MiniMax China",
+    "model": "MiniMax-M3",
+    "first_use_consent_presented": true,
+    "first_use_consent_accepted": true
+  },
+  "scenario": {
+    "kind": "synthetic Xiaochen-like acceptance profile",
+    "contains_real_personal_data": false,
+    "finalists": [
+      "shenzhen",
+      "hangzhou"
+    ],
+    "career_focus": "具身智能行业",
+    "monthly_rent_ceiling_cny": 4000,
+    "climate_redline": "潮湿闷热",
+    "initial_assumption": "我更倾向深圳，因为深圳成本低、具身智能机会更多。",
+    "three_act_votes": [
+      "tie",
+      "tie",
+      "tie"
+    ]
+  },
+  "agent_result": {
+    "protocol": "DQ1",
+    "revision": 2,
+    "left_city": "shenzhen",
+    "right_city": "hangzhou",
+    "dimension": "daily",
+    "question": "你把\"潮湿闷热\"列为健康红线。深圳与杭州一年里哪边更容易长期闷热需要除湿？先核这一项再谈别的。",
+    "task": "两城各联系一位现居住满半年的租户，请他们描述4到10月室内湿度、是否长期开除湿、以及通勤时段室外闷热的真实感受。",
+    "payload_used_display_label_for_redline": true,
+    "internal_field_names_absent_from_visible_result": true
+  },
+  "state_boundaries": {
+    "before_agent_sha256": "6e99d9529e9890e56dd3aa0bbc7fb7c5dc45ba02d5856a709ae3b6b6b1f8d81c",
+    "proposal_sha256": "678ab58ce8d78a319cdc4728baf4785ff657dd0f817293afe74aac406a4a3d15",
+    "proposal_only_modified_proposal_fields": true,
+    "after_task_confirmation_sha256": "676a247cd22c291d0aa97b4ae4d5134af715eae901d1cca96d88728255c41cf6",
+    "task_saved_only_after_explicit_confirmation": true,
+    "after_city_confirmation_sha256": "fc3dbd20f948103680c8706083588a0cb262d4c1ec291436b102d00474c25564",
+    "first_city_saved_only_after_explicit_choice": true,
+    "after_restart_sha256": "fc3dbd20f948103680c8706083588a0cb262d4c1ec291436b102d00474c25564",
+    "restart_restored_passport": true
+  },
+  "limitations": [
+    "This is one synthetic-profile, one-turn runtime verification; it does not establish recommendation accuracy or user happiness.",
+    "Kimi, mobile and HarmonyOS runtimes were not exercised in this pass.",
+    "Provider failover and real-user satisfaction remain unverified.",
+    "Public App Hub review status is tracked separately from this local signed-catalog rehearsal."
+  ]
+}

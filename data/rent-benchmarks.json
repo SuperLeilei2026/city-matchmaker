@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "scope": "2026年1月，30–60㎡住宅平均套租金，单位：元/月",
+  "note": "这是城市级挂牌样本基准，只用于比较租住压力；不能代表某个街区、具体房源、押金、通勤或合租价格。",
+  "source": {
+    "title": "中指研究院：2026年1月50城住宅租赁价格指数报告",
+    "url": "https://www.cih-index.com/report/detail/115092.html",
+    "methodologyTitle": "中指研究院：城市住宅租赁价格指数方法说明",
+    "methodologyUrl": "https://www.cih-index.com/data/index/rentIndex.html",
+    "observed": "2026-01",
+    "checked": "2026-10-13"
+  },
+  "cities": {
+    "wuhan": { "compactRent": 1493, "unitRent": 25.71 },
+    "chengdu": { "compactRent": 1730, "unitRent": 32.09 },
+    "nanjing": { "compactRent": 2248, "unitRent": 36.28 },
+    "guangzhou": { "compactRent": 2381, "unitRent": 47.78 },
+    "hangzhou": { "compactRent": 2638, "unitRent": 48.54 },
+    "shenzhen": { "compactRent": 3696, "unitRent": 81.86 },
+    "shanghai": { "compactRent": 3900, "unitRent": 81.50 },
+    "beijing": { "compactRent": 4482, "unitRent": 80.95 }
+  }
+}

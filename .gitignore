@@ -19,3 +19,4 @@ secrets/
 credentials/
 test-results/
 playwright-report/
+video/build/

@@ -1,31 +1,49 @@
 # 源码与发布状态
 
-更新：2026-10-07。MOST暴躁队 / Leinstein。仓库：[SuperLeilei2026/city-matchmaker](https://github.com/SuperLeilei2026/city-matchmaker)；[初赛登记回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)。登记不等于评审通过或晋级；目前没有本队晋级的公开官方证据。
+更新：2026-10-14。MOST暴躁队 / Leinstein。公开仓库：[SuperLeilei2026/city-matchmaker](https://github.com/SuperLeilei2026/city-matchmaker)；[初赛登记回执](https://github.com/gosimfoundation/hackathon-agenticapp26/issues/13#issuecomment-5964776262)。登记、GitHub Release 与 App Hub 人工审核是三个不同状态。
 
-## 当前交付
+## v0.6 冻结候选
 
-主交付是 OctoScript 原生脚本包 `bundle/`，入口 `main.splash`，附 manifest、listing、素材与真实截图。采用官方 [script-app Flow](https://github.com/OctoSense-org/OctoSense-App-Flow/blob/a90e7c620b31c75d6e71664f666430a6a10dc8dd/flows/script-app/FLOW.md)，无需本应用 Rust 代码。Web 保留 v0.3 交互，仅作辅助研究。
+`v0.6.0` 将发布“从城市推荐器到双城决策实验室”的完整版本：
 
-**v0.4.0：先看城市，留两座再比较。** 不要求先填问卷；收藏和翻页不推断五维。有明确偏好时再按共用规则比较，拿不准才可选补一题。
+- 已有候选／还没有方向双入口；
+- 行业、具体职业方向、兴趣、预算和气候红线；
+- 约束状态与内部偏好顺序分离，主界面不展示总分；
+- 用户亲选决赛两城、封存原始倾向、完成发展线／日常线／落地线三幕 PK；
+- 每幕同时展示事实、编辑判断、反例和未知；
+- 系统 Agent 只提出一个可能改变决定的问题及一项核验任务；
+- 任务和先验证城市分别确认后才保存；
+- 双城通行证保留先验证城市、备选城市和改选条件；
+- Web 五阶段状态、旧存档迁移与原生 v4 58 字段存档。
 
-v0.4 为 10 月 5 日的后续迭代，不能冒称在此前初赛截止时间前交付。此前已公开的 v0.3 源码与实录保留于 [`f4566a5`](https://github.com/SuperLeilei2026/city-matchmaker/tree/f4566a5f0bb254829e8ed193541ebd0a539e10ec)，旧标签不移动；主办方是否采纳后续更新未知。本次不重复留言或修改报名。
+最终源码候选指纹：
 
-## 本版材料
+- `bundle/main.splash` SHA-256：`91eb0086601f34e7eed5512ce604fd0c0f5485db1f30d7d277ba147413498375`
+- bundle BLAKE3：`ccbbcc66831bccddc446891b122093c9ddbd89a8ba2bc6ad9aad9f19eff9b03c`
 
-- **程序与复现：** [原生说明](octosense.md)、[工具基底](runtime-lock.md)、[产品需求](../BRIEF.md)。本地基本流程不依赖模型或 Web 服务器。
-- **真实截图：** [直接看城市](../bundle/screenshots/01-discovery.png)、[两城比较](../bundle/screenshots/02-comparison.png)、[可选追问](../bundle/screenshots/03-optional-question.png)、[资料](../bundle/screenshots/04-profile.png)。合成资料，来自真实 card-host。
-- **当前验证：** [原生流程](../qa/native-discovery-check.json)、[Agent 保护](../qa/native-agent-check.json)、[存档与规则对照](../qa/native-discovery-contract.json)。报告记录当前生产程序指纹，临时注入只用于保护机制和规则对照。
-- **数据：** 八城、32来源、136条信号中47条人工整理、89条未知；[资料边界](data-sources.md)、[匹配规则](matching-model.md)。SVG 是生活想象，不是路线或实景证明。
-- **当前影片：** [v0.4 原生实录、边界与历史影片](demo.md)。当前候选片长 2 分 38 秒，来自真实 `card-host` 操作并完整解码通过；它展示真实 Agent 不可用状态，不冒充模型成功。
+## 已完成验证
 
-## 独立记录的边界
+- 正式 v0.6 范围内 69 项 Node 测试全部通过；工作区另有 43 项未纳入本次发布的 v3 探索测试。
+- `hub check bundle --allow-unsigned` 通过，仅有预期的未签名开发包警告。
+- 原生完整双城流程 12 项检查通过，报告见 [`qa/native-departure-check.json`](../qa/native-departure-check.json)。
+- 原生 Agent 生产失败回退 2 项与临时响应注入 38 项检查通过，报告见 [`qa/native-agent-check.json`](../qa/native-agent-check.json)。注入只发生在测试临时副本，不是模型调用。
+- 在完整 OctoSense Shell 中，用最终候选从本地签名目录全新安装，并由 MiniMax-M3 完成一次真实 `DQ1` 调用。首次同意、提案不落盘、任务确认、城市确认和重启恢复均已逐步验证，见 [`qa/real-agent-e2e-v0.6/README.md`](../qa/real-agent-e2e-v0.6/README.md)。
+- 82 秒 16:9、1080p 产品介绍片已完成，视频制作说明见 [`video/README.md`](../video/README.md)。
 
-本地最终验收：19项生产 UI、4项 Agent 生产路径与23项临时响应保护、5项存档合同、8步跨实现状态、7组排名/区间/试城计划通过；JS 整套55项通过。三个原生报告与 v0.4 录屏对应生产 SHA-256 `8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca`。较早的开发包 gate 使用 App Hub `78dfda5f33638e1869c36bceef5713342aae861c` 构建工具并通过，只能证明当时的 unsigned 源包；历史记录见 [app-hub-gate-v0.4.json](../qa/app-hub-gate-v0.4.json)。最终 v0.4 发布改用仓库内的 GitHub provenance 工作流；工作流固定使用经官方 App Flow 审阅的 App Hub `655114c4943cd2490daaefa2173e7b5aaa20669f`，在 Tag 推送后生成并验证 attested release pack。
+这些验证证明应用能够执行约定流程和权限边界，不证明城市建议准确、用户会更快乐或能获得特定 offer。
 
-原生参考宿主可运行、本地包检查、公开源码、完整 Shell 安装、真实模型链路以及 App Hub 上架是不同状态，不能相互替代。
+## 仍属未知
 
-`card-host` 不提供模型服务。当前 Agent 的有效动作主要是追加气候避开项与明确拒绝当前城市；五维由用户确认选项。官方 Desktop 完整 Shell 已以隔离合成资料跑通一次 MiniMax-M3 返回、确认、执行、保存与恢复，见[真实 Agent 全链路报告](../qa/real-agent-e2e-v0.4/README.md)。临时响应测试仍不代表真实调用，Kimi 与其他平台尚未验证。
+- 小陈、小雷本人尚未完成首轮试玩；仓库提供了测试脚本和记录模板，但不会把计划冒充结果。
+- Kimi、Android、HarmonyOS、Windows、Linux、模型故障切换和真实岗位／房源核验未在本次冻结候选中覆盖。
+- GitHub 标签和 Release 只证明不可移动来源与工作流结果；App Hub 维护者批准和公开目录上架需要单独核验。
 
-**尚未获 App Hub 审核上架。** 固定版本的[赛事提交说明](https://github.com/gosimfoundation/hackathon-agenticapp26/blob/0db87b582438f0f01534435b8537e8c89bcd303d/docs/app-hub-submission.md)允许按源码和可运行作品评审，无需等待上架。当前 App Hub 的[提交规范](https://github.com/OctoSense-org/OctoSense-App-Hub/blob/97431789cce1847c493df87bb6b9c4b720d81f01/docs/SUBMITTING.md)要求新应用通过 GitHub 工作流产生发布证明，再由维护者审核；Tag、Release、gate 或 Issue 均不代表已经批准。公开核对项见[提交清单](submission-checklist.md)，人工审查问题的候选答案见 [REVIEW-ANSWERS.md](../tools/REVIEW-ANSWERS.md)。
+## 发布链路
 
-公开证据仅使用合成资料；真实个人进度、私钥、模型密钥与自由反馈不上传，详见 [隐私说明](privacy.md)。
+1. 将经过验证的源码、真实截图、隐私说明和发布工作流提交到公开仓库。
+2. 创建不可移动的 `v0.6.0` 标签，由 `.github/workflows/publish-app.yml` 生成 GitHub attestation、`app.bundle.pack.json` 与 `release-receipt.json`。
+3. 下载 Release 资产，核对 pack SHA-256、receipt、标签、提交与 bundle BLAKE3。
+4. 因应用尚未首次进入公开目录，按 App Hub 当前规范在原 Issue #177 更新版本与本次 release 证据。
+5. 维护者人工审核通过并由受保护目录工作流收录后，才能声称“App Hub 已上架”。
+
+历史标签不会移动。本地后续迭代也不能冒称在先前截止时间前已经交付。

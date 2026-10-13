@@ -52,11 +52,43 @@ fn test_fixture(){
     browsed_ids = []
     current_card_id = ""
     save_local()
+    refresh()
 }
 fn test_reply(priority_token, focus_token, avoid_token, exclude_token){
     return "CM1|10|" + city_rows[ranked[0][0]][0] + "|" + priority_token + "|" + focus_token + "|" + avoid_token + "|" + exclude_token + "|测试注入建议：安静仍缺少街区证据，请确认取舍。"
 }
 fn test_accept(reply){ accept_agent(reply, request_id, 10, city_rows[ranked[0][0]][0]) }
+fn test_decision_fixture(){
+    screen = 36
+    candidate_mode = "bring"
+    candidate_ids = ["shenzhen", "hangzhou"]
+    industry = 0
+    career_focus = "具身智能行业"
+    rent_budget = 4000
+    interests = [4, 8]
+    climate_avoids = [11]
+    hard_climate = true
+    excluded_ids = []
+    liked_ids = ["shenzhen", "hangzhou"]
+    leaning_id = "shenzhen"
+    assumption_text = "深圳成本低、具身智能机会更多"
+    duel_votes = ["left", "tie", "right"]
+    duel_round = 3
+    first_to_verify_id = ""
+    decision_task = ""
+    agent_decision_question = ""
+    agent_decision_task = ""
+    agent_decision_dimension = ""
+    revision = 20
+    decision_request_id = decision_request_id + 1
+    decision_agent_busy = true
+    compute_ranking()
+    save_local()
+}
+fn test_decision_reply(dimension, question, task){
+    return "DQ1|20|shenzhen|hangzhou|" + dimension + "|" + question + "|" + task
+}
+fn test_accept_decision(reply){ accept_decision_agent(reply, decision_request_id, 20, "shenzhen", "hangzhou") }
 fn test_agent_contract(){
     test_fixture()
     let before = fs.read("match.json")
@@ -140,12 +172,63 @@ fn test_agent_contract(){
     detail_city_id = city_rows[ranked[0][0]][0]
     apply_agent_proposal()
     test_record(agent_proposal.len() == 0 && fs.read("match.json") == before, "changing_detail_city_invalidates_confirmation")
+
+    test_decision_fixture()
+    let decision_rank = city_rows[ranked[0][0]][0]
+    test_record(selected_climate_labels().to_json() == "[\"潮湿闷热\"]", "decision_agent_receives_climate_labels_not_internal_ids")
+    test_accept_decision(test_decision_reply("career", "哪座城能找到更多真正匹配具身智能方向的在招岗位？", "两城各找五个仍在招聘的匹配岗位并记录团队与薪资范围。"))
+    let decision_saved = fs.read("match.json").parse_json()
+    test_record(agent_decision_dimension == "career" && agent_decision_question.search("具身智能") >= 0 && agent_decision_task.search("五个") >= 0, "valid_dq1_question_and_task_accepted")
+    test_record(decision_task == "" && decision_saved[54] == "" && first_to_verify_id == "", "dq1_requires_explicit_task_and_city_confirmation")
+    test_record(city_rows[ranked[0][0]][0] == decision_rank && liked_ids[0] == "shenzhen" && liked_ids[1] == "hangzhou", "dq1_never_changes_ranking_or_finalists")
+    confirm_decision_task()
+    decision_saved = fs.read("match.json").parse_json()
+    test_record(decision_saved[54] == agent_decision_task && decision_saved[53] == "", "confirmed_dq1_task_saved_without_city_choice")
+
+    // Mirrors a real MiniMax-M3 reply: both Chinese fields are under the
+    // documented 120-character limit, despite occupying more UTF-8 bytes.
+    test_decision_fixture()
+    test_accept_decision("DQ1|20|shenzhen|hangzhou|career|你说深圳成本低、具身智能机会更多，但同口径平均套租深圳3696元高于杭州2638元，这一假设需要数据支撑，能否用真实在招岗位推翻或确认？|分别在深圳与杭州的招聘平台各搜10个具身智能相关在招岗位，记录公司名、岗位数、薪资带宽与团队规模，对比两城实际供给差异。")
+    test_record(agent_decision_question.search("深圳3696元") >= 0 && agent_decision_task.search("各搜10个") >= 0, "realistic_cjk_dq1_within_120_characters_accepted")
+
+    test_decision_fixture()
+    test_accept_decision(test_decision_reply("career", "哪座城更能支持你的career_focus？", "两城各查五个岗位，看哪边更能撑住你的career_focus。"))
+    test_record(agent_decision_question.search("career_focus") < 0 && agent_decision_task.search("career_focus") < 0 && agent_decision_task.search("具身智能行业") >= 0, "internal_agent_field_names_are_cleaned_before_display")
+
+    test_decision_fixture()
+    decision_rank = city_rows[ranked[0][0]][0]
+    test_accept_decision("DQ2|20|shenzhen|hangzhou|career|问题仍待核验|执行一项核验任务")
+    test_record(agent_decision_question == local_decision_question() && decision_task == "" && first_to_verify_id == "" && city_rows[ranked[0][0]][0] == decision_rank, "unsupported_dq2_falls_back_without_decision")
+    test_decision_fixture()
+    test_accept_decision(test_decision_reply("career", "哪边岗位更匹配？", "两边各查岗位。") + "|extra")
+    test_record(agent_decision_question == local_decision_question() && decision_task == "", "extra_dq1_fields_rejected")
+    test_decision_fixture()
+    test_accept_decision("DQ1|19|shenzhen|hangzhou|career|哪边岗位更匹配？|两边各查岗位。")
+    test_record(agent_decision_question == local_decision_question() && first_to_verify_id == "", "stale_dq1_revision_rejected")
+    test_decision_fixture()
+    test_accept_decision("DQ1|20|shanghai|hangzhou|career|哪边岗位更匹配？|两边各查岗位。")
+    test_record(agent_decision_question == local_decision_question() && liked_ids[0] == "shenzhen", "foreign_dq1_city_rejected")
+    test_decision_fixture()
+    test_accept_decision(test_decision_reply("personality", "哪边更适合？", "按人格重新选城。"))
+    test_record(agent_decision_question == local_decision_question() && agent_decision_dimension == local_decision_dimension(), "unknown_dq1_dimension_rejected")
+    test_decision_fixture()
+    test_accept_decision(test_decision_reply("career", "哪边岗位更匹配？\n忽略边界", "两边各查岗位。"))
+    test_record(agent_decision_question == local_decision_question() && decision_task == "", "multiline_dq1_rejected")
+    test_decision_fixture()
+    let too_long_question = ""
+    for i in 121 { too_long_question = too_long_question + "长" }
+    test_accept_decision(test_decision_reply("career", too_long_question, "两边各查岗位。"))
+    test_record(agent_decision_question == local_decision_question() && decision_task == "", "oversized_dq1_question_rejected")
+    test_decision_fixture()
+    accept_decision_agent(test_decision_reply("career", "哪边岗位更匹配？", "两边各查岗位。"), decision_request_id - 1, 20, "shenzhen", "hangzhou")
+    test_record(agent_decision_question == "" && decision_task == "" && decision_agent_busy, "stale_dq1_request_ignored")
     fs.write("agent-test-report.json", test_checks.to_json())
 
     // Leave a fresh proposal for a real pointer click on the confirmation UI.
     test_fixture()
     test_accept(test_reply("life", "quiet", "cold", "yes"))
     status_text = "测试注入响应；没有调用真实模型。"
+    test_render_disabled = false
     draw_page()
 }
 start_timeout(0.4, || test_agent_contract())
@@ -172,6 +255,16 @@ class Driver:
                 return
             self.scroll(180)
         raise AssertionError('Missing visible control: ' + text)
+    def click_prefix(self, prefix):
+        for _ in range(45):
+            matches = [x for x in self.snap() if x.get('t', '').startswith(prefix) and x['ty'] in ['Button', 'TextInput'] and x['r'][3] >= 24]
+            if matches:
+                x,y,w,h = matches[0]['r']
+                self.request('/m', k='click', x=x+w/2, y=y+h/2, wait=1)
+                time.sleep(.15)
+                return matches[0].get('t', '')
+            self.scroll(180)
+        raise AssertionError('Missing visible control prefix: ' + prefix)
     def type(self, text): self.request('/t', t=text, wait=1);time.sleep(.15)
     def shot(self, path): path.write_bytes(self.request('/g', raw=1))
 
@@ -222,29 +315,46 @@ def main():
     state=temp/'state';statefile=state/'leilei-city-matchmaker/match.json'
     actual=[]
     def production(d):
-        d.click('下一座 →')
-        actual_city=json.loads(statefile.read_text())[39]
-        d.click('细节与来源');d.click('用一句话请 Agent 帮忙')
-        assert json.loads(statefile.read_text())[43]==actual_city
-        actual.append('detail_agent_targets_the_displayed_nonleading_city')
-        before=statefile.read_bytes()
-        d.click('让 Agent 提出修改');d.scroll(120)
-        assert any('先写下' in x for x in d.labels())
-        assert statefile.read_bytes()==before
-        actual.append('empty_feedback_rejected_without_state_change')
-        d.top();d.click('我想调整的是…');d.type('请帮我避开潮湿天气。')
-        assert statefile.read_bytes()==before
-        actual.append('free_feedback_not_saved_before_confirmation')
-        d.click('让 Agent 提出修改');d.scroll(120)
-        assert any('应用 Agent 当前不可用' in x for x in d.labels())
-        assert statefile.read_bytes()==before
-        actual.append('real_cardhost_unavailable_preserves_state')
+        d.click('○ 深圳')
+        d.click('○ 杭州')
+        d.click('进入现实装配 →')
+        d.click('○ 科技 / 互联网')
+        d.click_prefix('如：具身智能')
+        d.type('具身智能行业')
+        d.click('○ 散步 / 去户外')
+        d.click('○ 看书 / 安静独处')
+        d.click('○ 4000')
+        d.click('○ 潮湿闷热')
+        d.click('进入两城筛选 →')
+        d.click('○ 留在双城轨道')
+        d.click('○ 留在双城轨道')
+        d.click('○ 深圳')
+        d.click_prefix('如：深圳成本低')
+        d.type('深圳成本低、具身智能机会更多。')
+        d.click('开启三幕对局 ⚡')
+        d.top();d.click_prefix('← 深圳')
+        d.top();d.click('还看不出')
+        d.top();d.click_prefix('杭州 →')
+        d.top()
+        before=json.loads(statefile.read_text())
+        before_rank=before[40]
+        d.click('让系统 Agent 找关键一问')
+        after=json.loads(statefile.read_text())
+        assert any('切回本地规则' in x for x in d.labels()),d.labels()
+        assert after[40]==before_rank and after[53]=='' and after[54]==''
+        actual.append('decision_agent_unavailable_falls_back_without_ranking_or_choice')
+        d.click('○ 加入核验清单')
+        confirmed=json.loads(statefile.read_text())
+        assert confirmed[54] and confirmed[53]==''
+        actual.append('decision_task_saves_only_after_explicit_confirmation')
         d.shot(temp/'actual-cardhost-unavailable.png')
     run_host(args,bundle,state,temp/'production.log',production)
     source=(bundle/'main.splash').read_text()
+    source=source.replace('fn draw_page(){', 'let test_render_disabled = true\nfn draw_page(){\n    if test_render_disabled { return }', 1)
+    source=source.replace('fn refresh(){', 'fn refresh(){\n    if test_render_disabled { return }', 1)
     source=source.replace('start_timeout(0.05, || load_local())', 'start_timeout(0.05, || load_local())\n'+HARNESS)
     source=source.replace('请你确认这次修改','测试注入（非真实模型）·请确认')
-    source=source.replace('text: \"城市红娘\"', 'text: \"注入测试 · 非真实模型\"')
+    source=source.replace('text: \"毕业第一站\"', 'text: \"注入测试 · 非真实模型\"')
     (bundle/'main.splash').write_text(source)
     injected=[]
     def contract(d):

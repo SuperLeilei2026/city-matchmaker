@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-14",
+  "version": "0.6.0",
+  "production_main_sha256": "91eb0086601f34e7eed5512ce604fd0c0f5485db1f30d7d277ba147413498375",
+  "synthetic_inputs_only": true,
+  "real_model_called": false,
+  "checks": [
+    "dual_entry_candidates_persist",
+    "v4_tail_save_written",
+    "reality_conditions_persist",
+    "constraints_visible_without_public_score",
+    "user_selects_two_finalists",
+    "original_assumption_does_not_block_duel",
+    "three_act_votes_never_auto_choose",
+    "xiaocheng_assumptions_are_audited",
+    "agent_failure_falls_back_without_choice",
+    "confirmed_task_saved",
+    "passport_contains_first_and_backup",
+    "restart_restores_passport_and_task"
+  ],
+  "observations": {
+    "finalists": [
+      "shenzhen",
+      "hangzhou"
+    ],
+    "first_to_verify": "shenzhen",
+    "decision_task": "围绕“散步 / 去户外”和气候红线，各设计一次普通工作日可完成的实地或远程核验。"
+  }
+}

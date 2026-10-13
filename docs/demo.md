@@ -1,58 +1,51 @@
-# Joy City v0.4 · 原生真实演示
+# 毕业第一站 v0.6 · 当前演示证据
 
-本页对应当前 **v0.4.0** 原生流程：**打开看城市 → 留下第一座 → 继续浏览 → 留下第二座 → 两城比较 → 按需追问、看来源与资料**。历史 v0.3 五题演示仍保留，但不再代表当前产品。
+更新：2026-10-14。v0.6 已有真实原生窗口截图、真实模型全链路和操作报告。新版影片单独按[视频方案](video-treatment.md)制作；旧版影片只作历史追溯。
 
-[观看 v0.4 原生 MP4](demo-native-v0.4.mp4) · [v0.4 录制报告](../qa/native-demo-v0.4/recording-report.json) · [原生运行说明](octosense.md) · [产品设计](product-design.md)
+## 五阶段原生流程
 
-## 这段视频是什么
+### 1. 带来现实候选
 
-视频来自当前 production `bundle/main.splash`，SHA-256 为 `8ad19df2a9375b68624aec5cd25c5c9b4ca5e68b88c5736008f708db5d1969ca`。录制脚本复制当前 bundle 到临时目录，由真实 `card-host` 启动；启动前的隔离存档为空。整段操作只通过真实指针点击、文本输入与滚动完成，没有注入源码、存档或 Agent 响应，也没有操作用户原有窗口。
+![双入口](../qa/native-departure-v0.6/01-entry.png)
 
-成片长 **158.0 秒（2分38秒）**，分辨率 **920×1850**，H.264／25fps，共 3950 帧、2,745,673 字节。视频 SHA-256：
+### 2. 装上具体方向、兴趣、预算和红线
 
-```text
-b97999d8dc656131864f8bd0b1e13b0ffad3db7938e02e328e47875b3fb5067a
-```
+![现实条件](../qa/native-departure-v0.6/02-reality.png)
 
-编码后已用 ffmpeg 从头到尾完整解码，返回零错误；另抽查 4、56、115、132、153 秒，确认原生画面、中文章节字幕、Agent 不可用提示和最终两城比较均可读。录制结束后 production `main.splash` 哈希未变，旧 v0.3 视频也未被覆盖。
+### 3. 亲手留下两城并封存原始判断
 
-## 本片能核对的行为
+![留下两城](../qa/native-departure-v0.6/03-shortlist.png)
 
-| 时间 | 真实操作与结果 |
-| --- | --- |
-| 0–17 秒 | 空白存档直接打开北京城市卡；“下一座”只继续浏览，没有拒绝城市或补写五维。 |
-| 17–51 秒 | 留下成都，打开单城清单后点“继续逛”；路过广州，再留下杭州。第二次收藏直接进入成都／杭州比较。 |
-| 51–83 秒 | 两城先展示吸引力与代价；点“我还拿不准”后，只补一项恢复精力偏好，收藏保持不变。 |
-| 83–103 秒 | 打开成都详情和公开依据；来源、代价、岗位／住房／通勤等未知项同时出现。 |
-| 103–125 秒 | 输入“请帮我避开潮湿天气。”并真实请求应用 Agent。`card-host` 明确返回服务不可用，请求前后存档字节一致。 |
-| 125–158 秒 | 按需打开资料页；只有刚才明确回答的恢复精力一项被记录，其余四维继续显示未确认。最后回到两城比较。 |
+### 4. 完成三幕，审计证据、反例与未知
 
-本片中的北京、成都与杭州来自这次空白存档下 production bundle 的真实浏览顺序，没有固定城市或结果注入。城市顺序和人工整理线索不是推荐准确率、岗位概率或幸福概率。
+![三幕结束](../qa/native-departure-v0.6/04-duel.png)
 
-![打开即看城市](../qa/native-demo-v0.4/01-opening-city.png)
+### 5. 选择先验证城市，生成双城通行证
 
-![留下两座后比较](../qa/native-demo-v0.4/04-two-city-comparison.png)
+![双城通行证](../qa/native-departure-v0.6/05-passport.png)
 
-![真实 Agent 不可用状态](../qa/native-demo-v0.4/08-agent-unavailable.png)
+[操作报告](../qa/native-departure-check.json)记录12项真实窗口检查。输入采用小陈合成档案，没有读取个人资料，也没有调用模型。
 
-![资料按需打开](../qa/native-demo-v0.4/09-profile-on-demand.png)
+## Web 演示
+
+运行 `npm start` 后打开 <http://127.0.0.1:4318>。Web 与原生版共享五阶段状态和双城规则；Web 提供更丰富的分屏轨道动效与 PNG 通行证，并使用本地决胜问题，不调用模型。实际走查见 [web-qa.md](web-qa.md)。
 
 ## Agent 证据边界
 
-`card-host` 本身没有模型服务，因此本片展示的是**真实失败处理证据**：应用清楚提示 Agent 不可用，继续使用本地规则，并保持存档不变。它不是模型成功演示，录制报告将 `realModelSuccessVerified` 记为 `false`。完整 OctoSense Shell 中另有一次 MiniMax-M3 返回、确认、执行、保存与恢复的独立验收，见[真实 Agent 全链路报告](../qa/real-agent-e2e-v0.4/README.md)；该证据不追溯写入本片。
+参考 `card-host` 不提供模型服务。v0.6 在真实生产界面验证2项失败回退与确认保存，并在临时复制包中验证38项 `CM1`/`DQ1` 协议保护；见 [native-agent-check.json](../qa/native-agent-check.json)。注入响应不是 MiniMax/Kimi 调用。
 
-## 历史 v0.3 演示
+当前最终签名包已在完整 OctoSense Shell 中，以合成小陈式档案跑通一次 MiniMax-M3：首次同意、提案、任务确认、首城选择与重启恢复均有证据，见[真实模型全链路](../qa/real-agent-e2e-v0.6/README.md)。一次调用不代表 Kimi、故障切换、建议准确率或真人价值已验证。
 
-[v0.3 原生 MP4](demo-native.mp4) · [v0.3 录制报告](../qa/native-demo/recording-report.json) · [v0.3 分镜说明](demo-script.md)
+## 建议演示脚本
 
-旧片约 2分31秒，展示先答五个生活场景、核对画像、两轮推荐、切换视角与来源。它保留用于追溯历史提交材料，不能作为 v0.4“先看城市、留两座”流程的运行证据。辅助 [Web MP4](demo-web.mp4) 同样仍是 v0.3 研究界面，不代表当前原生主入口。
+使用小陈档案，控制在60–90秒：
 
-## 复现
+1. 深圳、杭州入场；
+2. 具身智能、散步、阅读、4000元、潮湿红线；
+3. 说出“深圳成本低、机会更多”；
+4. 三幕投票；
+5. 展示成本反例、行业粒度缺口与红线未知；
+6. Agent 提出关键一问，用户确认任务；
+7. 用户选择先验证深圳，杭州保留为备选。
 
-在仓库根目录运行：
-
-```sh
-python3 tools/record-native-demo.py
-```
-
-脚本默认输出 `docs/demo-native-v0.4.mp4` 与 `qa/native-demo-v0.4/recording-report.json`，并保留旧 v0.3 文件。若工具不在默认位置，可通过 `OCTO_CARD_HOST`、`OCTO_HUB`、`FFMPEG`、`FFPROBE` 和 `DEMO_FONT` 指定。脚本会在临时目录复制、stamp、check 当前 bundle，再使用独立空白状态录制；不会修改 production 源码或数据。
+镜头重点是判断如何被拆开，而不是快速点完所有按钮。

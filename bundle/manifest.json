@@ -7,12 +7,12 @@
   ],
   "id": "leilei-city-matchmaker",
   "integrity": {
-    "bundle_blake3": "4d438c6610b700f66eb89c50ef7dbf5d8604f7356df8a6423be05ca166b4b015"
+    "bundle_blake3": "ccbbcc66831bccddc446891b122093c9ddbd89a8ba2bc6ad9aad9f19eff9b03c"
   },
-  "name": "城市红娘",
+  "name": "毕业第一站",
   "network": {
     "hosts": []
   },
   "schema": 1,
-  "version": "0.4.0"
+  "version": "0.6.0"
 }

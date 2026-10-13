@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "subtitle": "先看看生活，喜欢再留下",
-  "description": "打开就是一座城：一句生活吸引点、一个代价。留第一座继续逛，留两座直接对比；路过不等于排除，也不拿收藏猜性格。难取舍时，只在有可比较证据时可选聊一句。资料与来源随时查看，气候底线和明确拒绝保留。详情可按需请求应用 Agent 提案，确认后才执行。",
+  "subtitle": "两座城上同一站台，找到会改变决定的线索",
+  "description": "毕业第一站把已经纠结的2–4座城市，或内部初筛出的三座候选，送入一场三幕双城对局。用户先封存原始倾向，再依次比较第一份工作、普通下班后和住下去的代价。预算与健康气候红线先显示冲突或未知，不用总分伪装答案；行业、兴趣、租金与资料缺口拆成证据、编辑判断和待核验项。最后由用户亲自选择先验证城市，带走双城通行证、备选城市和现实核验任务。系统 Agent 只提出最可能改变决定的一问，确认后才保存任务，不改排序也不替用户选城。",
   "category": "lifestyle",
   "keywords": [
     "city",
@@ -11,10 +11,11 @@
     "agent"
   ],
   "screenshots": [
-    "screenshots/01-discovery.png",
-    "screenshots/02-comparison.png",
-    "screenshots/03-optional-question.png",
-    "screenshots/04-profile.png"
+    "screenshots/01-entry.png",
+    "screenshots/02-reality.png",
+    "screenshots/03-shortlist.png",
+    "screenshots/04-duel.png",
+    "screenshots/05-passport.png"
   ],
   "icon": "assets/icon.svg",
   "platforms": [
@@ -25,7 +26,7 @@
     "support": "https://github.com/SuperLeilei2026/city-matchmaker/issues",
     "privacy_policy_url": "https://github.com/SuperLeilei2026/city-matchmaker/blob/main/docs/privacy.md"
   },
-  "release_notes": "0.4：直接城市卡、最多两城收藏对比、可选单题、随时补资料；保存浏览与收藏，不猜偏好。兼容旧存档，保留应用 Agent 受控确认。",
+  "release_notes": "0.6：从城市推荐器改为双城决策实验室。新增已有候选/无方向双入口、用户亲选决赛两城、三幕PK、原始假设审计、双城通行证与决胜提问官。预算和健康气候红线从偏好分数拆出，未知不算通过；主界面取消总相合指数。新增小陈与小雷固定验收场景、旧存档迁移和58字段原生存档。",
   "age_rating": "all",
   "license": "Apache-2.0"
 }

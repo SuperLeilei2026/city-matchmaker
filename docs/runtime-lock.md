@@ -1,5 +1,19 @@
 # 原生宿主版本与真实 Agent 验收准备
 
+## 2026-10-14 v0.6 最终候选
+
+本轮使用本机已有 `runtime/target/release` 工具，未据此声称它们对应上游最新 head：
+
+- `hub` SHA-256：`1ee0ec00bbac7acb361f95b152b5a9b5ae27f54f0dbebab8a227ec8f895ec1a1`；
+- `card-host` SHA-256：`eda78da3921d1e8350558b47b1da3c4f9d4bded97b660997a94c0d929ceaab3e`；
+- v0.6 `hub check --allow-unsigned` 通过，仅有未签名警告；
+- 真实隐藏窗口完成12项双城主流程；Agent 完成2项生产失败回退与38项临时响应保护；
+- 生产 `main.splash` SHA-256：`91eb0086601f34e7eed5512ce604fd0c0f5485db1f30d7d277ba147413498375`；bundle BLAKE3：`ccbbcc66831bccddc446891b122093c9ddbd89a8ba2bc6ad9aad9f19eff9b03c`；
+- 最终包复制到仓库外的本地签名目录，catalog sequence 4 与公开 anchor 验签通过；从全新安装进入完整 Shell，正常展示首次 Agent 同意界面；
+- 合成小陈式档案完成一次 MiniMax-M3 真实调用。提案没有改排序、投票、任务或首城；任务与首城分别在用户确认后写入；退出重启后存档 SHA-256 保持 `fc3dbd20f948103680c8706083588a0cb262d4c1ec291436b102d00474c25564`。证据见[全链路报告](../qa/real-agent-e2e-v0.6/README.md)。
+
+本地签名目录是发布演练，不等于公开 App Hub 审核。Kimi、移动端、故障切换和真人满意度仍未验证。以下较早记录按各自日期与版本保留，不能替代 v0.6 证据。
+
 核验日期：2026-10-09。平台：Apple silicon macOS，`aarch64-apple-darwin`。本页记录实际使用的工具；不把 card-host 的界面测试、响应注入、本地测试目录或 GitHub Release 当作模型成功或 App Hub 审核。
 
 ## 2026-10-09 GitHub 发布路线

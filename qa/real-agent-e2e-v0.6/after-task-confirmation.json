@@ -1,0 +1,21 @@
+{
+  "state_sha256": "676a247cd22c291d0aa97b4ae4d5134af715eae901d1cca96d88728255c41cf6",
+  "changed_indices_from_proposal_state": [
+    54
+  ],
+  "finalists": [
+    "shenzhen",
+    "hangzhou"
+  ],
+  "votes": [
+    "tie",
+    "tie",
+    "tie"
+  ],
+  "round": 3,
+  "first_to_verify": "",
+  "decision_task": "两城各联系一位现居住满半年的租户，请他们描述4到10月室内湿度、是否长期开除湿、以及通勤时段室外闷热的真实感受。",
+  "proposal_question": "你把\"潮湿闷热\"列为健康红线。深圳与杭州一年里哪边更容易长期闷热需要除湿？先核这一项再谈别的。",
+  "proposal_task": "两城各联系一位现居住满半年的租户，请他们描述4到10月室内湿度、是否长期开除湿、以及通勤时段室外闷热的真实感受。",
+  "proposal_dimension": "daily"
+}

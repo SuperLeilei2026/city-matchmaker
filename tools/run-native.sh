@@ -22,5 +22,5 @@ fi
 if [[ "${CITY_NATIVE_HIDDEN:-0}" == 1 ]]; then
   export MAKEPAD_HIDE_WINDOWS=1
 fi
-printf '%s\n' 'Opening Joy City in card-host. The local matching flow needs no API key.'
+printf '%s\n' 'Opening 毕业第一站 in card-host. The local matching flow needs no API key.'
 exec "$card_host" --bundle "$repo_dir/bundle" --app-data "$state_dir" --allow-unsigned --size 460x820 "$@"
