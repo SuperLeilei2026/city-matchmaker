@@ -10,7 +10,7 @@
 
 《毕业第一站》v0.6 把城市推荐器改造成**双城决策实验室**。它保留积木与车站的低门槛体验，但不再宣布“最适合你的城市”。应用帮助用户留下两座候选、封存原始倾向，在三幕对局里拆开发展、日常和落地条件，最后由用户亲自选择先验证哪座城，并带走现实核验任务。
 
-当前版本为 **v0.6.0**。参赛主交付是 OctoSense 原生 Script App：[bundle/main.splash](bundle/main.splash)。Web 版用于快速试玩与展示。GitHub Release、产品介绍片与 App Hub 审核状态以[发布记录](docs/publication.md)为准。
+当前版本为 **v0.6.0**。参赛主交付是 OctoSense 原生 Script App：[bundle/main.splash](bundle/main.splash)，[GitHub Release](https://github.com/SuperLeilei2026/city-matchmaker/releases/tag/v0.6.0) 同时提供密封 pack 与 [82 秒产品介绍片](https://github.com/SuperLeilei2026/city-matchmaker/releases/download/v0.6.0/graduation-first-station-v0.6.mp4)。Web 版用于快速试玩与展示；App Hub 人工审核状态以[发布记录](docs/publication.md)为准。
 
 ## 怎么玩
 

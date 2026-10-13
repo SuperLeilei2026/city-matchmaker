@@ -1,6 +1,6 @@
 # 《毕业第一站》v0.6 产品介绍片
 
-最终成片：`video/build/graduation-first-station-v0.6.mp4`。发布时将它作为 GitHub Release 资产提供，不把二进制中间文件提交进源码历史。
+最终成片：`video/build/graduation-first-station-v0.6.mp4`。它已作为 [GitHub Release 资产](https://github.com/SuperLeilei2026/city-matchmaker/releases/download/v0.6.0/graduation-first-station-v0.6.mp4)公开提供；二进制中间文件不进入源码历史。
 
 ## 成片规格
 
