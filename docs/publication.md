@@ -24,6 +24,7 @@
 公开发布证据：
 
 - [v0.6.0 GitHub Release](https://github.com/SuperLeilei2026/city-matchmaker/releases/tag/v0.6.0)，提交 `4b7f62789c7ddd842dd6bf5261883f1a6de69139`；
+- [B 站项目介绍视频](https://www.bilibili.com/video/BV1gvpy6qEho/)作为评审观看入口；它是冻结 Tag 之后补充的展示材料，不改变 v0.6.0 源码、包与摘要；
 - [GitHub Actions run 38447560800](https://github.com/SuperLeilei2026/city-matchmaker/actions/runs/38447560800) 的 `prepare` 与 `publish` 均通过；
 - release pack SHA-256：`9b24fe311f683ef10aff57bd219cb23eb5369461e21b697dbd4136cddfa85d00`；
 - 工作流当前 Hub 重新计算并签入 provenance 的 bundle BLAKE3：`eca6abb436954b5855fddab233f2806cbdcfa8fc719f38a3ca187ff710b5f04c`；
